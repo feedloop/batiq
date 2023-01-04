@@ -1,15 +1,16 @@
 # :screwdriver: creato
 
-Creato is application generator and runtime for web and mobile application.
+**Creato** is `react` and `react-native` application generator. It generates a web page, web application, web widget, or native application.
 
 ## TODO
 
 - [ ] App schema
 - [ ] Runtime
+- [ ] Core modules
   - [ ] Navigator
   - [ ] State management
   - [ ] Data Source management
-  - [ ] Action runtime
+  - [ ] Actions
 - [ ] Generator
   - [ ] Next.js
   - [ ] Web Components
@@ -19,69 +20,93 @@ Creato is application generator and runtime for web and mobile application.
 
 ## Getting Started
 
-### Run application in browser
+### Install CLI
+
+```bash
+# npm
+npm install -g @creato/cli
+
+# yarn
+yarn global add @creato/cli
+```
+
+It will install `@creato/cli` globally. You can use it to create application schema, run application, and generate project code from schema.
+
+Test the installation by running `creato --version`.
+
+### Create application schema
+
+```bash
+creato init -y
+```
+
+It will create an `app.json` file under the current directory. Or you can follow the prompts to create the schema.
+
+### Run application in the browser
 
 Use `@creato/cli` to run application from a browser.
 
 ```bash
-npx @creato/cli run ./app.json
+creato run ./app.json
 ```
 
-It will run the application under `http://localhost:3000`.
+It will run the application under `http://localhost:3000`. If you change the file it will dynamically refresh the app.
 
-For react-native application, it will use [react-native-web](https://necolas.github.io/react-native-web) to render components.
+### Generate project code
 
-### Mount application dynamically
-
-```ts
-// run-app.ts
-import { run } from "@creato/runtime";
-const appSchema = {
-  type: "web-app",
-  name: "My App",
-  pages: [
-    {
-      name: "Home",
-      path: "/",
-      content: [
-        {
-          type: "h1",
-          props: {
-            style: {
-              color: "red",
-            },
-          },
-          children: [
-            {
-              type: "Button",
-              props: {
-                onClick: "@navigate /about",
-              },
-              children: "Click me",
-            },
-          ],
-        },
-      ],
-    },
-  ],
-};
-
-run(appSchema, {
-  root: "#app",
-});
-```
-
-### Generate project code from schema
-
-Use `@creato/cli` to generate application from schema.
+Use the CLI to generate application from schema.
 
 ```bash
-npx @creato/cli generate ./app.json
+creato generate ./app.json
 ```
 
-It will generate the application under `./output` directory.
+It will generate the application under `./output` directory. The type of project will be determined by the `type` property in the schema. see all available [application types](docs/app-schema.md).
 
-Use the generator dynamically.
+## Runtime
+
+Runtime is a library that can be used to run an application schema inside browser. It is useful for development purpose. It can also be used to run an application schema inside a web page.
+
+> For react-native application, it will utilize [react-native-web](https://necolas.github.io/react-native-web) to render native components inside browser.
+
+### Install runtime
+
+```bash
+# npm
+npm install @creato/runtime
+
+# yarn
+yarn add @creato/runtime
+```
+
+### Create and mount app
+
+```ts
+// app.ts
+import { createApp } from "@creato/runtime";
+import schema from "./app.json";
+
+const app = createApp(schema);
+
+app.mount(document.getElementById("root"));
+```
+
+Or, you can use react `Runtime` component to mount the app.
+
+```tsx
+// app.tsx
+import { Runtime } from "@creato/runtime";
+import schema from "./app.json";
+
+const App = () => {
+  return <Runtime schema={schema} />;
+};
+```
+
+See all available [runtime options](docs/runtime.md).
+
+## Generator
+
+Generator can be used to generate project code from an app schema. It can generate Next.js, Expo, or Lit project.
 
 ```ts
 // generate-app.ts
@@ -93,17 +118,9 @@ generate(appSchema, {
 });
 ```
 
-The target project will be determined by the `type` property in the schema.
-
-| Type         | Target | Output       |
-| ------------ | ------ | ------------ |
-| `web-app`    | web    | Next.js      |
-| `web-widget` | web    | Lit project  |
-| `native-app` | mobile | React Native |
-
 ## App schema
 
-The app schema is a JSON file that describes the application. It is used by the generator to create the application. An application schema can be created under `app.json` or `app.yaml` file. The `type` property is required to determine the target of the application. you can use `web-app` for web application, `web-widget` for web widget, and `native-app` for native application.
+The app schema is a JSON file that describes the application. It is used by the generator to create the application. An application schema can be created under `app.json` or `app.yaml` file.
 
 ### Example
 
@@ -113,6 +130,13 @@ The app schema is a JSON file that describes the application. It is used by the 
   "type": "web-app",
   "name": "My App",
   "description": "My app description",
+  "deps": {
+    "react": "18.2.0",
+    "react-dom": "18.2.0",
+    "react-router-dom": "6.0.2",
+    "@creato/components": "1.0.0",
+    "@creato/actions": "1.0.0"
+  },
   "pages": [
     {
       "name": "Home",
@@ -125,15 +149,7 @@ The app schema is a JSON file that describes the application. It is used by the 
               "color": "red"
             }
           },
-          "children": [
-            {
-              "type": "Button",
-              "props": {
-                "onClick": "@navigate /about"
-              },
-              "children": "Click me"
-            }
-          ]
+          "children": "{{ dataSources.local.count }}"
         }
       ]
     },
@@ -147,7 +163,33 @@ The app schema is a JSON file that describes the application. It is used by the 
         }
       ]
     }
-  ]
+  ],
+  "dataSources": [
+    {
+      "name": "local",
+      "type": "local",
+      "data": {
+        "count": {
+          "type": "number",
+          "value": 0,
+          "default": 0,
+          "persistent": true
+        }
+      }
+    },
+    {
+      "name": "qorebase",
+      "type": "api",
+      "url": "https://project-01-data.qore.dev",
+      "token": "{{ config.qorebase.token }}"
+    }
+  ],
+  "config": {
+    "qorebase": {
+      "token": "token",
+      "projectId": "project-01"
+    }
+  }
 }
 ```
 
@@ -155,9 +197,15 @@ It's also can be written in yaml format.
 
 ```yaml
 # app.yaml
-name: My App
 type: web-app
+name: My App
 description: My app description
+deps:
+  - react@18.2.0
+  - react-dom@18.2.0
+  - react-router-dom@6.0.2
+  - @creato/components@1.0.0
+  - @creato/actions@1.0.0
 pages:
   - name: Home
     path: /
@@ -166,93 +214,29 @@ pages:
         props:
           style:
             color: red
-        children:
-          - type: Button
-            props:
-              onClick: "@navigate /about"
-            children: Click me
+        children: '{{ dataSources.local.count }}'
   - name: About
     path: /about
     content:
       - type: h1
         children: This is the about page
+dataSources:
+  - name: local
+    type: local
+    data:
+      count:
+        type: number
+        value: 0
+        default: 0
+        persistent: true
+  - name: qorebase
+    type: api
+    url: https://project-01-data.qore.dev
+    token:  '{{ config.qorebase.token }}'
+config:
+  qorebase:
+    token: token
+    projectId: project-01
 ```
 
-## Runtime
-
-The runtime is a library that is used to run the application. It is used by the generator to create the application. It can be installed under `@creato/runtime`.
-
-### Navigator
-
-The navigator is a library that is used to navigate between pages. It can be imported from a component under `@creato/runtime`.
-
-```tsx
-import { navigator } from "@creato/runtime";
-
-const MyComponent = () => {
-  return <button onClick={() => navigator.navigate("/about")}>Click me</button>;
-};
-```
-
-### State management
-
-The state management is a library that is used to manage the state of the application. It can be imported from a component under `@creato/runtime`.
-
-```tsx
-import { state } from "@creato/runtime";
-
-const MyComponent = () => {
-  const count = state.useState((state) => state.count);
-
-  return (
-    <button onClick={() => state.setState({ count: count + 1 })}>
-      Click me
-    </button>
-  );
-};
-```
-
-### Data Source management
-
-The data source management is a library that is used to manage the data source of the application. It can be imported from a component under `@creato/runtime`.
-
-```tsx
-import { dataSource } from "@creato/runtime";
-
-const MyComponent = () => {
-  const { data } = dataSource.useDataSource((dataSource) => dataSource.data);
-
-  return (
-    <button onClick={() => dataSource.setDataSource({ data: data + 1 })}>
-      Click me
-    </button>
-  );
-};
-```
-
-### Action runtime
-
-The action runtime is a library that is used to run the action of the application. It can be imported from a component under `@creato/runtime`.
-
-```tsx
-import { action } from "@creato/runtime";
-
-const MyComponent = () => {
-  return (
-    <button onClick={() => action.runAction("my-action")}>Click me</button>
-  );
-};
-```
-
-## Generator
-
-The generator is a library that is used to generate the application. We can generate an application source code from the app schema. while generating the application, the `type` property from application schema will be used to determine the target.
-
-```ts
-import { generate } from "@creato/generator";
-import appSchema from "./app.json";
-
-generate(appSchema, {
-  output: "./output",
-});
-```
+Read more about [app schema](docs/app-schema.md).
