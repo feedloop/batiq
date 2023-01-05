@@ -125,7 +125,6 @@ The app schema is a JSON file that describes the application. It is used by the 
 ### Example
 
 ```json
-// app.json
 {
   "type": "web-app",
   "name": "My App",
