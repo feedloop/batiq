@@ -1,6 +1,6 @@
-# :screwdriver: creato
+# :paintbrush: batiq
 
-**Creato** is `react` and `react-native` application generator. It generates a web page, web application, web widget, or native application.
+**Batiq** is `react` and `react-native` application generator. It generates a web page, web application, web widget, or native application.
 
 ## TODO
 
@@ -24,30 +24,30 @@
 
 ```bash
 # npm
-npm install -g @creato/cli
+npm install -g @batiq/cli
 
 # yarn
-yarn global add @creato/cli
+yarn global add @batiq/cli
 ```
 
-It will install `@creato/cli` globally. You can use it to create application schema, run application, and generate project code from schema.
+It will install `@batiq/cli` globally. You can use it to create application schema, run application, and generate project code from schema.
 
-Test the installation by running `creato --version`.
+Test the installation by running `batiq --version`.
 
 ### Create application schema
 
 ```bash
-creato init -y
+batiq init -y
 ```
 
 It will create an `app.json` file under the current directory. Or you can follow the prompts to create the schema.
 
 ### Run application in the browser
 
-Use `@creato/cli` to run application from a browser.
+Use `@batiq/cli` to run application from a browser.
 
 ```bash
-creato run ./app.json
+batiq run ./app.json
 ```
 
 It will run the application under `http://localhost:3000`. If you change the file it will dynamically refresh the app.
@@ -57,7 +57,7 @@ It will run the application under `http://localhost:3000`. If you change the fil
 Use the CLI to generate application from schema.
 
 ```bash
-creato generate ./app.json
+batiq generate ./app.json
 ```
 
 It will generate the application under `./output` directory. The type of project will be determined by the `type` property in the schema. see all available [application types](docs/app-schema.md).
@@ -72,17 +72,17 @@ Runtime is a library that can be used to run an application schema inside browse
 
 ```bash
 # npm
-npm install @creato/runtime
+npm install @batiq/runtime
 
 # yarn
-yarn add @creato/runtime
+yarn add @batiq/runtime
 ```
 
 ### Create and mount app
 
 ```ts
 // app.ts
-import { createApp } from "@creato/runtime";
+import { createApp } from "@batiq/runtime";
 import schema from "./app.json";
 
 const app = createApp(schema);
@@ -94,7 +94,7 @@ Or, you can use react `Runtime` component to mount the app.
 
 ```tsx
 // app.tsx
-import { Runtime } from "@creato/runtime";
+import { Runtime } from "@batiq/runtime";
 import schema from "./app.json";
 
 const App = () => {
@@ -110,7 +110,7 @@ Generator can be used to generate project code from an app schema. It can genera
 
 ```ts
 // generate-app.ts
-import { generate } from "@creato/generator";
+import { generate } from "@batiq/generator";
 import appSchema from "./app.json";
 
 generate(appSchema, {
@@ -133,8 +133,8 @@ The app schema is a JSON file that describes the application. It is used by the 
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-router-dom": "6.0.2",
-    "@creato/components": "1.0.0",
-    "@creato/actions": "1.0.0"
+    "@batiq/components": "1.0.0",
+    "@batiq/actions": "1.0.0"
   },
   "pages": [
     {
@@ -203,8 +203,8 @@ deps:
   - react@18.2.0
   - react-dom@18.2.0
   - react-router-dom@6.0.2
-  - @creato/components@1.0.0
-  - @creato/actions@1.0.0
+  - @batiq/components@1.0.0
+  - @batiq/actions@1.0.0
 pages:
   - name: Home
     path: /
