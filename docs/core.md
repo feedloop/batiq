@@ -86,6 +86,7 @@ Batiq Core provides a middleware system to intercept the schema and modify it.
 
 ```ts
 import createBatiq, { AppSchema, loggerMiddleware, multiplayerMiddleware } from "@batiq/core";
+import { log, multiplier, undoRedo } from "@batiq/core/middleware";
 
 const appJson: AppSchema = {
   name: "My App",
@@ -94,16 +95,16 @@ const appJson: AppSchema = {
   pages: [ ... ],
 };
 
-const app = createBatiq(appJson, [loggerMiddleware, multiplayerMiddleware]);
+const app = createBatiq(log(multiplier(undoRedo(appJson))));
 ```
 
 List of available middleware:
 
-- [`loggerMiddleware`](./middleware.md#loggermiddleware): Logs the schema changes.
-- [`multiplayerMiddleware`](./middleware.md#multiplayermiddleware): Allows multiple users to edit the schema at the same time.
-- [`storageMiddleware`](./middleware.md#storagemiddleware): Saves the schema in the browser's local storage.
-- [`undoRedoMiddleware`](./middleware.md#undoredomiddleware): Adds undo/redo functionality.
-- [`validationMiddleware`](./middleware.md#validationmiddleware): Validates the schema.
-- [`debugMiddleware`](./middleware.md#debugmiddleware): Logs the schema changes and the actions.
+- [`log`](./middleware.md#loggermiddleware): Logs the schema changes.
+- [`multiplayer`](./middleware.md#multiplayermiddleware): Allows multiple users to edit the schema at the same time.
+- [`storage`](./middleware.md#storagemiddleware): Saves the schema in the browser's local storage.
+- [`undoRedo`](./middleware.md#undoredomiddleware): Adds undo/redo functionality.
+- [`validation`](./middleware.md#validationmiddleware): Validates the schema.
+- [`debug`](./middleware.md#debugmiddleware): Logs the schema changes and the actions.
 
 If you want to create your own middleware, see this [documentation](./middleware.md#create-a-middleware).

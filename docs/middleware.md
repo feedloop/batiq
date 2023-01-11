@@ -4,74 +4,89 @@ Batiq Middleware is a way to extend Batiq Core with custom functionality. It is 
 
 ## Predefined middleware
 
-### `loggerMiddleware`
+### `log`
 
 This middleware logs all operations to the console.
 
 ```ts
-import { loggerMiddleware } from "@batiq/core";
+import { log } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [loggerMiddleware]);
+const app = createBatiq(log(appJson));
 ```
 
-### `multiplayerMiddleware`
+### `multiplayer`
 
 This middleware allows you to sync the schema with other Batiq instances.
 
 ```ts
-import { multiplayerMiddleware } from "@batiq/core";
+import { multiplayer } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [multiplayerMiddleware]);
+const app = createBatiq(multiplayer(appJson));
 ```
 
-### `storageMiddleware`
+### `storage`
 
 This middleware saves the schema in the browser's local storage.
 
 ```ts
-import { storageMiddleware } from "@batiq/core";
+import { storage } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [storageMiddleware]);
+const app = createBatiq(storage(appJson, { key: "batiq-schema" }));
 ```
 
-### `undoRedoMiddleware`
+### `undoRedo`
 
 This middleware adds undo/redo functionality.
 
 ```ts
-import { undoRedoMiddleware } from "@batiq/core";
+import { undoRedo } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [undoRedoMiddleware]);
+const app = createBatiq(undoRedo(appJson));
 ```
 
-### `validationMiddleware`
+### `validation`
 
 This middleware validates the schema.
 
 ```ts
-import { validationMiddleware } from "@batiq/core";
+import { validation } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [validationMiddleware]);
+const app = createBatiq(validation(appJson));
 ```
 
-### `debugMiddleware`
+### `debug`
 
 This middleware logs the schema changes and the actions.
 
 ```ts
-import { debugMiddleware } from "@batiq/core";
+import { debug } from "@batiq/core/middleware";
 
-const app = createBatiq(appJson, [debugMiddleware]);
+const app = createBatiq(debug(appJson));
 ```
 
 ## Create a Middleware
 
 To create a middleware, you need to create a function that takes a Batiq instance and returns a new Batiq instance.
 
+Middleware definition:
+
+```ts
+type Middleware<Input extends Schema = Schema, Output extends Input = Input> = (
+  input: Input
+) => Output;
+```
+
+Import in your middleware:
+
 ```ts
 import createBatiq from "@batiq/core";
+import { Middleware } from "@batiq/core/middleware";
 
-const myMiddleware = (batiq) => (next) => (operation) => {
+type MyMiddleware = {
+  log: () => void;
+}
+
+const myMiddleware: Middleware<MyMiddleware> = (batiq: Batiq) => {
   if (operation.type === "insert") {
     // Do something
   }
