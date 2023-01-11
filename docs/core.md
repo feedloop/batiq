@@ -95,7 +95,7 @@ const appJson: AppSchema = {
   pages: [ ... ],
 };
 
-const app = createBatiq(log(multiplier(undoRedo(appJson))));
+const app = createBatiq(appJson, [log, multiplier, undoRedo]);
 ```
 
 List of available middleware:
