@@ -18,7 +18,7 @@ describe("Batiq", () => {
   it("should be able to create a batiq instance", () => {
     const batiq = createBatiq(initialSchema);
 
-    expect(batiq.export()).toEqual(initialSchema);
+    expect(batiq.getSchema()).toEqual(initialSchema);
   });
 
   it('should call subscribers when "dispatch" is called', () => {
@@ -26,13 +26,11 @@ describe("Batiq", () => {
     const subscriber = jest.fn();
     batiq.subscribe(subscriber);
 
-    batiq.dispatch([
-      {
-        type: "set",
-        path: ["name"],
-        value: "new app",
-      },
-    ]);
+    batiq.dispatch({
+      type: "set",
+      path: ["name"],
+      value: "new app",
+    });
 
     expect(subscriber).toHaveBeenCalledWith([
       {
@@ -49,13 +47,11 @@ describe("Batiq", () => {
     const unsubscribe = batiq.subscribe(subscriber);
     unsubscribe();
 
-    batiq.dispatch([
-      {
-        type: "set",
-        path: ["name"],
-        value: "new app",
-      },
-    ]);
+    batiq.dispatch({
+      type: "set",
+      path: ["name"],
+      value: "new app",
+    });
 
     expect(subscriber).not.toHaveBeenCalled();
   });
@@ -84,7 +80,7 @@ describe("Batiq Operations", () => {
       },
     ]);
 
-    expect(batiq.export()).toEqual({
+    expect(batiq.getSchema()).toEqual({
       ...initialSchema,
       pages: [
         ...initialSchema.pages,
@@ -103,14 +99,12 @@ describe("Batiq Operations", () => {
   it("should be able to remove a value", () => {
     const batiq = createBatiq(initialSchema);
 
-    batiq.dispatch([
-      {
-        type: "remove",
-        path: ["pages", 0],
-      },
-    ]);
+    batiq.dispatch({
+      type: "remove",
+      path: ["pages", 0],
+    });
 
-    expect(batiq.export()).toEqual({
+    expect(batiq.getSchema()).toEqual({
       ...initialSchema,
       pages: initialSchema.pages.slice(1),
     });
@@ -119,15 +113,13 @@ describe("Batiq Operations", () => {
   it("should be able to set a value", () => {
     const batiq = createBatiq(initialSchema);
 
-    batiq.dispatch([
-      {
-        type: "set",
-        path: ["pages", 0, "name"],
-        value: "page 1 updated",
-      },
-    ]);
+    batiq.dispatch({
+      type: "set",
+      path: ["pages", 0, "name"],
+      value: "page 1 updated",
+    });
 
-    expect(batiq.export()).toEqual({
+    expect(batiq.getSchema()).toEqual({
       ...initialSchema,
       pages: [
         {
@@ -142,15 +134,13 @@ describe("Batiq Operations", () => {
   it("should be able to move a value", () => {
     const batiq = createBatiq(initialSchema);
 
-    batiq.dispatch([
-      {
-        type: "move",
-        from: ["pages", 0],
-        to: ["pages", 1],
-      },
-    ]);
+    batiq.dispatch({
+      type: "move",
+      from: ["pages", 0],
+      to: ["pages", 1],
+    });
 
-    expect(batiq.export()).toEqual({
+    expect(batiq.getSchema()).toEqual({
       ...initialSchema,
       pages: initialSchema.pages.slice().reverse(),
     });

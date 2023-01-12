@@ -15,7 +15,8 @@ export const createBatiq: CreateBatiqFn = (
   const batiq: BaseBatiqCore = {
     operations: [],
 
-    dispatch: (operations) => {
+    dispatch: (operation) => {
+      const operations = Array.isArray(operation) ? operation : [operation];
       batiq.operations = batiq.operations.concat(operations);
 
       const performOperation = (operation: AppOperation) => {
@@ -76,7 +77,7 @@ export const createBatiq: CreateBatiqFn = (
       [...listeners].forEach((listener) => listener(operations));
     },
 
-    export: () => json,
+    getSchema: () => json,
 
     subscribe: (listener: (operations: AppOperation[]) => void) => {
       listeners.add(listener);

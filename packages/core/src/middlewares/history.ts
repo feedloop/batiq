@@ -65,8 +65,8 @@ const history = <S extends BaseBatiqCore>(batiq: S): S & History => {
           path: operation.path,
           value: operation.value,
           oldValue: lens
-            .fromPath(batiq.export(), operation.path as any)
-            .get(batiq.export()),
+            .fromPath(batiq.getSchema(), operation.path as any)
+            .get(batiq.getSchema()),
         };
 
       case "remove":
@@ -74,8 +74,8 @@ const history = <S extends BaseBatiqCore>(batiq: S): S & History => {
           type: "remove",
           path: operation.path,
           value: lens
-            .fromPath(batiq.export(), operation.path as any)
-            .get(batiq.export()),
+            .fromPath(batiq.getSchema(), operation.path as any)
+            .get(batiq.getSchema()),
         };
 
       default:
@@ -93,7 +93,9 @@ const history = <S extends BaseBatiqCore>(batiq: S): S & History => {
     undo: () => {
       if (!batiqHistory.canUndo()) return;
       const operations = batiqHistory.undoStack.pop()!;
-      batiqHistory.redoStack.push(operations.map(inverseOperation));
+      batiqHistory.redoStack.push(
+        operations.map(inverseOperation).slice().reverse()
+      );
       dispatch(operations);
     },
 
@@ -102,11 +104,14 @@ const history = <S extends BaseBatiqCore>(batiq: S): S & History => {
     redo: () => {
       if (!batiqHistory.canRedo()) return;
       const operations = batiqHistory.redoStack.pop()!;
-      batiqHistory.undoStack.push(operations.map(inverseOperation));
+      batiqHistory.undoStack.push(
+        operations.map(inverseOperation).slice().reverse()
+      );
       dispatch(operations);
     },
 
-    dispatch: (operations) => {
+    dispatch: (operation) => {
+      const operations = Array.isArray(operation) ? operation : [operation];
       batiqHistory.undoStack.push(
         operations.map(transformAppOperation).map(inverseOperation)
       );

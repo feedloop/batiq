@@ -22,13 +22,13 @@ export type AppOperation = Operation<AppSchema>;
 
 export type BaseBatiqCore = {
   operations: AppOperation[];
-  dispatch: (operations: AppOperation[]) => void;
-  export: () => AppSchema;
+  dispatch: (operations: AppOperation | AppOperation[]) => void;
+  getSchema: () => AppSchema;
   subscribe: (listener: (operations: AppOperation[]) => void) => () => void;
 };
 
 /**
- * factory function to create a batiq instance middlewares type
+ * factory function to create a batiq instance, middlewares type
  * is limited to 10. Fortunately middleware is composable,
  * if you want more than 10 middlewares you should compose
  * them into a single middleware
