@@ -1,0 +1,10 @@
+{
+  "name": "@batiq/core",
+  "version": "0.1.0",
+  "type": "commonjs",
+  "scripts": {
+    "build": "echo 'implement build'"
+  },
+  "devDependencies": {},
+  "dependencies": {}
+}
