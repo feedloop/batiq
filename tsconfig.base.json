@@ -16,7 +16,7 @@
     "baseUrl": ".",
     "noEmit": true,
     "paths": {
-      "@batik/core": ["packages/core/src/index.ts"],
+      "@batiq/core": ["packages/core/src/index.ts"],
       "@nx/core": ["packages/core/src/index.ts"]
     }
   },
