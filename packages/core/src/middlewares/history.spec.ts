@@ -17,7 +17,7 @@ const initialSchema = {
 
 describe("Reverse Operation", () => {
   it("should be able to reverse an insert operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -47,7 +47,7 @@ describe("Reverse Operation", () => {
   });
 
   it("should be able to reverse a remove operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -67,7 +67,7 @@ describe("Reverse Operation", () => {
   });
 
   it("should be able to reverse a set operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -90,7 +90,7 @@ describe("Reverse Operation", () => {
   });
 
   it("should be able to reverse a move operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -113,7 +113,7 @@ describe("Reverse Operation", () => {
 
 describe("History Stack", () => {
   it("should increase undo stack when dispatching an operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -127,7 +127,7 @@ describe("History Stack", () => {
   });
 
   it("should increase redo stack when undoing an operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -152,7 +152,7 @@ describe("History Stack", () => {
   });
 
   it("should clear redo stack when dispatching a new operation", () => {
-    const batiq = history(createBatiq(initialSchema));
+    const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
       {
@@ -182,7 +182,6 @@ describe("History Stack", () => {
   });
 
   it("should not do anything when undoing/redoing an empty stack", () => {
-    // const batiq = history(createBatiq(initialSchema));
     const batiq = createBatiq(initialSchema, [history]);
 
     batiq.dispatch([
