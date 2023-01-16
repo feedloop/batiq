@@ -1,8 +1,25 @@
+import * as React from "react";
+import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
+
+export type ComponentDefinition<P extends Record<string, any>> =
+  React.ComponentType<React.PropsWithChildren<P>> & {
+    inputs: ComponentInput<P>;
+  };
+
+export type ComponentInput<P> = JSONSchemaType<P>;
+
+export type ComponentSchema = {
+  from: string;
+  name?: string;
+  properties: Record<string, any>;
+  children: ComponentSchema[];
+};
 
 export type PageSchema = {
   name: string;
   path: string;
+  children: ComponentSchema[];
 };
 
 export type AppSchema = {
