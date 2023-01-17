@@ -6,10 +6,12 @@ const initialSchema = {
     {
       name: "page 1",
       path: "/page-1",
+      children: [],
     },
     {
       name: "page 2",
       path: "/page-2",
+      children: [],
     },
   ],
 };

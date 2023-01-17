@@ -1,10 +1,12 @@
 {
   "name": "@batiq/core",
   "version": "0.1.0",
-  "type": "commonjs",
+  "type": "module",
   "scripts": {
     "build": "echo 'implement build'"
   },
   "devDependencies": {},
-  "dependencies": {}
+  "dependencies": {
+    "ajv": "^8.12.0"
+  }
 }

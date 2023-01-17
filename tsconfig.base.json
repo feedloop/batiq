@@ -17,7 +17,7 @@
     "noEmit": true,
     "paths": {
       "@batiq/core": ["packages/core/src/index.ts"],
-      "@nx/core": ["packages/core/src/index.ts"]
+      "@batiq/generator": ["packages/generator/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
