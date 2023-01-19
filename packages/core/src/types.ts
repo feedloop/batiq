@@ -2,10 +2,12 @@ import * as React from "react";
 import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
 
-export type ComponentDefinition<P extends Record<string, any>> =
-  React.ComponentType<React.PropsWithChildren<P>> & {
-    inputs: ComponentInput<P>;
-  };
+export type ComponentDefinition<P extends Record<string, any>> = (
+  | React.ComponentType<React.PropsWithChildren<P>>
+  | ((props: React.PropsWithChildren<P>) => JSX.Element)
+) & {
+  inputs: ComponentInput<P>;
+};
 
 export type ComponentInput<P> = JSONSchemaType<P>;
 
@@ -18,12 +20,44 @@ export type ComponentSchema = {
 
 export type PageSchema = {
   name: string;
-  path: string;
+  navigation: {
+    path: string;
+    tab?: {
+      label: string;
+      icon: string;
+    };
+  };
   children: ComponentSchema[];
 };
 
+export type Platform = "web" | "native" | "webcomponent";
+
 export type AppSchema = {
-  name: string;
+  batiq: string;
+  platform: Platform;
+  info: Record<string, any> & {
+    name: string;
+    description?: string;
+    version?: string;
+    tags?: {
+      name: string;
+      description?: string;
+    }[];
+  };
+  prefixes: string[];
+  config: Record<string, any>;
+  theme?: Partial<{
+    dark: boolean;
+    colors: Partial<{
+      primary: string;
+      background: string;
+      card: string;
+      text: string;
+      border: string;
+      notification: string;
+    }>;
+    [key: string]: any;
+  }>;
   pages: PageSchema[];
 };
 

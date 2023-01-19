@@ -1,16 +1,26 @@
 import { createBatiq } from "./batiq";
+import { AppSchema } from "./types";
 
-const initialSchema = {
+const initialSchema: AppSchema = {
   name: "app",
+  version: "1",
+  platform: "web",
+  prefixes: ["http://localhost"],
+  config: {},
+  theme: "default",
   pages: [
     {
       name: "page 1",
-      path: "/page-1",
+      navigation: {
+        path: "/page-1",
+      },
       children: [],
     },
     {
       name: "page 2",
-      path: "/page-2",
+      navigation: {
+        path: "/page-2",
+      },
       children: [],
     },
   ],

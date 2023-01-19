@@ -3,12 +3,14 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/generator/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
       "executor": "@nrwl/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/generator",
+        "project": "packages/generator/package.json",
         "main": "packages/generator/src/index.ts",
         "tsConfig": "packages/generator/tsconfig.lib.json",
         "assets": []

@@ -52,7 +52,7 @@ const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
 export const toVariableName = (source: string): string =>
   source
     .split(/\W+/)
-    .filter(Boolean)
+    .filter((word) => word.length > 0)
     .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1))
     .join("_");
 

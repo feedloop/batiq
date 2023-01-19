@@ -1,7 +1,9 @@
 import * as t from "@babel/types";
 import { toVariableName } from "./transformIR";
 import { Prop, JSX, Component, ComponentImport, PageIR } from "./transformIR";
-import babelGenerate from "@babel/generator";
+import { createRequire } from "module";
+const require = createRequire(import.meta.url);
+const { default: babelGenerate } = require("@babel/generator");
 
 const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
   return t.importDeclaration(

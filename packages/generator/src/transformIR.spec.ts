@@ -20,7 +20,9 @@ const defaultParagraphComponent: ComponentSchema = {
 
 const page = (components: ComponentSchema[]): PageSchema => ({
   name: "Page",
-  path: "/page",
+  navigation: {
+    path: "/page",
+  },
   children: components,
 });
 
