@@ -1,0 +1,20 @@
+{
+  "name": "@batiq/components",
+  "version": "0.0.1",
+  "type": "module",
+  "module": "src/index.ts",
+  "dependencies": {
+    "native-base": "^3.4.25"
+  },
+  "peerDependencies": {
+    "expo": "*",
+    "react": ">=18.0.0",
+    "react-native-safe-area-context": "*",
+    "react-native-svg": "*"
+  },
+  "devDependencies": {
+    "expo": "~47.0.13",
+    "react-native-safe-area-context": "4.4.1",
+    "react-native-svg": "13.4.0"
+  }
+}
