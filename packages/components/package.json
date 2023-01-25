@@ -4,6 +4,7 @@
   "type": "module",
   "module": "src/index.ts",
   "dependencies": {
+    "@sinclair/typebox": "^0.25.21",
     "native-base": "^3.4.25"
   },
   "peerDependencies": {

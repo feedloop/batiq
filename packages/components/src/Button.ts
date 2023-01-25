@@ -1,9 +1,7 @@
 import { Button } from "native-base";
+import { Type } from "@sinclair/typebox";
 
 // @ts-ignore
-Button.inputs = {
-  type: "object",
-  properties: {},
-};
+Button.inputs = Type.Strict(Type.Object({}));
 
 export { Button };
