@@ -3,6 +3,7 @@ import * as t from "@babel/types";
 import { toVariableName } from "./transformIR";
 import * as prettier from "prettier";
 import { createRequire } from "module";
+import { valueToAST } from "./utils/valueToAST";
 const require = createRequire(import.meta.url);
 const { default: generate } = require("@babel/generator");
 
@@ -69,14 +70,7 @@ const generateNavigationProgram = (schema: AppSchema): t.Program => {
               t.jsxAttribute(t.jsxIdentifier("name"), t.stringLiteral(tab)),
               t.jsxAttribute(
                 t.jsxIdentifier("options"),
-                t.jsxExpressionContainer(
-                  t.objectExpression([
-                    t.objectProperty(
-                      t.identifier("headerShown"),
-                      t.booleanLiteral(false)
-                    ),
-                  ])
-                )
+                t.jsxExpressionContainer(valueToAST({ headerShown: false }))
               ),
             ],
             false
@@ -232,78 +226,46 @@ const generateNavigationProgram = (schema: AppSchema): t.Program => {
                 t.jsxAttribute(
                   t.jsxIdentifier("linking"),
                   t.jsxExpressionContainer(
-                    t.objectExpression([
-                      t.objectProperty(
-                        t.identifier("prefixes"),
-                        t.arrayExpression(
-                          schema.prefixes.map((prefix) =>
-                            t.stringLiteral(prefix)
-                          )
-                        )
-                      ),
-                      t.objectProperty(
-                        t.identifier("config"),
-                        t.objectExpression([
-                          t.objectProperty(
-                            t.identifier("screens"),
-                            t.objectExpression(
-                              [
-                                t.objectProperty(
-                                  t.identifier("Tabs"),
-                                  t.objectExpression([
-                                    t.objectProperty(
-                                      t.identifier("screens"),
-                                      t.objectExpression(
-                                        Object.values(navigation.tabs).map(
-                                          (tab) =>
-                                            Array.isArray(tab.page)
-                                              ? t.objectProperty(
-                                                  t.identifier(tab.tab.label),
-                                                  t.objectExpression([
-                                                    t.objectProperty(
-                                                      t.identifier("screens"),
-                                                      t.objectExpression(
-                                                        tab.page.map((page) =>
-                                                          t.objectProperty(
-                                                            t.stringLiteral(
-                                                              page.name
-                                                            ),
-                                                            t.stringLiteral(
-                                                              page.navigation
-                                                                .path
-                                                            )
-                                                          )
-                                                        )
-                                                      )
-                                                    ),
+                    valueToAST({
+                      prefixes: schema.prefixes,
+                      config: {
+                        screens: {
+                          ...(tabScreens.length > 0
+                            ? {
+                                Tabs: {
+                                  screens: Object.fromEntries(
+                                    Object.values(navigation.tabs).map(
+                                      (tab): [string, any] =>
+                                        Array.isArray(tab.page)
+                                          ? [
+                                              tab.tab.label,
+                                              {
+                                                screens: Object.fromEntries(
+                                                  tab.page.map((page) => [
+                                                    page.name,
+                                                    page.navigation.path,
                                                   ])
-                                                )
-                                              : t.objectProperty(
-                                                  t.stringLiteral(
-                                                    tab.tab.label
-                                                  ),
-                                                  t.stringLiteral(
-                                                    tab.page.navigation.path
-                                                  )
-                                                )
-                                        )
-                                      )
-                                    ),
-                                  ])
-                                ),
-                              ].concat(
-                                navigation.stack.map((page) =>
-                                  t.objectProperty(
-                                    t.stringLiteral(page.name),
-                                    t.stringLiteral(page.navigation.path)
-                                  )
-                                )
-                              )
-                            )
+                                                ),
+                                              },
+                                            ]
+                                          : [
+                                              tab.tab.label,
+                                              tab.page.navigation.path,
+                                            ]
+                                    )
+                                  ),
+                                },
+                              }
+                            : {}),
+                          ...Object.fromEntries(
+                            navigation.stack.map((page) => [
+                              page.name,
+                              page.navigation.path,
+                            ])
                           ),
-                        ])
-                      ),
-                    ])
+                        },
+                      },
+                    })
                   )
                 ),
               ],
@@ -335,12 +297,7 @@ const generateNavigationProgram = (schema: AppSchema): t.Program => {
                             t.jsxAttribute(
                               t.jsxIdentifier("options"),
                               t.jsxExpressionContainer(
-                                t.objectExpression([
-                                  t.objectProperty(
-                                    t.identifier("headerShown"),
-                                    t.booleanLiteral(false)
-                                  ),
-                                ])
+                                valueToAST({ headerShow: false })
                               )
                             ),
                           ],
