@@ -120,7 +120,7 @@ export const main = (argv: string[]) => {
             private: true,
           })
         );
-        const pm = new ExpoPackageManager.YarnPackageManager({
+        const pm = new ExpoPackageManager.NpmPackageManager({
           cwd: path.resolve(argv.output),
           silent: false,
         });
