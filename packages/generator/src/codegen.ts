@@ -1,7 +1,11 @@
 import * as t from "@babel/types";
-import { toVariableName } from "./transformIR";
-import { Prop, JSX, Component, ComponentImport, PageIR } from "./transformIR";
-import babelGenerate from "@babel/generator";
+import { toVariableName, transformIR } from "./transformIR";
+import { JSX, Component, ComponentImport, PageIR } from "./transformIR";
+import { createRequire } from "module";
+import { valueToAST } from "./utils/valueToAST";
+import { PageSchema } from "@batiq/core";
+const require = createRequire(import.meta.url);
+const { default: babelGenerate } = require("@babel/generator");
 
 const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
   return t.importDeclaration(
@@ -17,29 +21,6 @@ const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
   );
 };
 
-const transformExpression = (expression: Prop["value"]): t.Expression => {
-  if (typeof expression === "string") {
-    return t.stringLiteral(expression);
-  }
-  if (typeof expression === "number") {
-    return t.numericLiteral(expression);
-  }
-  if (typeof expression === "boolean") {
-    return t.booleanLiteral(expression);
-  }
-  if (Array.isArray(expression)) {
-    return t.arrayExpression(expression.map(transformExpression));
-  }
-  if (typeof expression === "object") {
-    return t.objectExpression(
-      Object.entries(expression).map(([key, value]) =>
-        t.objectProperty(t.identifier(key), transformExpression(value))
-      )
-    );
-  }
-  throw new Error("Unknown expression type");
-};
-
 const transformJSX = (JSX: JSX): t.JSXElement => {
   return t.jsxElement(
     t.jsxOpeningElement(
@@ -47,7 +28,7 @@ const transformJSX = (JSX: JSX): t.JSXElement => {
       JSX.props.map((prop) =>
         t.jsxAttribute(
           t.jsxIdentifier(prop.name),
-          t.jsxExpressionContainer(transformExpression(prop.value))
+          t.jsxExpressionContainer(valueToAST(prop.value))
         )
       ),
       JSX.children.length === 0
@@ -102,3 +83,6 @@ export const generate = async (ir: PageIR, format = false): Promise<string> => {
   const prettier = await import("prettier");
   return prettier.format(code, { parser: "babel" });
 };
+
+export const generatePage = async (page: PageSchema, format?: boolean) =>
+  generate(await transformIR(page), format);

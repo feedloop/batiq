@@ -1,16 +1,28 @@
 import { createBatiq } from "./batiq";
+import { AppSchema } from "./types";
 
-const initialSchema = {
-  name: "app",
+const initialSchema: AppSchema = {
+  batiq: "1",
+  platform: "web",
+  info: {
+    name: "app",
+  },
+  config: {
+    prefixes: [],
+  },
   pages: [
     {
       name: "page 1",
-      path: "/page-1",
+      navigation: {
+        path: "/page-1",
+      },
       children: [],
     },
     {
       name: "page 2",
-      path: "/page-2",
+      navigation: {
+        path: "/page-2",
+      },
       children: [],
     },
   ],
@@ -30,7 +42,7 @@ describe("Batiq", () => {
 
     batiq.dispatch({
       type: "set",
-      path: ["name"],
+      path: ["info", "name"],
       value: "new app",
     });
 
@@ -51,7 +63,7 @@ describe("Batiq", () => {
 
     batiq.dispatch({
       type: "set",
-      path: ["name"],
+      path: ["info", "name"],
       value: "new app",
     });
 

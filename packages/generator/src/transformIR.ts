@@ -52,19 +52,19 @@ const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
 export const toVariableName = (source: string): string =>
   source
     .split(/\W+/)
-    .filter(Boolean)
+    .filter((word) => word.length > 0)
     .map((word) => word.slice(0, 1).toUpperCase() + word.slice(1))
     .join("_");
 
 const transform = async (
   schema: ComponentSchema
 ): Promise<[ComponentImport[], JSX]> => {
-  const component: ComponentDefinition<Record<string, any>> = (
-    await import(schema.from)
-  )[schema.name ?? "default"];
-  if (!ajv.validate(component.inputs, schema.properties)) {
-    throw new Error(ajv.errorsText());
-  }
+  // const component: ComponentDefinition<Record<string, any>> = (
+  //   await importModuleCwd(schema.from)
+  // )[schema.name ?? "default"];
+  // if (!ajv.validate(component.inputs, schema.properties)) {
+  //   throw new Error(ajv.errorsText());
+  // }
 
   const imports = [
     schema.name
