@@ -227,7 +227,11 @@ const generateNavigationProgram = (schema: AppSchema): t.Program => {
                   t.jsxIdentifier("linking"),
                   t.jsxExpressionContainer(
                     valueToAST({
-                      prefixes: schema.prefixes,
+                      prefixes: t.logicalExpression(
+                        "??",
+                        t.identifier("process.env.LINK_PREFIXES"),
+                        t.arrayExpression([])
+                      ),
                       config: {
                         screens: {
                           ...(tabScreens.length > 0
