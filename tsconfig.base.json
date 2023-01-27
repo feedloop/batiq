@@ -16,8 +16,10 @@
     "baseUrl": ".",
     "noEmit": true,
     "paths": {
+      "@batiq/cli": ["packages/cli/src/index.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],
-      "@batiq/generator": ["packages/generator/src/index.ts"]
+      "@batiq/generator": ["packages/generator/src/index.ts"],
+      "@batiq/components": ["packages/components/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

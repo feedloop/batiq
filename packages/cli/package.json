@@ -1,0 +1,21 @@
+{
+  "name": "@batiq/cli",
+  "version": "0.1.0",
+  "type": "module",
+  "bin": {
+    "batiq": "cli.js"
+  },
+  "scripts": {
+    "dev": "NODE_ENV=development ts-node src/index.ts"
+  },
+  "dependencies": {
+    "@batiq/generator": "*",
+    "@expo/package-manager": "^0.0.57",
+    "@expo/spawn-async": "^1.7.0",
+    "yargs": "^17.6.2"
+  },
+  "devDependencies": {
+    "ts-paths-esm-loader": "^1.3.2",
+    "tsconfig-paths": "^4.1.2"
+  }
+}
