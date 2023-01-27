@@ -9,9 +9,11 @@
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/cli",
+        "project": "packages/cli/package.json",
         "main": "packages/cli/src/index.ts",
         "tsConfig": "packages/cli/tsconfig.lib.json",
-        "assets": []
+        "assets": ["packages/cli/src/cli.js"],
+        "format": ["esm"]
       }
     },
     "publish": {

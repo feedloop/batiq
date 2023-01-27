@@ -1,10 +1,12 @@
 {
   "name": "@batiq/cli",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "module",
-  "bin": "bin/run.js",
+  "bin": {
+    "batiq": "cli.js"
+  },
   "scripts": {
-    "dev": "ts-node src/index.ts"
+    "dev": "NODE_ENV=development ts-node src/index.ts"
   },
   "dependencies": {
     "@batiq/generator": "*",
