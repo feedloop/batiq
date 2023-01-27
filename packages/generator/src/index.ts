@@ -1,8 +1,15 @@
-import { PageSchema } from "@batiq/core";
-import { generate } from "./codegen";
-import { transformIR } from "./transformIR";
+import { AppSchema } from "@batiq/core";
+import generateExpo from "./expo/generate";
 
-export { generateNavigation } from "./navigation";
-
-export const generatePage = async (page: PageSchema, format?: boolean) =>
-  generate(await transformIR(page), format);
+export const generateApp = (
+  schema: AppSchema,
+  target: "expo" | "next" | "vite",
+  output: string
+) => {
+  switch (target) {
+    case "expo":
+      return generateExpo(schema, output);
+    default:
+      throw Error("target not implemented");
+  }
+};

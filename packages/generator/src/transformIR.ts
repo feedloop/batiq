@@ -59,12 +59,12 @@ export const toVariableName = (source: string): string =>
 const transform = async (
   schema: ComponentSchema
 ): Promise<[ComponentImport[], JSX]> => {
-  const component: ComponentDefinition<Record<string, any>> = (
-    await import(schema.from)
-  )[schema.name ?? "default"];
-  if (!ajv.validate(component.inputs, schema.properties)) {
-    throw new Error(ajv.errorsText());
-  }
+  // const component: ComponentDefinition<Record<string, any>> = (
+  //   await importModuleCwd(schema.from)
+  // )[schema.name ?? "default"];
+  // if (!ajv.validate(component.inputs, schema.properties)) {
+  //   throw new Error(ajv.errorsText());
+  // }
 
   const imports = [
     schema.name

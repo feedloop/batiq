@@ -1,8 +1,9 @@
 import * as t from "@babel/types";
-import { toVariableName } from "./transformIR";
+import { toVariableName, transformIR } from "./transformIR";
 import { JSX, Component, ComponentImport, PageIR } from "./transformIR";
 import { createRequire } from "module";
 import { valueToAST } from "./utils/valueToAST";
+import { PageSchema } from "@batiq/core";
 const require = createRequire(import.meta.url);
 const { default: babelGenerate } = require("@babel/generator");
 
@@ -82,3 +83,6 @@ export const generate = async (ir: PageIR, format = false): Promise<string> => {
   const prettier = await import("prettier");
   return prettier.format(code, { parser: "babel" });
 };
+
+export const generatePage = async (page: PageSchema, format?: boolean) =>
+  generate(await transformIR(page), format);

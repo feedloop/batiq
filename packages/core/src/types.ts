@@ -44,8 +44,9 @@ export type AppSchema = {
       description?: string;
     }[];
   };
-  prefixes: string[];
-  config: Record<string, any>;
+  config: Record<string, any> & {
+    link_prefixes?: string[];
+  };
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{

@@ -3,12 +3,14 @@ import { AppSchema } from "../types";
 import history from "./history";
 
 const initialSchema: AppSchema = {
-  name: "app",
-  version: "1",
+  batiq: "1",
   platform: "web",
-  config: {},
-  prefixes: [],
-  theme: "default",
+  info: {
+    name: "app",
+  },
+  config: {
+    prefixes: [],
+  },
   pages: [
     {
       name: "page 1",

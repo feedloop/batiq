@@ -13,7 +13,8 @@
         "project": "packages/generator/package.json",
         "main": "packages/generator/src/index.ts",
         "tsConfig": "packages/generator/tsconfig.lib.json",
-        "assets": []
+        "assets": [],
+        "format": ["esm"]
       }
     },
     "publish": {
@@ -38,6 +39,5 @@
         "passWithNoTests": true
       }
     }
-  },
-  "tags": []
+  }
 }
