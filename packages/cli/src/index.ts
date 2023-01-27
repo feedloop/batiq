@@ -22,6 +22,7 @@ export const main = (argv: string[]) => {
           type: "string",
           description: "target platform",
           default: "expo",
+          choices: ["expo", "vite", "web-component"],
         },
         schema: {
           type: "string",
