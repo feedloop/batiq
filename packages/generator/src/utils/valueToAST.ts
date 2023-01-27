@@ -1,6 +1,9 @@
 import * as t from "@babel/types";
 
 export const valueToAST = (value: any): t.Expression => {
+  if (t.isExpression(value)) {
+    return value;
+  }
   if (value === null) {
     return t.nullLiteral();
   }

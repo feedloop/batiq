@@ -54,13 +54,6 @@ const generateExpo = async (schema: AppSchema, output: string) => {
         2
       )
     );
-    console.log(
-      "env",
-      dot.object(schema.config),
-      Object.entries(dot.object(schema.config))
-        .map(([key, value]) => `${key.toUpperCase()}=${value}`)
-        .join("\n")
-    );
     fs.writeFileSync(
       ".env",
       Object.entries(dot.object(schema.config))
