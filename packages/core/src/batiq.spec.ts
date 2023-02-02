@@ -49,7 +49,7 @@ describe("Batiq", () => {
     expect(subscriber).toHaveBeenCalledWith([
       {
         type: "set",
-        path: ["name"],
+        path: ["info", "name"],
         value: "new app",
       },
     ]);

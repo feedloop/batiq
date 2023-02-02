@@ -15,6 +15,7 @@
   },
   "files": [],
   "include": [],
+  "exclude": ["tests/cases/**/output.tsx"],
   "references": [
     {
       "path": "./tsconfig.lib.json"

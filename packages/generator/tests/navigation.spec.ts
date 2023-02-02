@@ -1,12 +1,12 @@
 import glob from "tiny-glob";
 import path from "node:path";
 import { toMatchFile } from "jest-file-snapshot";
-import { generateNavigation } from "../src/navigation";
+import { generateNavigation } from "../src/expo/navigation";
 
 expect.extend({ toMatchFile });
 
 describe("Navigation", () => {
-  it("askdjasd", async () => {
+  it("generate navigation", async () => {
     const files = await glob(
       path.join(__dirname, "cases/navigation/*/input.tsx"),
       { absolute: true }

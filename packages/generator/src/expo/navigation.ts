@@ -2,10 +2,15 @@ import { AppSchema, PageSchema } from "@batiq/core";
 import * as t from "@babel/types";
 import { toVariableName } from "../transformIR";
 import * as prettier from "prettier";
-import { createRequire } from "module";
 import { valueToAST } from "../utils/valueToAST";
-const require = createRequire(import.meta.url);
-const { default: generate } = require("@babel/generator");
+import _babelGenerate from "@babel/generator";
+
+// Babel is a CJS package and uses `default` as named binding (`exports.default =`).
+// https://github.com/babel/babel/issues/15269
+const babelGenerate =
+  typeof _babelGenerate === "object"
+    ? ((_babelGenerate as any)["default"] as typeof _babelGenerate)
+    : _babelGenerate;
 
 type Tab = {
   tab: NonNullable<PageSchema["navigation"]["tab"]>;
@@ -294,7 +299,7 @@ const generateNavigationProgram = (schema: AppSchema): t.Program => {
                             t.jsxAttribute(
                               t.jsxIdentifier("options"),
                               t.jsxExpressionContainer(
-                                valueToAST({ headerShow: false })
+                                valueToAST({ headerShown: false })
                               )
                             ),
                           ],
@@ -343,6 +348,6 @@ export const generateNavigation = (
   schema: AppSchema,
   format?: boolean
 ): string => {
-  const { code } = generate(generateNavigationProgram(schema));
+  const { code } = babelGenerate(generateNavigationProgram(schema));
   return format ? prettier.format(code, { parser: "babel" }) : code;
 };

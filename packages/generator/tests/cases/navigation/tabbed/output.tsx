@@ -1,6 +1,6 @@
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import Page_1Page from "./pages/Page_1";
 import Page_2Page from "./pages/Page_2";
 import Page_3Page from "./pages/Page_3";
@@ -15,10 +15,32 @@ const Tabs = () => (
   </Tab.Navigator>
 );
 const App = () => (
-  <NavigationContainer>
+  <NavigationContainer
+    linking={{
+      prefixes: process.env.LINK_PREFIXES ?? [],
+      config: {
+        screens: {
+          Tabs: {
+            screens: {
+              Home: "/page-1",
+              About: "/page-3",
+              Settings: "/page-4",
+            },
+          },
+          "page 2": "/page-2",
+        },
+      },
+    }}
+  >
     <Stack.Navigator>
-      <Stack.Screen name="Tabs" component={Tabs}></Stack.Screen>
-      <Stack.Screen name="/page-2" component={Page_2Page}></Stack.Screen>
+      <Stack.Screen
+        name="Tabs"
+        component={Tabs}
+        options={{
+          headerShown: false,
+        }}
+      ></Stack.Screen>
+      <Stack.Screen name="page 2" component={Page_2Page}></Stack.Screen>
     </Stack.Navigator>
   </NavigationContainer>
 );

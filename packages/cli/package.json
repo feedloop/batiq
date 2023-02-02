@@ -1,15 +1,14 @@
 {
   "name": "@batiq/cli",
   "version": "0.1.0",
-  "type": "module",
+  "type": "commonjs",
   "bin": {
     "batiq": "cli.js"
   },
   "scripts": {
-    "dev": "NODE_ENV=development ts-node src/index.ts"
+    "dev": "NODE_ENV=development ts-node -r tsconfig-paths/register src/index.ts"
   },
   "dependencies": {
-    "@batiq/generator": "*",
     "@expo/package-manager": "^0.0.57",
     "@expo/spawn-async": "^1.7.0",
     "yargs": "^17.6.2"

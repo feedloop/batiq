@@ -1,11 +1,16 @@
 import * as t from "@babel/types";
 import { toVariableName, transformIR } from "./transformIR";
 import { JSX, Component, ComponentImport, PageIR } from "./transformIR";
-import { createRequire } from "module";
 import { valueToAST } from "./utils/valueToAST";
 import { PageSchema } from "@batiq/core";
-const require = createRequire(import.meta.url);
-const { default: babelGenerate } = require("@babel/generator");
+import _babelGenerate from "@babel/generator";
+
+// Babel is a CJS package and uses `default` as named binding (`exports.default =`).
+// https://github.com/babel/babel/issues/15269
+const babelGenerate =
+  typeof _babelGenerate === "object"
+    ? ((_babelGenerate as any)["default"] as typeof _babelGenerate)
+    : _babelGenerate;
 
 const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
   return t.importDeclaration(

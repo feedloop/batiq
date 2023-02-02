@@ -87,16 +87,9 @@ const generateExpo = async (schema: AppSchema, output: string) => {
           delete process.env[key];
         });
     }
-    await pm.addAsync(
-      "expo",
-      "react@18.1.0",
-      "react-dom@18.1.0",
-      "react-native@0.70.5",
-      "react-native-web"
-    );
+    await pm.addAsync("expo");
     await pm.addDevAsync(
       "@babel/core",
-      "@expo/webpack-config",
       "@types/react",
       "@types/react-native",
       "dotenv",
@@ -105,11 +98,16 @@ const generateExpo = async (schema: AppSchema, output: string) => {
     await pm.installAsync();
     const expoInstall = spawnAsync("./node_modules/.bin/expo", [
       "install",
+      "react",
+      "react-dom",
+      "react-native",
+      "react-native-web",
       "@react-navigation/native-stack",
       "@react-navigation/bottom-tabs",
       "@react-navigation/native",
       "react-native-screens",
       "react-native-safe-area-context",
+      "@expo/webpack-config",
       ...componentDependencies,
       "--npm",
     ]);

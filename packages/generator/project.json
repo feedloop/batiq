@@ -14,6 +14,7 @@
         "main": "packages/generator/src/index.ts",
         "tsConfig": "packages/generator/tsconfig.lib.json",
         "assets": [],
+        "buildableProjectDepsInPackageJsonType": "dependencies",
         "format": ["esm"]
       }
     },
