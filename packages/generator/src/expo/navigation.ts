@@ -1,9 +1,9 @@
 import { AppSchema, PageSchema } from "@batiq/core";
 import * as t from "@babel/types";
-import { toVariableName } from "../transformIR";
 import * as prettier from "prettier";
 import { valueToAST } from "../utils/valueToAST";
 import _babelGenerate from "@babel/generator";
+import { toVariableName } from "../utils/naming";
 
 // Babel is a CJS package and uses `default` as named binding (`exports.default =`).
 // https://github.com/babel/babel/issues/15269

@@ -12,11 +12,51 @@ export type ComponentDefinition<P extends Record<string, any>> = (
 export type ComponentInput<P> = JSONSchemaType<P>;
 
 export type ComponentSchema = {
+  type: "component";
   from: string;
   name?: string;
-  properties: Record<string, any>;
-  children: ComponentSchema[];
+  properties: Record<string, Property>;
+  children: Primitive[];
 };
+
+// type ActionDefinition =
+//   | ((props) => () => void & {
+//     inputs: JSONSchemaType,
+//       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
+//       impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+//       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+//     })
+//   | ((props:) => void & {
+//     inputs: JSONSchemaType,
+//       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
+//       impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+//       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+//     });
+
+export type ActionSchema = {
+  type: "action";
+  from: string;
+  name: string;
+  properties: Property[];
+  /**
+   * these properties may changed in the future, they are supposed to be defined in the action definition, but for now compiler doesn't have
+   * access to the action definition, so we have to define them here.
+   */
+  isHook?: boolean; // if set, treat action as a hook/not, otherwise infer from its name.
+  impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+  root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+};
+
+export type ExpressionSchema = {
+  type: "expression";
+  expression: string;
+};
+
+type Primitive = ComponentSchema | string | number | boolean;
+export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
+export type Value = Container<Primitive>;
+export type Children = Container<Primitive | ExpressionSchema>;
+export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
 
 export type PageSchema = {
   name: string;

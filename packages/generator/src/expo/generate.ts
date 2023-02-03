@@ -3,10 +3,10 @@ import fs from "node:fs";
 import { AppSchema, ComponentSchema } from "@batiq/core";
 import * as ExpoPackageManager from "@expo/package-manager";
 import spawnAsync from "@expo/spawn-async";
-import { toVariableName } from "../transformIR";
 import { generateNavigation } from "./navigation";
 import { generatePage } from "../codegen";
 import Dot from "dot-object";
+import { toVariableName } from "../utils/naming";
 
 const dot = new Dot("__");
 
@@ -24,10 +24,15 @@ const generateExpo = async (schema: AppSchema, output: string) => {
   try {
     process.chdir(output);
     const getComponentDependencies = (component: ComponentSchema): string[] =>
-      component.children.flatMap((component) => [
-        component.from,
-        ...getComponentDependencies(component),
-      ]);
+      component.children
+        .filter(
+          (component): component is ComponentSchema =>
+            typeof component === "object" && component.type === "component"
+        )
+        .flatMap((component) => [
+          component.from,
+          ...getComponentDependencies(component),
+        ]);
     const componentDependencies = Array.from(
       new Set(
         schema.pages.flatMap((page) =>
