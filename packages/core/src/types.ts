@@ -1,6 +1,7 @@
 import * as React from "react";
 import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
+import { TTuple, TArray, Static } from "@sinclair/typebox";
 
 export type ComponentDefinition<P extends Record<string, any>> = (
   | React.ComponentType<React.PropsWithChildren<P>>
@@ -19,19 +20,20 @@ export type ComponentSchema = {
   children: Primitive[];
 };
 
-// type ActionDefinition =
-//   | ((props) => () => void & {
-//     inputs: JSONSchemaType,
-//       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
-//       impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
-//       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
-//     })
-//   | ((props:) => void & {
-//     inputs: JSONSchemaType,
-//       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
-//       impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
-//       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
-//     });
+export type ActionDefinition<
+  S extends TTuple | TArray = TTuple<[]>,
+  A extends Static<S> = Static<S>
+> =
+  | ((() => (...args: A) => void) & {
+      inputs: S;
+      isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
+      impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+      root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+    })
+  | (((...args: A) => void) & {
+      inputs: S;
+      isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
+    });
 
 export type ActionSchema = {
   type: "action";

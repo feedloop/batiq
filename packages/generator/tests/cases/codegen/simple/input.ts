@@ -1,4 +1,4 @@
-import { PageIR } from "../../../../src/transformIR";
+import { PageIR } from "../../../../src/intermediate-representation";
 
 export const input: PageIR = {
   imports: [
@@ -16,6 +16,7 @@ export const input: PageIR = {
       variableDeclarations: {},
       JSX: [
         {
+          type: "element",
           name: "Paragraph",
           props: [
             {

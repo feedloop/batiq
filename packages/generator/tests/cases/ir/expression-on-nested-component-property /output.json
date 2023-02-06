@@ -8,9 +8,9 @@
       "default": false
     },
     {
-      "source": "@react-navigation/native",
+      "source": "@batiq/core",
       "names": [
-        "useLinkTo"
+        "useExpression"
       ],
       "default": false
     }
@@ -20,14 +20,15 @@
       "name": "Page",
       "props": [],
       "variableDeclarations": {
-        "linkTo": {
+        "evaluate": {
           "type": "function_call",
           "arguments": [],
-          "name": "useLinkTo"
+          "name": "useExpression"
         }
       },
       "JSX": [
         {
+          "type": "element",
           "name": "Paragraph",
           "props": [
             {
@@ -35,18 +36,19 @@
               "value": "red"
             },
             {
-              "name": "onPress",
+              "name": "paddingLeft",
               "value": {
                 "type": "function_call",
-                "name": "linkTo",
+                "name": "evaluate",
                 "arguments": [
-                  "/page-2"
+                  "1 + 1"
                 ]
               }
             }
           ],
           "children": [
             {
+              "type": "element",
               "name": "Paragraph_",
               "props": [],
               "children": []
@@ -60,14 +62,15 @@
       "name": "Paragraph_",
       "props": [],
       "variableDeclarations": {
-        "linkTo": {
+        "evaluate": {
           "type": "function_call",
           "arguments": [],
-          "name": "useLinkTo"
+          "name": "useExpression"
         }
       },
       "JSX": [
         {
+          "type": "element",
           "name": "Paragraph",
           "props": [
             {
@@ -75,12 +78,12 @@
               "value": "red"
             },
             {
-              "name": "onPress",
+              "name": "paddingLeft",
               "value": {
                 "type": "function_call",
-                "name": "linkTo",
+                "name": "evaluate",
                 "arguments": [
-                  "/page-2"
+                  "1 + 1"
                 ]
               }
             }

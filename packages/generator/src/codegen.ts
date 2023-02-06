@@ -1,6 +1,14 @@
 import * as t from "@babel/types";
-import { FunctionCall, transformIR, Value } from "./transformIR";
-import { JSX, Component, ComponentImport, PageIR } from "./transformIR";
+import {
+  FunctionCall,
+  transformIR,
+  Value,
+  Component,
+  ComponentImport,
+  PageIR,
+  Element,
+  JSX,
+} from "./intermediate-representation";
 import { valueToAST } from "./utils/valueToAST";
 import { PageSchema } from "@batiq/core";
 import _babelGenerate from "@babel/generator";
@@ -18,6 +26,25 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
     return t.arrayExpression(ir.map(primitiveIRToAST));
   }
   if (typeof ir === "object") {
+    if (ir.type === "element") {
+      const selfClosing = (<Element>ir).children.length === 0;
+      return t.jsxElement(
+        t.jsxOpeningElement(
+          t.jsxIdentifier((<Element>ir).name),
+          (<Element>ir).props.map(({ name, value }) =>
+            t.jsxAttribute(
+              t.jsxIdentifier(name),
+              t.jsxExpressionContainer(primitiveIRToAST(value))
+            )
+          ),
+          selfClosing
+        ),
+        selfClosing
+          ? null
+          : t.jsxClosingElement(t.jsxIdentifier((<Element>ir).name)),
+        (<Element>ir).children.map(primitiveIRToAST).map(expressionToJSXChild)
+      );
+    }
     if (ir.type === "function_call") {
       return t.callExpression(
         t.identifier((<FunctionCall>ir).name),
@@ -42,22 +69,21 @@ const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
   );
 };
 
-const transformJSX = (JSX: JSX): t.JSXElement => {
-  return t.jsxElement(
-    t.jsxOpeningElement(
-      t.jsxIdentifier(JSX.name),
-      JSX.props.map((prop) =>
-        t.jsxAttribute(
-          t.jsxIdentifier(prop.name),
-          t.jsxExpressionContainer(primitiveIRToAST(prop.value))
-        )
-      ),
-      JSX.children.length === 0
-    ),
-    t.jsxClosingElement(t.jsxIdentifier(JSX.name)),
-    JSX.children.map(transformJSX),
-    JSX.children.length === 0
-  );
+const expressionToJSXChild = (
+  expression: t.Expression
+):
+  | t.JSXText
+  | t.JSXExpressionContainer
+  | t.JSXSpreadChild
+  | t.JSXElement
+  | t.JSXFragment => {
+  if (t.isJSXElement(expression)) {
+    return expression;
+  }
+  if (t.isStringLiteral(expression)) {
+    return t.jsxText(expression.value);
+  }
+  return t.jsxExpressionContainer(expression);
 };
 
 const transformComponent = (component: Component): t.VariableDeclaration => {
@@ -78,11 +104,11 @@ const transformComponent = (component: Component): t.VariableDeclaration => {
           ),
           t.returnStatement(
             component.JSX.length === 1
-              ? transformJSX(component.JSX[0])
+              ? primitiveIRToAST(component.JSX[0])
               : t.jsxFragment(
                   t.jsxOpeningFragment(),
                   t.jsxClosingFragment(),
-                  component.JSX.map(transformJSX)
+                  component.JSX.map(primitiveIRToAST).map(expressionToJSXChild)
                 )
           ),
         ])

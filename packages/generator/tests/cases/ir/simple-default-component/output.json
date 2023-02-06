@@ -15,6 +15,7 @@
       "variableDeclarations": {},
       "JSX": [
         {
+          "type": "element",
           "name": "Paragraph",
           "props": [
             {

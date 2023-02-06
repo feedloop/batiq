@@ -14,8 +14,8 @@ export const input: PageSchema = {
         color: "red",
         onPress: {
           type: "action",
-          from: "@react-navigation/native",
-          name: "useLinkTo",
+          from: "./test/navigate",
+          name: "navigate",
           properties: ["/page-2"],
           root: true,
         },
@@ -29,8 +29,8 @@ export const input: PageSchema = {
             color: "red",
             onPress: {
               type: "action",
-              from: "@react-navigation/native",
-              name: "useLinkTo",
+              from: "./test/navigate",
+              name: "navigate",
               properties: ["/page-2"],
               root: true,
             },

@@ -1,12 +1,12 @@
 import path from "node:path";
 import glob from "fast-glob";
 import { toMatchFile } from "jest-file-snapshot";
-import { transformIR } from "../src/transformIR";
+import { transformIR } from "../src/intermediate-representation";
 
 expect.extend({ toMatchFile });
 
 describe("Navigation", () => {
-  const files = glob.sync(path.join(__dirname, "cases/pageIR/*/input.ts"), {
+  const files = glob.sync(path.join(__dirname, "cases/ir/*/input.ts"), {
     absolute: true,
   });
 

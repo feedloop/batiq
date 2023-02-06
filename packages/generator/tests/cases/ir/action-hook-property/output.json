@@ -8,9 +8,9 @@
       "default": false
     },
     {
-      "source": "@react-navigation/native",
+      "source": "./test/navigate",
       "names": [
-        "useLinkTo"
+        "navigate"
       ],
       "default": false
     }
@@ -20,14 +20,15 @@
       "name": "Page",
       "props": [],
       "variableDeclarations": {
-        "linkTo": {
+        "navigate_": {
           "type": "function_call",
           "arguments": [],
-          "name": "useLinkTo"
+          "name": "navigate"
         }
       },
       "JSX": [
         {
+          "type": "element",
           "name": "Paragraph",
           "props": [
             {
@@ -38,7 +39,7 @@
               "name": "onPress",
               "value": {
                 "type": "function_call",
-                "name": "linkTo",
+                "name": "navigate_",
                 "arguments": [
                   "/page-2"
                 ]

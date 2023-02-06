@@ -1,4 +1,4 @@
-import { PageIR } from "../../../../src/transformIR";
+import { PageIR } from "../../../../src/intermediate-representation";
 
 export const input: PageIR = {
   imports: [
@@ -8,8 +8,8 @@ export const input: PageIR = {
       default: false,
     },
     {
-      source: "@react-navigation/native",
-      names: ["useLinkTo"],
+      source: "./test/navigate",
+      names: ["navigate"],
       default: false,
     },
   ],
@@ -18,14 +18,15 @@ export const input: PageIR = {
       name: "Page",
       props: [],
       variableDeclarations: {
-        linkTo: {
+        navigate_: {
           type: "function_call",
           arguments: [],
-          name: "useLinkTo",
+          name: "navigate",
         },
       },
       JSX: [
         {
+          type: "element",
           name: "Paragraph",
           props: [
             {
@@ -36,7 +37,7 @@ export const input: PageIR = {
               name: "onPress",
               value: {
                 type: "function_call",
-                name: "linkTo",
+                name: "navigate_",
                 arguments: ["/page-2"],
               },
             },
