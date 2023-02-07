@@ -1,0 +1,8 @@
+{
+  "name": "@batiq/actions",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "peerDependencies": {
+    "@react-navigation/native": "^6.1.3"
+  }
+}
