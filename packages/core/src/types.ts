@@ -21,7 +21,7 @@ export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
   | {
       inputs: S;
       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
-      impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+      pure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
     }
   | {
