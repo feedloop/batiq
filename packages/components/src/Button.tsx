@@ -1,8 +1,10 @@
-import { Button as NativeButton, IButtonProps } from "native-base";
-import { Type } from "@sinclair/typebox";
+import React from "react";
+import { Button as NativeButton } from "native-base";
+import { Static } from "@sinclair/typebox";
+import { Button as ButtonDefinition } from "./definitions";
 import { useLinkTo } from "@react-navigation/native";
 
-const ButtonLink = (props: IButtonProps & { to: string }) => {
+const ButtonLink = (props: Static<typeof ButtonDefinition.inputs>) => {
   const { to, ...rest } = props;
   const linkTo = useLinkTo();
   return (
@@ -14,12 +16,9 @@ const ButtonLink = (props: IButtonProps & { to: string }) => {
   );
 };
 
-const Button = (props: IButtonProps & { to: string }) => {
+const Button = (props: Static<typeof ButtonDefinition.inputs>) => {
   const { to, ...rest } = props;
   return to ? <ButtonLink to={to} {...rest} /> : <NativeButton {...rest} />;
 };
-
-// @ts-ignore
-Button.inputs = Type.Strict(Type.Object({}));
 
 export { Button };

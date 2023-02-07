@@ -1,23 +1,12 @@
 import React from "react";
 import { Text as Text_ } from "native-base";
-import { Static, Type } from "@sinclair/typebox";
+import { Static } from "@sinclair/typebox";
 import { useLinkTo } from "@react-navigation/native";
-import { ComponentDefinition } from "@batiq/core";
+import { Link as LinkDefinition } from "./definitions";
 
-const inputs = Type.Strict(
-  Type.Object({
-    text: Type.String(),
-    to: Type.String(),
-  })
-);
-type T = Static<typeof inputs>;
+type T = Static<typeof LinkDefinition.inputs>;
 
-const Link: ComponentDefinition<T> = ({
-  children,
-  text,
-  to,
-  ...rest
-}: React.PropsWithChildren<T>) => {
+const Link = ({ children, text, to, ...rest }: React.PropsWithChildren<T>) => {
   const linkTo = useLinkTo();
   return (
     <Text_
@@ -29,7 +18,5 @@ const Link: ComponentDefinition<T> = ({
     </Text_>
   );
 };
-// @ts-ignore
-Link.inputs = inputs;
 
 export { Link };
