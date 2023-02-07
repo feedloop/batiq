@@ -3,10 +3,7 @@ import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
 import { TTuple, TArray, Static } from "@sinclair/typebox";
 
-export type ComponentDefinition<P extends Record<string, any>> = (
-  | React.ComponentType<React.PropsWithChildren<P>>
-  | ((props: React.PropsWithChildren<P>) => JSX.Element)
-) & {
+export type ComponentDefinition<P extends Record<string, any>> = {
   inputs: ComponentInput<P>;
 };
 
@@ -20,33 +17,23 @@ export type ComponentSchema = {
   children: Primitive[];
 };
 
-export type ActionDefinition<
-  S extends TTuple | TArray = TTuple<[]>,
-  A extends Static<S> = Static<S>
-> =
-  | ((() => (...args: A) => void) & {
+export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
+  | {
       inputs: S;
       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
       impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
-    })
-  | (((...args: A) => void) & {
+    }
+  | {
       inputs: S;
       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
-    });
+    };
 
 export type ActionSchema = {
   type: "action";
   from: string;
   name: string;
   properties: Property[];
-  /**
-   * these properties may changed in the future, they are supposed to be defined in the action definition, but for now compiler doesn't have
-   * access to the action definition, so we have to define them here.
-   */
-  isHook?: boolean; // if set, treat action as a hook/not, otherwise infer from its name.
-  impure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
-  root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
 };
 
 export type ExpressionSchema = {
