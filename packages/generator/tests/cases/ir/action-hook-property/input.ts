@@ -8,13 +8,13 @@ export const input: PageSchema = {
   children: [
     {
       type: "component",
-      from: "./test/paragraph",
+      from: "./test",
       name: "Paragraph",
       properties: {
         color: "red",
         onPress: {
           type: "action",
-          from: "./test/navigate",
+          from: "./test",
           name: "navigate",
           properties: ["/page-2"],
         },

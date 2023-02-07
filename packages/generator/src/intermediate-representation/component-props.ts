@@ -2,6 +2,7 @@ import { ActionDefinition, ActionSchema, ExpressionSchema } from "@batiq/core";
 import Ajv from "ajv";
 import { hookResultName } from "../utils/naming";
 import { Component, ComponentImport, Value } from "./types";
+import { importDefinition } from "../utils/importDefinition";
 
 const ajv = new Ajv();
 
@@ -22,9 +23,10 @@ export const transformHookExpressionProp = async (
 ): Promise<TransformPropResult> => {
   switch (value.type) {
     case "action": {
-      const actionDef: ActionDefinition = (await import(value.from))[
+      const actionDef: ActionDefinition = await importDefinition(
+        value.from,
         value.name
-      ];
+      );
       if (
         actionDef?.inputs &&
         !ajv.validate(actionDef.inputs, value.properties)
@@ -32,8 +34,8 @@ export const transformHookExpressionProp = async (
         throw new Error(ajv.errorsText());
       }
       const isHook =
-        (value.name.startsWith("use") && actionDef.isHook !== false) ||
-        actionDef.isHook === true;
+        (value.name.startsWith("use") && actionDef?.isHook !== false) ||
+        actionDef?.isHook === true;
 
       return {
         imports: [
@@ -60,7 +62,10 @@ export const transformHookExpressionProp = async (
           },
         },
         splitComponent:
-          !isRoot && value.type === "action" && isHook && !!value.root,
+          !isRoot &&
+          value.type === "action" &&
+          isHook &&
+          !!("root" in actionDef ? actionDef?.root : true),
         additionalComponents: [],
       };
     }

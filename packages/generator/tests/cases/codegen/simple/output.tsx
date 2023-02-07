@@ -1,4 +1,4 @@
-import { Paragraph } from "./test/paragraph";
+import { Paragraph } from "./test";
 const Page = (props) => {
   return <Paragraph color={"red"} />;
 };

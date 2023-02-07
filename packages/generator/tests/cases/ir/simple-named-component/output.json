@@ -1,7 +1,7 @@
 {
   "imports": [
     {
-      "source": "./test/paragraph",
+      "source": "./test",
       "names": [],
       "default": true
     }
@@ -14,7 +14,7 @@
       "JSX": [
         {
           "type": "element",
-          "name": "Test_Paragraph",
+          "name": "Test",
           "props": [
             {
               "name": "color",

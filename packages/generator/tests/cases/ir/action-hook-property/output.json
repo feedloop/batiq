@@ -1,15 +1,9 @@
 {
   "imports": [
     {
-      "source": "./test/paragraph",
+      "source": "./test",
       "names": [
-        "Paragraph"
-      ],
-      "default": false
-    },
-    {
-      "source": "./test/navigate",
-      "names": [
+        "Paragraph",
         "navigate"
       ],
       "default": false

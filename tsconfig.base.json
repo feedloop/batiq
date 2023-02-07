@@ -2,6 +2,8 @@
   "compileOnSave": false,
   "compilerOptions": {
     "rootDir": ".",
+    "allowJs": true,
+    "noImplicitAny": false,
     "sourceMap": true,
     "declaration": false,
     "moduleResolution": "node",
@@ -15,11 +17,14 @@
     "skipDefaultLibCheck": true,
     "baseUrl": ".",
     "noEmit": true,
+    "jsx": "react-jsx",
     "paths": {
+      "@batiq/actions": ["packages/actions/src/index.ts"],
       "@batiq/cli": ["packages/cli/src/index.ts"],
+      "@batiq/components": ["packages/components/src/index.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],
-      "@batiq/generator": ["packages/generator/src/index.ts"],
-      "@batiq/components": ["packages/components/src/index.ts"]
+      "@batiq/expression": ["packages/expression/src/index.ts"],
+      "@batiq/generator": ["packages/generator/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

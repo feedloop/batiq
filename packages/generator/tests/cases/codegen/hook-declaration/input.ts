@@ -3,12 +3,12 @@ import { PageIR } from "../../../../src/intermediate-representation";
 export const input: PageIR = {
   imports: [
     {
-      source: "./test/paragraph",
+      source: "./test",
       names: ["Paragraph"],
       default: false,
     },
     {
-      source: "./test/navigate",
+      source: "./test",
       names: ["navigate"],
       default: false,
     },

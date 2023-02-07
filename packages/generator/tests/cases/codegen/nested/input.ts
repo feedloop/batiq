@@ -3,7 +3,7 @@ import { PageIR } from "../../../../src/intermediate-representation";
 export const input: PageIR = {
   imports: [
     {
-      source: "./test/paragraph",
+      source: "./test",
       names: ["Paragraph"],
       default: true,
     },

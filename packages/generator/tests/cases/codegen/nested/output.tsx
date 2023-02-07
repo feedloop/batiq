@@ -1,4 +1,4 @@
-import Test_Paragraph, { Paragraph } from "./test/paragraph";
+import Test, { Paragraph } from "./test";
 const PageWithNestedComponent = (props) => {
   return (
     <>

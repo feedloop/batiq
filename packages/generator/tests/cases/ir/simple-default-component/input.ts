@@ -8,7 +8,7 @@ export const input: PageSchema = {
   children: [
     {
       type: "component",
-      from: "./test/paragraph",
+      from: "./test",
       name: "Paragraph",
       properties: {
         color: "red",

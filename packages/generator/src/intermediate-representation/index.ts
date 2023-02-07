@@ -22,9 +22,14 @@ const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
     [] as ComponentImport[]
   );
 
-export const transformIR = async (page: PageSchema): Promise<PageIR> => {
+export const transformIR = async (
+  page: PageSchema,
+  validate = false
+): Promise<PageIR> => {
   const results = await Promise.all(
-    page.children.map((component) => transformComponent(component, true))
+    page.children.map((component) =>
+      transformComponent(component, true, validate)
+    )
   );
   const imports = mergeImports(results.flatMap((r) => r.imports));
   const root = {

@@ -6,6 +6,7 @@ import {
   Value as SchemaValue,
 } from "@batiq/core";
 import Ajv from "ajv";
+import { importDefinition } from "../utils/importDefinition";
 import { toVariableName } from "../utils/naming";
 import { transformHookExpressionProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -21,13 +22,18 @@ type TransformResult = {
 
 export const transformComponent = async (
   schema: ComponentSchema,
-  isRoot = true
+  isRoot = true,
+  validate: boolean
 ): Promise<TransformResult> => {
-  const component: ComponentDefinition<Record<string, any>> = (
-    await import(schema.from)
-  )[schema.name ?? "default"];
-  if (!ajv.validate(component.inputs, schema.properties)) {
-    throw new Error(ajv.errorsText());
+  if (validate) {
+    const component: ComponentDefinition<Record<string, any>> =
+      await importDefinition(schema.from, schema.name ?? "default");
+    if (
+      component?.inputs &&
+      !ajv.validate(component.inputs, schema.properties)
+    ) {
+      throw new Error(ajv.errorsText());
+    }
   }
 
   const imports = [
@@ -73,7 +79,7 @@ export const transformComponent = async (
         (component): component is ComponentSchema =>
           typeof component === "object" && component.type === "component"
       )
-      .map((component) => transformComponent(component, false))
+      .map((component) => transformComponent(component, false, validate))
   );
 
   const variables = [
