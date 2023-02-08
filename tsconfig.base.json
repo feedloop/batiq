@@ -23,6 +23,7 @@
       "@batiq/cli": ["packages/cli/src/index.ts"],
       "@batiq/components": ["packages/components/src/index.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],
+      "@batiq/data": ["packages/data/src/index.ts"],
       "@batiq/expression": ["packages/expression/src/index.ts"],
       "@batiq/generator": ["packages/generator/src/index.ts"]
     }
