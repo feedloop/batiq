@@ -17,6 +17,7 @@
     "@nrwl/js": "15.4.5",
     "@nrwl/linter": "15.4.5",
     "@nrwl/rollup": "15.4.5",
+    "@nrwl/storybook": "^15.6.3",
     "@nrwl/workspace": "15.4.5",
     "@swc/cli": "~0.1.55",
     "@swc/core": "^1.2.173",
