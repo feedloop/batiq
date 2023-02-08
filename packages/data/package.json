@@ -1,0 +1,12 @@
+{
+  "name": "@batiq/data",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "peerDependencies": {
+    "react": "*"
+  },
+  "devDependencies": {
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0"
+  }
+}

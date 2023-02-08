@@ -29,7 +29,7 @@ export const transformHookExpressionProp = async (
       );
       if (
         actionDef?.inputs &&
-        !ajv.validate(actionDef.inputs, value.properties)
+        !ajv.validate(actionDef.inputs, value.arguments)
       ) {
         throw new Error(ajv.errorsText());
       }
@@ -58,7 +58,7 @@ export const transformHookExpressionProp = async (
           value: {
             type: "function_call",
             name: isHook ? hookResultName(value.name) : value.name,
-            arguments: value.properties,
+            arguments: value.arguments,
           },
         },
         splitComponent:

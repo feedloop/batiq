@@ -33,7 +33,7 @@ export type ActionSchema = {
   type: "action";
   from: string;
   name: string;
-  properties: Property[];
+  arguments: Property[];
 };
 
 export type ExpressionSchema = {
