@@ -1,0 +1,8 @@
+{
+  "name": "@batiq/runtime",
+  "version": "0.0.1",
+  "type": "commonjs",
+  "devDependencies": {
+    "react-native-web": "^0.18.12"
+  }
+}

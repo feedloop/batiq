@@ -1,0 +1,59 @@
+{
+  "batiq": "1",
+  "info": {
+    "name": "app"
+  },
+  "platform": "web",
+  "config": {
+    "link_prefixes": ["http://localhost:3000/", "app://"]
+  },
+  "pages": [
+    {
+      "name": "page 1",
+      "navigation": {
+        "path": "/page-1",
+        "tab": {
+          "label": "Home",
+          "icon": "home"
+        }
+      },
+      "children": [
+        {
+          "type": "component",
+          "from": "@batiq/components",
+          "name": "Provider",
+          "properties": {},
+          "children": [
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Button",
+              "properties": {},
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Text",
+                  "properties": {
+                    "text": "Page 4"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Link",
+              "properties": {
+                "text": "Page 2",
+                "to": "/page-2"
+              },
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

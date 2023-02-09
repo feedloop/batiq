@@ -1,6 +1,8 @@
 import { AppSchema } from "@batiq/core";
 import { installExpo, generateExpo } from "./expo/generate";
 
+export { transformIR } from "./intermediate-representation";
+
 export const installApp = (
   schema: AppSchema,
   target: "expo" | "next" | "vite"

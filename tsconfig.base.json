@@ -25,7 +25,8 @@
       "@batiq/core": ["packages/core/src/index.ts"],
       "@batiq/data": ["packages/data/src/index.ts"],
       "@batiq/expression": ["packages/expression/src/index.ts"],
-      "@batiq/generator": ["packages/generator/src/index.ts"]
+      "@batiq/generator": ["packages/generator/src/index.ts"],
+      "@batiq/runtime": ["packages/runtime/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]
