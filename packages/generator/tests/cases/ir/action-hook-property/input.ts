@@ -16,7 +16,7 @@ export const input: PageSchema = {
           type: "action",
           from: "./test",
           name: "navigate",
-          properties: ["/page-2"],
+          arguments: ["/page-2"],
         },
       },
       children: [],
