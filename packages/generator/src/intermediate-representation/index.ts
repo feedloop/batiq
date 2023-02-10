@@ -34,7 +34,6 @@ export const transformIR = async (
   const imports = mergeImports(results.flatMap((r) => r.imports));
   const root = {
     name: toVariableName(page.name),
-    props: [],
     variableDeclarations: Object.fromEntries(
       results.flatMap((r) => r.variables)
     ),
@@ -44,6 +43,7 @@ export const transformIR = async (
   const additionalComponents = results.flatMap((r) => r.additionalComponents);
   return {
     imports,
+    variableDeclarations: {},
     components: [root, ...additionalComponents],
   };
 };

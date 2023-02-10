@@ -1,10 +1,10 @@
 import path from "node:path";
 import fs from "node:fs";
-import { AppSchema, ComponentSchema } from "@batiq/core";
+import { AppSchema } from "@batiq/core";
 import * as ExpoPackageManager from "@expo/package-manager";
 import spawnAsync from "@expo/spawn-async";
-import { generateNavigation } from "./navigation";
-import { generatePage } from "../codegen";
+import { generateNavigationPageIR } from "./navigation";
+import { generate, generatePage } from "../codegen";
 import Dot from "dot-object";
 import { toVariableName } from "../utils/naming";
 import { transformIR } from "../intermediate-representation";
@@ -135,7 +135,10 @@ export const generateExpo = async (schema: AppSchema) => {
       );
     })
   );
-  fs.writeFileSync("app/App.tsx", generateNavigation(schema, true));
+  fs.writeFileSync(
+    "app/App.tsx",
+    await generate(generateNavigationPageIR(schema), true)
+  );
   fs.writeFileSync(
     "App.tsx",
     `import * as dotenv from 'dotenv';

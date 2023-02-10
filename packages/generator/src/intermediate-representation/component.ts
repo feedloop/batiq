@@ -114,7 +114,6 @@ export const transformComponent = async (
         ? [
             {
               name: (schema.name ?? toVariableName(schema.from)) + "_",
-              props: [],
               variableDeclarations: Object.fromEntries(variables),
               JSX: [jsx],
               root: false,

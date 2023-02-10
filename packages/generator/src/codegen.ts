@@ -7,6 +7,8 @@ import {
   ComponentImport,
   PageIR,
   Element,
+  Variable,
+  BinaryOperator,
   JSX,
 } from "./intermediate-representation";
 import { valueToAST } from "./utils/valueToAST";
@@ -21,6 +23,23 @@ const babelGenerate =
     ? ((_babelGenerate as any)["default"] as typeof _babelGenerate)
     : _babelGenerate;
 
+const jsxIdentifier = (
+  name: string | string[]
+): t.JSXIdentifier | t.JSXMemberExpression => {
+  if (typeof name === "string") {
+    return t.jsxIdentifier(name);
+  }
+  if (name.length < 2) {
+    return t.jsxIdentifier(name[0]);
+  }
+  return name
+    .slice(2)
+    .reduce(
+      (acc, part) => t.jsxMemberExpression(acc, t.jsxIdentifier(part)),
+      t.jsxMemberExpression(t.jsxIdentifier(name[0]), t.jsxIdentifier(name[1]))
+    );
+};
+
 const primitiveIRToAST = (ir: Value): t.Expression => {
   if (Array.isArray(ir)) {
     return t.arrayExpression(ir.map(primitiveIRToAST));
@@ -30,19 +49,21 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
       const selfClosing = (<Element>ir).children.length === 0;
       return t.jsxElement(
         t.jsxOpeningElement(
-          t.jsxIdentifier((<Element>ir).name),
+          jsxIdentifier((<Element>ir).name),
           (<Element>ir).props.map(({ name, value }) =>
             t.jsxAttribute(
               t.jsxIdentifier(name),
-              t.jsxExpressionContainer(primitiveIRToAST(value))
+              typeof value === "string"
+                ? t.stringLiteral(value)
+                : t.jsxExpressionContainer(primitiveIRToAST(value))
             )
           ),
           selfClosing
         ),
         selfClosing
           ? null
-          : t.jsxClosingElement(t.jsxIdentifier((<Element>ir).name)),
-        (<Element>ir).children.map(primitiveIRToAST).map(expressionToJSXChild)
+          : t.jsxClosingElement(jsxIdentifier((<Element>ir).name)),
+        (<Element>ir).children.map(jsxIRToAST).map(expressionToJSXChild)
       );
     }
     if (ir.type === "function_call") {
@@ -51,8 +72,43 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
         (<FunctionCall>ir).arguments.map(primitiveIRToAST)
       );
     }
+    if (ir.type === "variable") {
+      return t.identifier((<Variable>ir).name);
+    }
+    if (ir.type === "binary_operator") {
+      const { operator, left, right } = <BinaryOperator>ir;
+      if (operator === "||" || operator === "&&" || operator === "??") {
+        return t.logicalExpression(
+          operator,
+          primitiveIRToAST(left),
+          primitiveIRToAST(right)
+        );
+      }
+      return t.binaryExpression(
+        operator,
+        primitiveIRToAST(left),
+        primitiveIRToAST(right)
+      );
+    }
+    return t.objectExpression(
+      Object.entries(<Record<string, Value>>ir).map(([key, value]) =>
+        t.objectProperty(t.stringLiteral(key), primitiveIRToAST(value))
+      )
+    );
   }
   return valueToAST(ir);
+};
+
+export const jsxIRToAST = (jsx: JSX): t.Expression => {
+  if (!Array.isArray(jsx) && typeof jsx === "object") {
+    if (jsx.type === "render_prop") {
+      return t.arrowFunctionExpression(
+        jsx.parameters.map(t.identifier),
+        primitiveIRToAST(jsx.JSX)
+      );
+    }
+  }
+  return primitiveIRToAST(jsx);
 };
 
 const transformImport = (imp: ComponentImport): t.ImportDeclaration => {
@@ -86,6 +142,12 @@ const expressionToJSXChild = (
   return t.jsxExpressionContainer(expression);
 };
 
+const transformVariableDeclaration = (name: string, value: Value) => {
+  return t.variableDeclaration("const", [
+    t.variableDeclarator(t.identifier(name), primitiveIRToAST(value)),
+  ]);
+};
+
 const transformComponent = (component: Component): t.VariableDeclaration => {
   return t.variableDeclaration("const", [
     t.variableDeclarator(
@@ -108,7 +170,7 @@ const transformComponent = (component: Component): t.VariableDeclaration => {
               : t.jsxFragment(
                   t.jsxOpeningFragment(),
                   t.jsxClosingFragment(),
-                  component.JSX.map(primitiveIRToAST).map(expressionToJSXChild)
+                  component.JSX.map(jsxIRToAST).map(expressionToJSXChild)
                 )
           ),
         ])
@@ -121,6 +183,9 @@ export const transformToProgram = (ir: PageIR): t.Program => {
   return t.program(
     [
       ...ir.imports.map(transformImport),
+      ...Object.entries(ir.variableDeclarations || {}).map(([name, value]) =>
+        transformVariableDeclaration(name, value)
+      ),
       ...ir.components.map(transformComponent),
       t.exportDefaultDeclaration(
         t.identifier(ir.components.find((c) => c.root)!.name)

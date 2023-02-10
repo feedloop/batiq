@@ -8,10 +8,10 @@
       "default": false
     }
   ],
+  "variableDeclarations": {},
   "components": [
     {
       "name": "Page",
-      "props": [],
       "variableDeclarations": {},
       "JSX": [
         {

@@ -13,10 +13,10 @@ export const input: PageIR = {
       default: false,
     },
   ],
+  variableDeclarations: {},
   components: [
     {
       name: "Page",
-      props: [],
       variableDeclarations: {
         navigate_: {
           type: "function_call",

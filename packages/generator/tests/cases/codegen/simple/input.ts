@@ -8,11 +8,11 @@ export const input: PageIR = {
       default: false,
     },
   ],
+  variableDeclarations: {},
   components: [
     {
       name: "Page",
       root: true,
-      props: [],
       variableDeclarations: {},
       JSX: [
         {

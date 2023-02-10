@@ -12,21 +12,68 @@ export type FunctionCall = {
   arguments: Container<Primitive>[];
 };
 
+export type Variable = {
+  type: "variable";
+  name: string;
+};
+
+export type BinaryOperator = {
+  type: "binary_operator";
+  operator: // Binary Expression
+  | "+"
+    | "-"
+    | "/"
+    | "%"
+    | "*"
+    | "**"
+    | "&"
+    | "|"
+    | ">>"
+    | ">>>"
+    | "<<"
+    | "^"
+    | "=="
+    | "==="
+    | "!="
+    | "!=="
+    | "in"
+    | "instanceof"
+    | ">"
+    | "<"
+    | ">="
+    | "<="
+    | "|>"
+
+    // Logical
+    | "||"
+    | "&&"
+    | "??";
+  left: Value;
+  right: Value;
+};
+
 type Primitive = string | number | boolean;
-export type Value = Container<FunctionCall | Element | Primitive>;
+export type Value = Container<
+  FunctionCall | Variable | BinaryOperator | Element | Primitive
+>;
 
 export type Element = {
   type: "element";
-  name: string;
+  name: string | string[];
   props: { name: string; value: Value }[];
   children: JSX[];
 };
 
-export type JSX = Element | Primitive;
+export type RenderProp = {
+  type: "render_prop";
+  parameters: string[];
+  JSX: JSX;
+};
+
+export type JSX = Element | RenderProp | Primitive;
 
 export type Component = {
   name: string;
-  props: Value[];
   variableDeclarations: Record<string, Value>;
   JSX: JSX[];
   root: boolean;
@@ -34,5 +81,6 @@ export type Component = {
 
 export type PageIR = {
   imports: ComponentImport[];
+  variableDeclarations: Record<string, Value>;
   components: Component[];
 };
