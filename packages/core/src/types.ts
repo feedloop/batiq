@@ -1,22 +1,51 @@
 import * as React from "react";
 import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
+import { TTuple, TArray, Static } from "@sinclair/typebox";
 
-export type ComponentDefinition<P extends Record<string, any>> = (
-  | React.ComponentType<React.PropsWithChildren<P>>
-  | ((props: React.PropsWithChildren<P>) => JSX.Element)
-) & {
+export type ComponentDefinition<P extends Record<string, any>> = {
   inputs: ComponentInput<P>;
 };
 
 export type ComponentInput<P> = JSONSchemaType<P>;
 
 export type ComponentSchema = {
+  type: "component";
   from: string;
   name?: string;
-  properties: Record<string, any>;
-  children: ComponentSchema[];
+  properties: Record<string, Property>;
+  children: Primitive[];
 };
+
+export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
+  | {
+      inputs: S;
+      isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
+      pure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
+      root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+    }
+  | {
+      inputs: S;
+      isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
+    };
+
+export type ActionSchema = {
+  type: "action";
+  from: string;
+  name: string;
+  arguments: Property[];
+};
+
+export type ExpressionSchema = {
+  type: "expression";
+  expression: string;
+};
+
+type Primitive = ComponentSchema | string | number | boolean;
+export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
+export type Value = Container<Primitive>;
+export type Children = Container<Primitive | ExpressionSchema>;
+export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
 
 export type PageSchema = {
   name: string;

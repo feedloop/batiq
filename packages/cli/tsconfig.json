@@ -1,7 +1,7 @@
 {
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
-    "module": "ESNext",
+    "module": "CommonJS",
     "moduleResolution": "node",
     "forceConsistentCasingInFileNames": true,
     "strict": true,
@@ -23,7 +23,6 @@
     }
   ],
   "ts-node": {
-    "esm": true,
     "skipIgnore": true,
     "transpileOnly": true,
     "require": ["tsconfig-paths/register"],

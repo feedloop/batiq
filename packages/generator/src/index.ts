@@ -1,14 +1,25 @@
 import { AppSchema } from "@batiq/core";
-import generateExpo from "./expo/generate";
+import { installExpo, generateExpo } from "./expo/generate";
 
-export const generateApp = (
+export const installApp = (
   schema: AppSchema,
-  target: "expo" | "next" | "vite",
-  output: string
+  target: "expo" | "next" | "vite"
 ) => {
   switch (target) {
     case "expo":
-      return generateExpo(schema, output);
+      return installExpo(schema);
+    default:
+      throw Error("target not implemented");
+  }
+};
+
+export const generateApp = (
+  schema: AppSchema,
+  target: "expo" | "next" | "vite"
+) => {
+  switch (target) {
+    case "expo":
+      return generateExpo(schema);
     default:
       throw Error("target not implemented");
   }

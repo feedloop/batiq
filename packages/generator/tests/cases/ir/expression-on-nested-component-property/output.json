@@ -1,0 +1,97 @@
+{
+  "imports": [
+    {
+      "source": "./test",
+      "names": [
+        "Paragraph"
+      ],
+      "default": false
+    },
+    {
+      "source": "@batiq/core",
+      "names": [
+        "useExpression"
+      ],
+      "default": false
+    }
+  ],
+  "components": [
+    {
+      "name": "Page",
+      "props": [],
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Paragraph",
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            },
+            {
+              "name": "paddingLeft",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "1 + 1"
+                ]
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph_",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Paragraph_",
+      "props": [],
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Paragraph",
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            },
+            {
+              "name": "paddingLeft",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "1 + 1"
+                ]
+              }
+            }
+          ],
+          "children": []
+        }
+      ],
+      "root": false
+    }
+  ]
+}

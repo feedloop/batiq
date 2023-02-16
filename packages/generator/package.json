@@ -1,7 +1,7 @@
 {
   "name": "@batiq/generator",
   "version": "0.1.0",
-  "type": "module",
+  "type": "commonjs",
   "module": "src/index.ts",
   "dependencies": {
     "@babel/generator": "^7.20.7",
@@ -16,7 +16,6 @@
     "@types/dot-object": "^2.1.2",
     "fast-glob": "^3.2.12",
     "jest-file-snapshot": "^0.5.0",
-    "minimatch": "^6.1.5",
-    "tiny-glob": "^0.2.9"
+    "minimatch": "^6.1.5"
   }
 }

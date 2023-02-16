@@ -1,0 +1,32 @@
+{
+  "imports": [
+    {
+      "source": "./test",
+      "names": [
+        "Paragraph"
+      ],
+      "default": false
+    }
+  ],
+  "components": [
+    {
+      "name": "Page",
+      "props": [],
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Paragraph",
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            }
+          ],
+          "children": []
+        }
+      ],
+      "root": true
+    }
+  ]
+}

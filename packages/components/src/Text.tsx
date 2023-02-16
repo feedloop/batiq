@@ -1,21 +1,12 @@
 import React from "react";
 import { Text as Text_ } from "native-base";
-import { Static, Type } from "@sinclair/typebox";
-import { ComponentDefinition } from "@batiq/core";
+import { Static } from "@sinclair/typebox";
+import { Text as TextDefinition } from "./definitions";
 
-const inputs = Type.Strict(
-  Type.Object({
-    text: Type.String(),
-  })
+type T = Static<typeof TextDefinition.inputs>;
+
+const Text = ({ children, text, ...rest }: React.PropsWithChildren<T>) => (
+  <Text_ {...rest}>{text}</Text_>
 );
-type T = Static<typeof inputs>;
-
-const Text: ComponentDefinition<T> = ({
-  children,
-  text,
-  ...rest
-}: React.PropsWithChildren<T>) => <Text_ {...rest}>{text}</Text_>;
-// @ts-ignore
-Text.inputs = inputs;
 
 export { Text };
