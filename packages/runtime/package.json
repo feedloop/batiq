@@ -3,6 +3,9 @@
   "version": "0.0.1",
   "type": "commonjs",
   "devDependencies": {
+    "@react-navigation/bottom-tabs": "^6.5.4",
+    "@react-navigation/native": "^6.1.3",
+    "@react-navigation/native-stack": "^6.9.9",
     "react-native-web": "^0.18.12"
   }
 }

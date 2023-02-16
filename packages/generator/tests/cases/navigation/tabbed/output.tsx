@@ -10,9 +10,9 @@ const Tab = createBottomTabNavigator();
 const Tabs = (props) => {
   return (
     <Tab.Navigator>
-      <Tab.Screen name="Home" component={Page_1Page} />
-      <Tab.Screen name="About" component={Page_3Page} />
-      <Tab.Screen name="Settings" component={Page_4Page} />
+      <Tab.Screen name="Home" component={Pages_Page_1} />
+      <Tab.Screen name="About" component={Pages_Page_3} />
+      <Tab.Screen name="Settings" component={Pages_Page_4} />
     </Tab.Navigator>
   );
 };
@@ -43,7 +43,7 @@ const App = (props) => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="page 2" component={Page_2Page} />
+        <Stack.Screen name="page 2" component={Pages_Page_2} />
       </Stack.Navigator>
     </NavigationContainer>
   );

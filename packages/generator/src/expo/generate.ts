@@ -3,11 +3,11 @@ import fs from "node:fs";
 import { AppSchema } from "@batiq/core";
 import * as ExpoPackageManager from "@expo/package-manager";
 import spawnAsync from "@expo/spawn-async";
-import { generateNavigationPageIR } from "./navigation";
-import { generate, generatePage } from "../codegen";
+import { generatePage } from "../codegen";
 import Dot from "dot-object";
 import { toVariableName } from "../utils/naming";
-import { transformIR } from "../intermediate-representation";
+import { transformIR } from "@batiq/ir";
+import { generateNavigation } from "./navigation";
 
 const dot = new Dot("__");
 
@@ -135,10 +135,7 @@ export const generateExpo = async (schema: AppSchema) => {
       );
     })
   );
-  fs.writeFileSync(
-    "app/App.tsx",
-    await generate(generateNavigationPageIR(schema), true)
-  );
+  fs.writeFileSync("app/App.tsx", await generateNavigation(schema));
   fs.writeFileSync(
     "App.tsx",
     `import * as dotenv from 'dotenv';

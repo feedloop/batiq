@@ -1,8 +1,8 @@
 import { ActionDefinition, ActionSchema, ExpressionSchema } from "@batiq/core";
 import Ajv from "ajv";
-import { hookResultName } from "../utils/naming";
+import { hookResultName } from "./utils/naming";
 import { Component, ComponentImport, Value } from "./types";
-import { importDefinition } from "../utils/importDefinition";
+import { importDefinition } from "./utils/importDefinition";
 
 const ajv = new Ajv();
 

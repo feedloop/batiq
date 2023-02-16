@@ -1,9 +1,10 @@
 import { PageSchema } from "@batiq/core";
-import { toVariableName } from "../utils/naming";
+import { toVariableName } from "./utils/naming";
 import { transformComponent } from "./component";
 import { ComponentImport, Component, PageIR } from "./types";
 
 export * from "./types";
+export { generateNavigationPageIR } from "./expo-navigation";
 
 const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
   imports.reduce(

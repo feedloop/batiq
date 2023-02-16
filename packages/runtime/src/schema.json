@@ -5,7 +5,7 @@
   },
   "platform": "web",
   "config": {
-    "link_prefixes": ["http://localhost:3000/", "app://"]
+    "link_prefixes": ["http://localhost:4400/", "app://"]
   },
   "pages": [
     {

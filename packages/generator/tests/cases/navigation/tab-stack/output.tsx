@@ -19,12 +19,12 @@ const Tabs = (props) => {
       >
         {() => (
           <HomeStack.Navigator>
-            <HomeStack.Screen name="page 1" component={Page_1Page} />
-            <HomeStack.Screen name="page 4" component={Page_4Page} />
+            <HomeStack.Screen name="page 1" component={Pages_Page_1} />
+            <HomeStack.Screen name="page 4" component={Pages_Page_4} />
           </HomeStack.Navigator>
         )}
       </Tab.Screen>
-      <Tab.Screen name="About" component={Page_3Page} />
+      <Tab.Screen name="About" component={Pages_Page_3} />
     </Tab.Navigator>
   );
 };
@@ -59,7 +59,7 @@ const App = (props) => {
             headerShown: false,
           }}
         />
-        <Stack.Screen name="page 2" component={Page_2Page} />
+        <Stack.Screen name="page 2" component={Pages_Page_2} />
       </Stack.Navigator>
     </NavigationContainer>
   );

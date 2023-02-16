@@ -10,7 +10,7 @@ import {
   Variable,
   BinaryOperator,
   JSX,
-} from "./intermediate-representation";
+} from "@batiq/ir";
 import { valueToAST } from "./utils/valueToAST";
 import { PageSchema } from "@batiq/core";
 import _babelGenerate from "@babel/generator";

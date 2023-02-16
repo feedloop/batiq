@@ -18,8 +18,8 @@ const App = (props) => {
       }}
     >
       <Stack.Navigator>
-        <Stack.Screen name="page 1" component={Page_1Page} />
-        <Stack.Screen name="page 2" component={Page_2Page} />
+        <Stack.Screen name="page 1" component={Pages_Page_1} />
+        <Stack.Screen name="page 2" component={Pages_Page_2} />
       </Stack.Navigator>
     </NavigationContainer>
   );

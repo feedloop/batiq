@@ -6,8 +6,8 @@ import {
   Value as SchemaValue,
 } from "@batiq/core";
 import Ajv from "ajv";
-import { importDefinition } from "../utils/importDefinition";
-import { toVariableName } from "../utils/naming";
+import { importDefinition } from "./utils/importDefinition";
+import { toVariableName } from "./utils/naming";
 import { transformHookExpressionProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
 

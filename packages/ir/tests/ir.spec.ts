@@ -1,7 +1,7 @@
 import path from "node:path";
 import glob from "fast-glob";
 import { toMatchFile } from "jest-file-snapshot";
-import { transformIR } from "../src/intermediate-representation";
+import { transformIR } from "../src";
 
 expect.extend({ toMatchFile });
 

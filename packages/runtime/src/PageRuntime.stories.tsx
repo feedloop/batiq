@@ -3,7 +3,7 @@ import { PageRuntimeLazy } from "./PageRuntime";
 import schema from "./schema.json";
 
 export default {
-  title: "Runtime",
+  title: "Page Runtime",
   component: PageRuntimeLazy,
   argTypes: {
     schema: { control: "object" },
