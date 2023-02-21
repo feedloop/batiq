@@ -14,7 +14,7 @@ describe("Navigation", () => {
   files.forEach(async (file) => {
     test(path.basename(path.dirname(file)), async () => {
       const { input } = await import(file);
-      expect(generateNavigation(input, true)).toMatchFile(
+      expect(await generateNavigation(input)).toMatchFile(
         file.replace("input.tsx", "output.tsx")
       );
     });

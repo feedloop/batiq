@@ -9,10 +9,10 @@
       "default": false
     }
   ],
+  "variableDeclarations": {},
   "components": [
     {
       "name": "Page",
-      "props": [],
       "variableDeclarations": {
         "navigate_": {
           "type": "function_call",
@@ -54,7 +54,6 @@
     },
     {
       "name": "Paragraph_",
-      "props": [],
       "variableDeclarations": {
         "navigate_": {
           "type": "function_call",

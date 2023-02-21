@@ -8,12 +8,11 @@ export const input: PageIR = {
       default: true,
     },
   ],
-
+  variableDeclarations: {},
   components: [
     {
       name: "PageWithNestedComponent",
       root: true,
-      props: [],
       variableDeclarations: {},
       JSX: [
         {

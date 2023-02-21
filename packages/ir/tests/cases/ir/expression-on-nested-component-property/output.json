@@ -15,10 +15,10 @@
       "default": false
     }
   ],
+  "variableDeclarations": {},
   "components": [
     {
       "name": "Page",
-      "props": [],
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",
@@ -60,7 +60,6 @@
     },
     {
       "name": "Paragraph_",
-      "props": [],
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",

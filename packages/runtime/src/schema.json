@@ -5,7 +5,7 @@
   },
   "platform": "web",
   "config": {
-    "link_prefixes": ["http://localhost:3000/", "app://"]
+    "link_prefixes": ["http://localhost:4400/", "app://"]
   },
   "pages": [
     {
@@ -19,57 +19,41 @@
       },
       "children": [
         {
+          "type": "component",
           "from": "@batiq/components",
           "name": "Provider",
           "properties": {},
           "children": [
             {
+              "type": "component",
               "from": "@batiq/components",
               "name": "Button",
               "properties": {},
               "children": [
                 {
+                  "type": "component",
                   "from": "@batiq/components",
                   "name": "Text",
                   "properties": {
-                    "text": "Hello World"
+                    "text": "Page 4"
                   },
                   "children": []
                 }
               ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Link",
+              "properties": {
+                "text": "Page 2",
+                "to": "/page-2"
+              },
+              "children": []
             }
           ]
         }
       ]
-    },
-    {
-      "name": "page 2",
-      "navigation": {
-        "path": "/page-2"
-      },
-      "children": []
-    },
-    {
-      "name": "page 3",
-      "navigation": {
-        "path": "/page-3",
-        "tab": {
-          "label": "About",
-          "icon": "about"
-        }
-      },
-      "children": []
-    },
-    {
-      "name": "page 4",
-      "navigation": {
-        "path": "/page-4",
-        "tab": {
-          "label": "Home",
-          "icon": "home"
-        }
-      },
-      "children": []
     }
   ]
 }
