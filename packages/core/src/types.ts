@@ -20,12 +20,14 @@ export type ComponentSchema = {
 export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
   | {
       inputs: S;
+      returns?: string | string[];
       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
       pure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
     }
   | {
       inputs: S;
+      returns?: string | string[];
       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
     };
 
@@ -33,7 +35,10 @@ export type ActionSchema = {
   type: "action";
   from: string;
   name: string;
-  arguments: Property[];
+  id?: string;
+  arguments: Container<Primitive | ExpressionSchema>[];
+  next?: string | number;
+  onError?: string | number;
 };
 
 export type ExpressionSchema = {
@@ -41,7 +46,7 @@ export type ExpressionSchema = {
   expression: string;
 };
 
-type Primitive = ComponentSchema | string | number | boolean;
+export type Primitive = ComponentSchema | string | number | boolean;
 export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
 export type Value = Container<Primitive>;
 export type Children = Container<Primitive | ExpressionSchema>;

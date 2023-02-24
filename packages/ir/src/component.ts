@@ -48,17 +48,35 @@ export const transformComponent = async (
 
   const primitives = Object.entries(schema.properties).filter(
     (entry): entry is [string, SchemaValue] =>
-      Array.isArray(entry[1]) ||
-      !(
-        typeof entry[1] === "object" &&
-        (entry[1].type === "action" || entry[1].type === "expression")
-      )
+      Array.isArray(entry[1])
+        ? !entry[1].some(
+            (item) =>
+              !Array.isArray(item) &&
+              typeof item === "object" &&
+              item.type === "action"
+          )
+        : !(
+            typeof entry[1] === "object" &&
+            (entry[1].type === "action" || entry[1].type === "expression")
+          )
   );
   const actionAndExpressions = Object.entries(schema.properties).filter(
-    (entry): entry is [string, ActionSchema | ExpressionSchema] =>
-      !Array.isArray(entry[1]) &&
-      typeof entry[1] === "object" &&
-      (entry[1].type === "action" || entry[1].type === "expression")
+    (
+      entry
+    ): entry is [string, ActionSchema | ActionSchema[] | ExpressionSchema] =>
+      Array.isArray(entry[1])
+        ? entry[1].every((item) =>
+            Array.isArray(item)
+              ? item.every(
+                  (i) =>
+                    !Array.isArray(i) &&
+                    typeof i === "object" &&
+                    i.type === "action"
+                )
+              : typeof item === "object" && item.type === "action"
+          )
+        : typeof entry[1] === "object" &&
+          (entry[1].type === "action" || entry[1].type === "expression")
   );
 
   const props = primitives.map(

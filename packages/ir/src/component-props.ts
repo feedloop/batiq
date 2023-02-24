@@ -3,6 +3,7 @@ import Ajv from "ajv";
 import { hookResultName } from "./utils/naming";
 import { Component, ComponentImport, Value } from "./types";
 import { importDefinition } from "./utils/importDefinition";
+import { buildActionGraph } from "./action-graph";
 
 const ajv = new Ajv();
 
@@ -17,10 +18,121 @@ type TransformPropResult = {
   additionalComponents: Component[];
 };
 
-export const transformHookExpressionProp = async (
-  [name, value]: [string, ActionSchema | ExpressionSchema],
+export const transformActionGraphProp = async (
+  [name, value]: [string, ActionSchema[]],
   isRoot: boolean
 ): Promise<TransformPropResult> => {
+  const graph = buildActionGraph(value);
+  const imports = [
+    {
+      source: "@batiq/actions",
+      names: ["useActionGraph"],
+      default: false,
+    },
+    ...graph.nodes.map((node) => ({
+      source: node.from,
+      names: [node.name],
+      default: false,
+    })),
+  ];
+  const actionDefs = await Promise.all(
+    graph.nodes.map(async (node) => {
+      const actionDef: ActionDefinition = await importDefinition(
+        node.from,
+        node.name
+      );
+      if (
+        actionDef?.inputs &&
+        !ajv.validate(actionDef.inputs, node.arguments)
+      ) {
+        throw new Error(ajv.errorsText());
+      }
+      return {
+        node,
+        actionDef,
+        isHook:
+          (node.name.startsWith("use") && actionDef?.isHook !== false) ||
+          actionDef?.isHook === true,
+      };
+    })
+  );
+  const variables: [string, Value][] = [
+    ...actionDefs.flatMap(({ node, isHook }): [string, Value][] =>
+      isHook
+        ? [
+            [
+              hookResultName(node.name),
+              { type: "function_call", arguments: [], name: node.name },
+            ],
+          ]
+        : []
+    ),
+    [
+      "actionGraph",
+      {
+        type: "function_call",
+        arguments: [
+          {
+            nodes: actionDefs.map(
+              ({ node, isHook }): Value => ({
+                type: "function_definition",
+                async: true,
+                parameters: ["evaluate"],
+                return: {
+                  type: "function_call",
+                  name: isHook ? hookResultName(node.name) : node.name,
+                  arguments: node.arguments.map((arg) =>
+                    !Array.isArray(arg) &&
+                    typeof arg === "object" &&
+                    arg.type === "expression"
+                      ? {
+                          type: "function_call",
+                          name: "evaluate",
+                          arguments: [arg.expression],
+                        }
+                      : arg
+                  ),
+                },
+              })
+            ),
+            successEdges: graph.successEdges,
+            errorEdges: graph.errorEdges,
+          },
+        ],
+        name: "useActionGraph",
+      },
+    ],
+  ];
+
+  const actionGraph: Value = {
+    type: "variable",
+    name: "actionGraph",
+  };
+
+  return {
+    imports,
+    variables,
+    prop: {
+      name,
+      value: actionGraph,
+    },
+    splitComponent:
+      !isRoot &&
+      actionDefs.some(
+        (actionDef) =>
+          actionDef.isHook && !!("root" in actionDef ? actionDef?.root : true)
+      ),
+    additionalComponents: [],
+  };
+};
+
+export const transformHookExpressionProp = async (
+  [name, value]: [string, ActionSchema | ActionSchema[] | ExpressionSchema],
+  isRoot: boolean
+): Promise<TransformPropResult> => {
+  if (Array.isArray(value)) {
+    return transformActionGraphProp([name, value], isRoot);
+  }
   switch (value.type) {
     case "action": {
       const actionDef: ActionDefinition = await importDefinition(
@@ -108,7 +220,7 @@ type TransformPropsResult = {
 };
 
 export const transformHookExpressionProps = async (
-  props: [string, ActionSchema | ExpressionSchema][],
+  props: [string, ActionSchema | ActionSchema[] | ExpressionSchema][],
   isRoot: boolean
 ): Promise<TransformPropsResult> => {
   const propResults = await Promise.all(
