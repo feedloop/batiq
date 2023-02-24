@@ -19,6 +19,9 @@ export const createScope = (
       imports.has(source) && imports.get(source)?.default,
     getVariable: (key: string) => variables.get(key),
     addVariable: (name: string, value: any) => {
+      if (scope.has(name)) {
+        throw new Error(`Variable ${name} already exists`);
+      }
       variables.set(name, value);
     },
     addImport: (
