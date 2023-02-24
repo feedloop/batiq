@@ -74,40 +74,42 @@ export const transformActionGraphProp = async (
       return isHook ? [[variableName, scope.getVariable(variableName)]] : [];
     }
   );
+  const actionGraphVariableName = generateUniqueName(scope, "actionGraph");
+  scope.addVariable(actionGraphVariableName, {
+    type: "function_call",
+    arguments: [
+      {
+        nodes: actionDefs.map(
+          ({ node, isHook }): Value => ({
+            type: "function_definition",
+            async: true,
+            parameters: ["evaluate"],
+            return: {
+              type: "function_call",
+              name: isHook ? hookResultName(node.name) : node.name,
+              arguments: node.arguments.map((arg) =>
+                !Array.isArray(arg) &&
+                typeof arg === "object" &&
+                arg.type === "expression"
+                  ? {
+                      type: "function_call",
+                      name: "evaluate",
+                      arguments: [arg.expression],
+                    }
+                  : arg
+              ),
+            },
+          })
+        ),
+        successEdges: graph.successEdges,
+        errorEdges: graph.errorEdges,
+      },
+    ],
+    name: "useActionGraph",
+  });
   const actionGraphVariable: [string, Value] = [
-    generateHookResultName(scope, "useActionGraph"),
-    {
-      type: "function_call",
-      arguments: [
-        {
-          nodes: actionDefs.map(
-            ({ node, isHook }): Value => ({
-              type: "function_definition",
-              async: true,
-              parameters: ["evaluate"],
-              return: {
-                type: "function_call",
-                name: isHook ? hookResultName(node.name) : node.name,
-                arguments: node.arguments.map((arg) =>
-                  !Array.isArray(arg) &&
-                  typeof arg === "object" &&
-                  arg.type === "expression"
-                    ? {
-                        type: "function_call",
-                        name: "evaluate",
-                        arguments: [arg.expression],
-                      }
-                    : arg
-                ),
-              },
-            })
-          ),
-          successEdges: graph.successEdges,
-          errorEdges: graph.errorEdges,
-        },
-      ],
-      name: "useActionGraph",
-    },
+    actionGraphVariableName,
+    scope.getVariable(actionGraphVariableName),
   ];
 
   const actionGraph: Value = {
