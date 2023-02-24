@@ -6,21 +6,21 @@
         "Paragraph",
         "navigate"
       ],
-      "default": false
+      "default": null
     },
     {
       "source": "@batiq/actions",
       "names": [
         "useActionGraph"
       ],
-      "default": false
+      "default": null
     },
     {
       "source": "actions",
       "names": [
         "log"
       ],
-      "default": false
+      "default": null
     }
   ],
   "variableDeclarations": {},

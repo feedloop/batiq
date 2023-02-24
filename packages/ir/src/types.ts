@@ -3,7 +3,7 @@ import { Container } from "@batiq/core";
 export type ComponentImport = {
   source: string;
   names: string[];
-  default: boolean;
+  default: string | null;
 };
 
 export type FunctionCall = {

@@ -11,33 +11,32 @@ export const input: PageSchema = {
       from: "./test",
       name: "Paragraph",
       properties: {
+        text: "To Page 2",
         color: "red",
         onPress: {
           type: "action",
           from: "./test",
           name: "navigate",
           arguments: ["/page-2"],
-          root: true,
         },
       },
-      children: [
-        {
-          type: "component",
+      children: [],
+    },
+    {
+      type: "component",
+      from: "./test",
+      name: "Paragraph",
+      properties: {
+        text: "To Page 3",
+        color: "red",
+        onPress: {
+          type: "action",
           from: "./test",
-          name: "Paragraph",
-          properties: {
-            color: "red",
-            onPress: {
-              type: "action",
-              from: "./test",
-              name: "navigate",
-              arguments: ["/page-3"],
-              root: true,
-            },
-          },
-          children: [],
+          name: "useNavigate",
+          arguments: ["/page-3"],
         },
-      ],
+      },
+      children: [],
     },
   ],
 };

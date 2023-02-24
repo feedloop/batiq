@@ -7,9 +7,10 @@ import {
 } from "@batiq/core";
 import Ajv from "ajv";
 import { importDefinition } from "./utils/importDefinition";
-import { toVariableName } from "./utils/naming";
+import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformHookExpressionProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
+import { Scope } from "./scope";
 
 const ajv = new Ajv();
 
@@ -21,6 +22,7 @@ type TransformResult = {
 };
 
 export const transformComponent = async (
+  scope: Scope,
   schema: ComponentSchema,
   isRoot = true,
   validate: boolean
@@ -36,15 +38,26 @@ export const transformComponent = async (
     }
   }
 
+  const componentName =
+    schema.name ?? generateDefaultImport(scope, schema.from);
   const imports = [
     schema.name
       ? {
           source: schema.from,
           names: [schema.name],
-          default: false,
+          default: null,
         }
-      : { source: schema.from, names: [], default: true },
+      : {
+          source: schema.from,
+          names: [],
+          default: componentName,
+        },
   ];
+  if (schema.name) {
+    scope.addImport(schema.from, [schema.name], null);
+  } else {
+    scope.addImport(schema.from, [], componentName);
+  }
 
   const primitives = Object.entries(schema.properties).filter(
     (entry): entry is [string, SchemaValue] =>
@@ -80,13 +93,17 @@ export const transformComponent = async (
   );
 
   const props = primitives.map(
-    ([name, value]): { name: string; value: Value } => ({
-      name,
-      value,
-    })
+    ([name, value]): { name: string; value: Value } => {
+      name = generateUniqueName(scope, name);
+      return {
+        name,
+        value,
+      };
+    }
   );
 
   const propsResult = await transformHookExpressionProps(
+    scope.clone(),
     actionAndExpressions,
     isRoot
   );
@@ -97,7 +114,9 @@ export const transformComponent = async (
         (component): component is ComponentSchema =>
           typeof component === "object" && component.type === "component"
       )
-      .map((component) => transformComponent(component, false, validate))
+      .map((component) =>
+        transformComponent(scope.clone(), component, false, validate)
+      )
   );
 
   const variables = [
@@ -107,7 +126,7 @@ export const transformComponent = async (
 
   const jsx: JSX = {
     type: "element",
-    name: schema.name ?? toVariableName(schema.from),
+    name: componentName,
     props: [...props, ...propsResult.props],
     children: childrenResults.map((result) => result.element),
   };
@@ -122,7 +141,7 @@ export const transformComponent = async (
     element: propsResult.splitComponent
       ? {
           type: "element",
-          name: (schema.name ?? toVariableName(schema.from)) + "_",
+          name: generateUniqueName(scope, componentName),
           props: [],
           children: [],
         }
@@ -131,7 +150,7 @@ export const transformComponent = async (
       ...(propsResult.splitComponent
         ? [
             {
-              name: (schema.name ?? toVariableName(schema.from)) + "_",
+              name: generateUniqueName(scope, componentName),
               variableDeclarations: Object.fromEntries(variables),
               JSX: [jsx],
               root: false,

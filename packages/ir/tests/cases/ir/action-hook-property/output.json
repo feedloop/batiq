@@ -6,7 +6,7 @@
         "Paragraph",
         "navigate"
       ],
-      "default": false
+      "default": null
     }
   ],
   "variableDeclarations": {},
