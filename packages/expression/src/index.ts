@@ -1,22 +1,15 @@
 import React from "react";
 import { useDataContext } from "@batiq/data";
-import { buildExpressionParser, evaluate } from "@feedloop/expression-parser";
-import { javascriptConfig, mergeConfig } from "@feedloop/formula-editor";
+import { evaluate, mergeConfig } from "@feedloop/expression";
+import javascriptConfig from "@feedloop/formula-prelude/evaluators/javascript";
 import Dot from "dot-object";
 
 const dot = new Dot(".");
 
-const parse = buildExpressionParser(javascriptConfig);
-
 export const evaluateExpression = (
   expression: string,
   additionalConfig: Partial<typeof javascriptConfig> = {}
-) => {
-  const ast = parse(expression);
-  return ast.errors.length === 0
-    ? evaluate(ast.ast, mergeConfig(javascriptConfig, additionalConfig))
-    : undefined;
-};
+) => evaluate(expression, mergeConfig(javascriptConfig, additionalConfig));
 
 export const useLazyExpression = () => {
   const data = useDataContext();
@@ -45,10 +38,7 @@ export const useLazyExpression = () => {
     ): any =>
       evaluateExpression(
         expression,
-        mergeConfig(
-          { functions: [], operators: [], variables },
-          additionalConfig
-        )
+        mergeConfig({ variables }, additionalConfig)
       ),
     [variables]
   );

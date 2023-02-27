@@ -13,10 +13,10 @@ type ActionGraph = {
 export const useActionGraph = (graph: ActionGraph) => {
   const evaluate = useLazyExpression();
 
-  return React.useCallback(() => {
-    const run = async (node: number, ctx = {}) => {
+  const run = React.useCallback(
+    async (node = 0, ctx = {}) => {
       const next = graph.successEdges.find((e) => e[0] === node)?.[1];
-      const error = graph.errorEdges.find((e) => e[0] === node)?.[0];
+      const error = graph.errorEdges.find((e) => e[0] === node)?.[1];
 
       const evaluateWithCtx = (expression: string) =>
         evaluate(expression, {
@@ -41,7 +41,8 @@ export const useActionGraph = (graph: ActionGraph) => {
         task = task.catch(() => run(error, ctx));
       }
       return task;
-    };
-    run(0);
-  }, [evaluate]);
+    },
+    [evaluate]
+  );
+  return run;
 };
