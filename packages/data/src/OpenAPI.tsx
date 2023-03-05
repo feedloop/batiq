@@ -35,7 +35,7 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
   const api = new OpenAPIClientAxios({ definition });
   const client = await api.init();
 
-  const { http, apiKey, oauth2, openIdConnect } = auth;
+  let { http, apiKey, oauth2, openIdConnect } = auth;
 
   const [securityName, securityScheme] =
     Object.entries(api.document.components?.securitySchemes || {})
@@ -66,6 +66,11 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
   return {
     isAuthenticated: async () => {
       switch (securityScheme?.type) {
+        case "apiKey":
+          return apiKey !== undefined
+            ? true
+            : window?.localStorage.getItem("apiKey");
+
         case "oauth2":
           return window?.localStorage?.getItem("token") !== null;
 
@@ -76,8 +81,17 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
           return true;
       }
     },
-    authenticate: async () => {
+    authenticate: async (data) => {
       switch (securityScheme?.type) {
+        case "apiKey": {
+          if (apiKey) {
+            apiKey = data.apiKey;
+            return;
+          }
+          window?.localStorage.setItem("apiKey", data.apiKey);
+          return;
+        }
+
         case "oauth2": {
           const { clientId } = oauth2;
           const { scopes, authorizationUrl = oauth2.authorizationUrl } =
