@@ -1,10 +1,37 @@
 import * as React from "react";
 import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
-import { TTuple, TArray, Static } from "@sinclair/typebox";
+import { TTuple, TArray } from "@sinclair/typebox";
 
 export type ComponentDefinition<P extends Record<string, any>> = {
   inputs: ComponentInput<P>;
+  definitions: {
+    kind: "block" | "text" | "void";
+  };
+};
+
+export type DataSourceDefinition<P extends Record<string, any>> =
+  ComponentDefinition<{
+    name: string;
+    query: P;
+  }>;
+
+type QueryResult<T> =
+  | {
+      type: "single";
+      data: T;
+    }
+  | {
+      type: "list";
+      data: T[];
+    };
+
+export type DataSource<P extends Record<string, any>, Data> = {
+  isAuthenticated: () => Promise<boolean>;
+  authenticate: (...args: any[]) => Promise<any>;
+  definition: DataSourceDefinition<P>;
+  query: (query: P) => Promise<QueryResult<Data>>;
+  component: (props: { name: string; query: P }) => React.ReactElement;
 };
 
 export type ComponentInput<P> = JSONSchemaType<P>;
@@ -46,10 +73,17 @@ export type ExpressionSchema = {
   expression: string;
 };
 
+export type DataSchema = {
+  type: "data";
+  data: string;
+  name: string;
+  query: Record<string, any>;
+};
+
 export type Primitive = ComponentSchema | string | number | boolean;
 export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
 export type Value = Container<Primitive>;
-export type Children = Container<Primitive | ExpressionSchema>;
+export type Children = Container<Primitive | ExpressionSchema | DataSchema>;
 export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
 
 export type PageSchema = {
@@ -66,6 +100,18 @@ export type PageSchema = {
 
 export type Platform = "web" | "native" | "webcomponent";
 
+export type DataSourceDefinitionSchema = {
+  type:
+    | "qore"
+    | "local"
+    | "openapi"
+    | {
+        from: string;
+        name: string;
+      };
+  config: Record<string, any>;
+};
+
 export type AppSchema = {
   batiq: string;
   platform: Platform;
@@ -81,6 +127,7 @@ export type AppSchema = {
   config: Record<string, any> & {
     link_prefixes?: string[];
   };
+  data: Record<string, DataSourceDefinitionSchema>;
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{

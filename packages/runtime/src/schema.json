@@ -7,6 +7,24 @@
   "config": {
     "link_prefixes": ["http://localhost:4400/", "app://"]
   },
+  "datasource": {
+    "qore": {
+      "type": "qore",
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      }
+    },
+    "qore2": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "CustomDataSource"
+      },
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      },
+      "authenticatedRoutes": ["/users", "/posts/*"]
+    }
+  },
   "pages": [
     {
       "name": "page 1",
@@ -29,12 +47,21 @@
               "from": "@batiq/components",
               "name": "Button",
               "properties": {
-                "onPress": {
-                  "type": "action",
-                  "from": "@batiq/actions",
-                  "name": "navigate",
-                  "arguments": ["/page-4"]
-                }
+                "onPress": [
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "navigate",
+                    "arguments": ["/page-4"],
+                    "next": 1
+                  },
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "goBack",
+                    "arguments": []
+                  }
+                ]
               },
               "children": [
                 {
@@ -45,6 +72,24 @@
                     "text": "Page 4"
                   },
                   "children": []
+                }
+              ]
+            },
+            {
+              "type": "data",
+              "datasource": "qore2",
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/data",
+                  "name": "DataSource",
+                  "properties": {
+                    "data": "qore",
+                    "name": "qore_users",
+                    "query": {
+                      "column": {}
+                    }
+                  }
                 }
               ]
             },
