@@ -46,11 +46,21 @@ export type ExpressionSchema = {
   expression: string;
 };
 
+export type BreakpointSchema<T> = {
+  type: "breakpoint";
+  breakpoints: Record<string, T>;
+};
+
 export type Primitive = ComponentSchema | string | number | boolean;
-export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
+export type Container<T> =
+  | T
+  | Container<T>[]
+  | { [key in string extends "type" ? never : string]: Container<T> };
 export type Value = Container<Primitive>;
 export type Children = Container<Primitive | ExpressionSchema>;
-export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
+export type Property =
+  | Container<Primitive | ExpressionSchema | ActionSchema>
+  | BreakpointSchema<Container<Primitive | ExpressionSchema | ActionSchema>>;
 
 export type PageSchema = {
   name: string;
@@ -65,6 +75,22 @@ export type PageSchema = {
 };
 
 export type Platform = "web" | "native" | "webcomponent";
+
+export type FontStyle = {
+  fontFamily: string;
+  fontWeight:
+    | "normal"
+    | "bold"
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+};
 
 export type AppSchema = {
   batiq: string;
@@ -91,6 +117,17 @@ export type AppSchema = {
       border: string;
       notification: string;
     }>;
+    fonts: {
+      [platform: string]: {
+        regular: FontStyle;
+        medium: FontStyle;
+        bold: FontStyle;
+        heavy: FontStyle;
+      };
+    };
+    breakpoints: {
+      [key: string]: number;
+    };
     [key: string]: any;
   }>;
   pages: PageSchema[];
