@@ -61,6 +61,11 @@ export type BinaryOperator = {
   right: Value;
 };
 
+export type JSON = {
+  type: "json";
+  value: Record<string, any>;
+};
+
 export type Primitive = string | number | boolean;
 export type Value = Container<
   | FunctionDefinition
@@ -68,6 +73,7 @@ export type Value = Container<
   | Variable
   | BinaryOperator
   | Element
+  | JSON
   | Primitive
 >;
 
@@ -84,7 +90,11 @@ export type RenderProp = {
   JSX: JSX;
 };
 
-export type JSX = Element | RenderProp | Primitive;
+export type JSXExpression = {
+  type: "jsx_expression";
+  value: Value;
+};
+export type JSX = Element | RenderProp | JSXExpression | Primitive;
 
 export type Component = {
   name: string;

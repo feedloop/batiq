@@ -1,4 +1,9 @@
-import { ActionDefinition, ActionSchema, ExpressionSchema } from "@batiq/core";
+import {
+  ActionDefinition,
+  ActionSchema,
+  ExpressionSchema,
+  Property,
+} from "@batiq/core";
 import Ajv from "ajv";
 import {
   generateHookResultName,
@@ -15,17 +20,14 @@ const ajv = new Ajv();
 type TransformPropResult = {
   imports: ComponentImport[];
   variables: [string, Value][];
-  prop: {
-    name: string;
-    value: Value;
-  };
+  prop: Value;
   splitComponent: boolean;
   additionalComponents: Component[];
 };
 
 export const transformActionGraphProp = async (
   scope: Scope,
-  [name, value]: [string, ActionSchema[]],
+  value: ActionSchema[],
   isRoot: boolean
 ): Promise<TransformPropResult> => {
   const graph = buildActionGraph(value);
@@ -120,10 +122,7 @@ export const transformActionGraphProp = async (
   return {
     imports,
     variables: variables.concat([actionGraphVariable]),
-    prop: {
-      name,
-      value: actionGraph,
-    },
+    prop: actionGraph,
     splitComponent:
       !isRoot &&
       actionDefs.some(
@@ -136,11 +135,11 @@ export const transformActionGraphProp = async (
 
 export const transformHookExpressionProp = async (
   scope: Scope,
-  [name, value]: [string, ActionSchema | ActionSchema[] | ExpressionSchema],
+  value: ActionSchema | ActionSchema[] | ExpressionSchema,
   isRoot: boolean
 ): Promise<TransformPropResult> => {
   if (Array.isArray(value)) {
-    return transformActionGraphProp(scope, [name, value], isRoot);
+    return transformActionGraphProp(scope, value, isRoot);
   }
   switch (value.type) {
     case "action": {
@@ -158,7 +157,7 @@ export const transformHookExpressionProp = async (
         (value.name.startsWith("use") && actionDef?.isHook !== false) ||
         actionDef?.isHook === true;
 
-      const imports = [
+      const imports: ComponentImport[] = [
         {
           source: value.from,
           names: [value.name],
@@ -182,23 +181,26 @@ export const transformHookExpressionProp = async (
         scope.addVariable(hookCallVariableName, null);
       }
 
+      const arguments_ = await Promise.all(
+        value.arguments.map((arg) => transformComponentProp(scope, arg, isRoot))
+      );
       return {
-        imports,
-        variables,
+        imports: imports.concat(arguments_.flatMap((arg) => arg.imports)),
+        variables: variables.concat(arguments_.flatMap((arg) => arg.variables)),
         prop: {
-          name,
-          value: {
-            type: "function_call",
-            name: hookCallVariableName ? hookCallVariableName : value.name,
-            arguments: value.arguments,
-          },
+          type: "function_call",
+          name: hookCallVariableName ? hookCallVariableName : value.name,
+          arguments: arguments_.map((arg) => arg.prop),
         },
         splitComponent:
-          !isRoot &&
-          value.type === "action" &&
-          isHook &&
-          !!("root" in actionDef ? actionDef?.root : true),
-        additionalComponents: [],
+          (!isRoot &&
+            value.type === "action" &&
+            isHook &&
+            !!("root" in actionDef ? actionDef?.root : true)) ||
+          arguments_.some((arg) => arg.splitComponent),
+        additionalComponents: arguments_.flatMap(
+          (arg) => arg.additionalComponents
+        ),
       };
     }
 
@@ -215,18 +217,72 @@ export const transformHookExpressionProp = async (
           ],
         ],
         prop: {
-          name,
-          value: {
-            type: "function_call",
-            name: hookCallVariableName,
-            arguments: [value.expression],
-          },
+          type: "function_call",
+          name: hookCallVariableName,
+          arguments: [value.expression],
         },
         splitComponent: !isRoot,
         additionalComponents: [],
       };
     }
   }
+};
+
+export const transformComponentProp = async (
+  scope: Scope,
+  value: Property,
+  isRoot: boolean
+): Promise<TransformPropResult> => {
+  if (Array.isArray(value)) {
+    if (
+      value.every(
+        (item) =>
+          !Array.isArray(item) &&
+          typeof item === "object" &&
+          item.type === "action"
+      )
+    ) {
+      return transformHookExpressionProp(
+        scope,
+        value as ActionSchema[],
+        isRoot
+      );
+    }
+  } else if (
+    typeof value === "object" &&
+    (value.type === "expression" || value.type === "action")
+  ) {
+    return transformHookExpressionProp(
+      scope,
+      value as ExpressionSchema | ActionSchema,
+      isRoot
+    );
+  } else if (typeof value === "object" && !("type" in value)) {
+    const propertyResult = await Promise.all(
+      Object.entries(value).map(async ([name, v]) => ({
+        name,
+        value: await transformComponentProp(scope, v, isRoot),
+      }))
+    );
+    return {
+      imports: propertyResult.flatMap((res) => res.value.imports),
+      variables: propertyResult.flatMap((res) => res.value.variables),
+      prop: Object.fromEntries(
+        propertyResult.map((res) => [res.name, res.value.prop])
+      ),
+      splitComponent: propertyResult.some((prop) => prop.value.splitComponent),
+      additionalComponents: propertyResult.flatMap(
+        (prop) => prop.value.additionalComponents
+      ),
+    };
+  }
+  return {
+    imports: [],
+    variables: [],
+    prop: value,
+    splitComponent: false,
+    additionalComponents: [],
+  };
 };
 
 type TransformPropsResult = {
@@ -240,23 +296,26 @@ type TransformPropsResult = {
   splitComponent: boolean;
 };
 
-export const transformHookExpressionProps = async (
+export const transformComponentProps = async (
   scope: Scope,
-  props: [string, ActionSchema | ActionSchema[] | ExpressionSchema][],
+  props: [string, Property][],
   isRoot: boolean
 ): Promise<TransformPropsResult> => {
   const { results } = await props.reduce(
-    async (promise, prop) => {
+    async (promise, [name, value]) => {
       const { scope, results } = await promise;
-      const transformResult: TransformPropResult =
-        await transformHookExpressionProp(scope, prop, isRoot);
+      const transformResult: TransformPropResult = await transformComponentProp(
+        scope,
+        value,
+        isRoot
+      );
 
       return {
         scope: scope,
         results: {
           imports: results.imports.concat(transformResult.imports),
           variables: results.variables.concat(transformResult.variables),
-          props: results.props.concat(transformResult.prop),
+          props: results.props.concat({ name, value: transformResult.prop }),
           additionalComponents: results.additionalComponents.concat(
             transformResult.additionalComponents
           ),

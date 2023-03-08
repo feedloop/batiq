@@ -26,12 +26,17 @@ type QueryResult<T> =
       data: T[];
     };
 
-export type DataSource<P extends Record<string, any>, Data> = {
+export type DataSource<
+  P extends Record<string, any> = Record<string, any>,
+  Data = any
+> = {
   isAuthenticated: () => Promise<boolean>;
   authenticate: (...args: any[]) => Promise<any>;
   definition: DataSourceDefinition<P>;
   query: (query: P) => Promise<QueryResult<Data>>;
-  component: (props: { name: string; query: P }) => React.ReactElement;
+  component: (
+    props: React.PropsWithChildren<{ name: string; query: P }>
+  ) => React.ReactElement;
 };
 
 export type ComponentInput<P> = JSONSchemaType<P>;
@@ -78,13 +83,29 @@ export type DataSchema = {
   data: string;
   name: string;
   query: Record<string, any>;
+  children: ComponentSchema["children"];
 };
 
-export type Primitive = ComponentSchema | string | number | boolean;
-export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
+export type BreakpointSchema<T> = {
+  type: "breakpoint";
+  breakpoints: Record<string, T>;
+};
+
+export type Primitive =
+  | ComponentSchema
+  | ExpressionSchema
+  | DataSchema
+  | string
+  | number
+  | boolean;
+export type Container<T> =
+  | T
+  | Container<T>[]
+  | { [key in string extends "type" ? never : string]: Container<T> };
 export type Value = Container<Primitive>;
-export type Children = Container<Primitive | ExpressionSchema | DataSchema>;
-export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
+export type Property =
+  | Container<Primitive | ExpressionSchema | ActionSchema>
+  | BreakpointSchema<Container<Primitive | ExpressionSchema | ActionSchema>>;
 
 export type PageSchema = {
   name: string;
@@ -95,7 +116,7 @@ export type PageSchema = {
       icon: string;
     };
   };
-  children: ComponentSchema[];
+  children: Primitive[];
 };
 
 export type Platform = "web" | "native" | "webcomponent";
@@ -110,6 +131,22 @@ export type DataSourceDefinitionSchema = {
         name: string;
       };
   config: Record<string, any>;
+};
+
+export type FontStyle = {
+  fontFamily: string;
+  fontWeight:
+    | "normal"
+    | "bold"
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
 };
 
 export type AppSchema = {
@@ -138,6 +175,17 @@ export type AppSchema = {
       border: string;
       notification: string;
     }>;
+    fonts: {
+      [platform: string]: {
+        regular: FontStyle;
+        medium: FontStyle;
+        bold: FontStyle;
+        heavy: FontStyle;
+      };
+    };
+    breakpoints: {
+      [key: string]: number;
+    };
     [key: string]: any;
   }>;
   pages: PageSchema[];

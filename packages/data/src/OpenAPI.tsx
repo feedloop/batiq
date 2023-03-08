@@ -35,6 +35,7 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
   const api = new OpenAPIClientAxios({ definition });
   const client = await api.init();
 
+  // eslint-disable-next-line prefer-const
   let { http, apiKey, oauth2, openIdConnect } = auth;
 
   const [securityName, securityScheme] =

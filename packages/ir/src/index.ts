@@ -1,6 +1,6 @@
 import { PageSchema } from "@batiq/core";
 import { toVariableName } from "./utils/naming";
-import { transformComponent } from "./component";
+import { transformJSXChild } from "./component";
 import { ComponentImport, Component, PageIR } from "./types";
 import { createScope } from "./scope";
 
@@ -31,9 +31,38 @@ export const transformIR = async (
   const scope = createScope();
   scope.addVariable(toVariableName(page.name), null);
   const results = await Promise.all(
-    page.children.map((component) =>
-      transformComponent(scope.clone(), component, true, validate)
-    )
+    page.children.map((component) => {
+      if (typeof component === "object") {
+        switch (component.type) {
+          case "component":
+            return transformJSXChild(scope.clone(), component, true, validate);
+
+          case "data":
+            return transformJSXChild(
+              scope.clone(),
+              {
+                type: "component",
+                from: "@batiq/data",
+                name: "DataSource",
+                properties: {
+                  data: component.data,
+                  name: component.name,
+                  query: component.query,
+                },
+                children: component.children,
+              },
+              true,
+              validate
+            );
+        }
+      }
+      return {
+        imports: [],
+        variables: [],
+        element: component,
+        additionalComponents: [],
+      };
+    })
   );
   const imports = mergeImports(results.flatMap((r) => r.imports));
   const root = {

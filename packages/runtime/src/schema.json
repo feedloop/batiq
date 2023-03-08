@@ -78,13 +78,12 @@
             {
               "type": "data",
               "datasource": "qore2",
+              "properties": {},
               "children": [
                 {
-                  "type": "component",
-                  "from": "@batiq/data",
-                  "name": "DataSource",
+                  "type": "data",
+                  "datasource": "qore",
                   "properties": {
-                    "data": "qore",
                     "name": "qore_users",
                     "query": {
                       "column": {}

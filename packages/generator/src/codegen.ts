@@ -117,6 +117,9 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
             async
           );
     }
+    if (ir.type === "json") {
+      return valueToAST(ir.value);
+    }
     return t.objectExpression(
       Object.entries(<Record<string, Value>>ir).map(([key, value]) =>
         t.objectProperty(t.stringLiteral(key), primitiveIRToAST(value))
