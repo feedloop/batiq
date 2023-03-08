@@ -2,6 +2,8 @@ import React from "react";
 
 const DataContext = React.createContext<Record<string, any>>({});
 
+export const useDataContext = () => React.useContext(DataContext);
+
 type Props = {
   name: string;
   data: Record<string, any>;

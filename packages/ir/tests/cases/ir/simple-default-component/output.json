@@ -5,7 +5,7 @@
       "names": [
         "Paragraph"
       ],
-      "default": false
+      "default": null
     }
   ],
   "variableDeclarations": {},

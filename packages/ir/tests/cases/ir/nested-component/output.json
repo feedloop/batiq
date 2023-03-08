@@ -5,7 +5,7 @@
       "names": [
         "Paragraph"
       ],
-      "default": true
+      "default": "Test"
     }
   ],
   "variableDeclarations": {},

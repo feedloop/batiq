@@ -1,6 +1,7 @@
 import { AppSchema, PageSchema } from "@batiq/core";
 import { toVariableName } from "./utils/naming";
-import { PageIR, ComponentImport, Value, Component, JSX } from "@batiq/ir";
+import { PageIR, ComponentImport, Value, Component } from "./types";
+import { JSX } from "./index";
 
 type Tab = {
   tab: NonNullable<PageSchema["navigation"]["tab"]>;
@@ -48,22 +49,22 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
     {
       source: "@react-navigation/native",
       names: ["NavigationContainer"],
-      default: false,
+      default: null,
     },
     {
       source: "@react-navigation/bottom-tabs",
       names: ["createBottomTabNavigator"],
-      default: false,
+      default: null,
     },
     {
       source: "@react-navigation/native-stack",
       names: ["createNativeStackNavigator"],
-      default: false,
+      default: null,
     },
     ...schema.pages.map((page) => ({
       source: `./pages/${toVariableName(page.name)}`,
       names: [],
-      default: true,
+      default: toVariableName(`./pages/${toVariableName(page.name)}`),
     })),
   ];
 

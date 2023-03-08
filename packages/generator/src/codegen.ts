@@ -10,6 +10,7 @@ import {
   Variable,
   BinaryOperator,
   JSX,
+  FunctionDefinition,
 } from "@batiq/ir";
 import { valueToAST } from "./utils/valueToAST";
 import { PageSchema } from "@batiq/core";
@@ -67,9 +68,12 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
       );
     }
     if (ir.type === "function_call") {
+      const { object, name, arguments: args } = <FunctionCall>ir;
       return t.callExpression(
-        t.identifier((<FunctionCall>ir).name),
-        (<FunctionCall>ir).arguments.map(primitiveIRToAST)
+        object
+          ? t.memberExpression(primitiveIRToAST(object), t.identifier(name))
+          : t.identifier(name),
+        args.map(primitiveIRToAST)
       );
     }
     if (ir.type === "variable") {
@@ -89,6 +93,29 @@ const primitiveIRToAST = (ir: Value): t.Expression => {
         primitiveIRToAST(left),
         primitiveIRToAST(right)
       );
+    }
+    if (ir.type === "function_definition") {
+      const {
+        name,
+        parameters,
+        return: returnValue,
+        async,
+      } = <FunctionDefinition>ir;
+      return name
+        ? t.functionExpression(
+            t.identifier(name),
+            parameters.map(t.identifier),
+            t.blockStatement([
+              t.returnStatement(primitiveIRToAST(returnValue)),
+            ]),
+            undefined,
+            async
+          )
+        : t.arrowFunctionExpression(
+            parameters.map(t.identifier),
+            primitiveIRToAST(returnValue),
+            async
+          );
     }
     return t.objectExpression(
       Object.entries(<Record<string, Value>>ir).map(([key, value]) =>

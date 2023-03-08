@@ -20,12 +20,14 @@ export type ComponentSchema = {
 export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
   | {
       inputs: S;
+      returns?: string | string[];
       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
       pure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
     }
   | {
       inputs: S;
+      returns?: string | string[];
       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
     };
 
@@ -33,7 +35,10 @@ export type ActionSchema = {
   type: "action";
   from: string;
   name: string;
-  arguments: Property[];
+  id?: string;
+  arguments: Container<Primitive | ExpressionSchema>[];
+  next?: string | number;
+  onError?: string | number;
 };
 
 export type ExpressionSchema = {
@@ -41,11 +46,21 @@ export type ExpressionSchema = {
   expression: string;
 };
 
-type Primitive = ComponentSchema | string | number | boolean;
-export type Container<T> = T | Container<T>[] | { [key: string]: Container<T> };
+export type BreakpointSchema<T> = {
+  type: "breakpoint";
+  breakpoints: Record<string, T>;
+};
+
+export type Primitive = ComponentSchema | string | number | boolean;
+export type Container<T> =
+  | T
+  | Container<T>[]
+  | { [key in string extends "type" ? never : string]: Container<T> };
 export type Value = Container<Primitive>;
 export type Children = Container<Primitive | ExpressionSchema>;
-export type Property = Container<Primitive | ExpressionSchema | ActionSchema>;
+export type Property =
+  | Container<Primitive | ExpressionSchema | ActionSchema>
+  | BreakpointSchema<Container<Primitive | ExpressionSchema | ActionSchema>>;
 
 export type PageSchema = {
   name: string;
@@ -60,6 +75,22 @@ export type PageSchema = {
 };
 
 export type Platform = "web" | "native" | "webcomponent";
+
+export type FontStyle = {
+  fontFamily: string;
+  fontWeight:
+    | "normal"
+    | "bold"
+    | "100"
+    | "200"
+    | "300"
+    | "400"
+    | "500"
+    | "600"
+    | "700"
+    | "800"
+    | "900";
+};
 
 export type AppSchema = {
   batiq: string;
@@ -86,6 +117,17 @@ export type AppSchema = {
       border: string;
       notification: string;
     }>;
+    fonts: {
+      [platform: string]: {
+        regular: FontStyle;
+        medium: FontStyle;
+        bold: FontStyle;
+        heavy: FontStyle;
+      };
+    };
+    breakpoints: {
+      [key: string]: number;
+    };
     [key: string]: any;
   }>;
   pages: PageSchema[];

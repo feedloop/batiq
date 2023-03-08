@@ -28,7 +28,14 @@
               "type": "component",
               "from": "@batiq/components",
               "name": "Button",
-              "properties": {},
+              "properties": {
+                "onPress": {
+                  "type": "action",
+                  "from": "@batiq/actions",
+                  "name": "navigate",
+                  "arguments": ["/page-4"]
+                }
+              },
               "children": [
                 {
                   "type": "component",
@@ -44,6 +51,30 @@
             {
               "type": "component",
               "from": "@batiq/components",
+              "name": "Text",
+              "properties": {
+                "text": "Page 2",
+                "onPress": [
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "navigate",
+                    "arguments": ["/page-2"],
+                    "next": 1
+                  },
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "goBack",
+                    "arguments": []
+                  }
+                ]
+              },
+              "children": []
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
               "name": "Link",
               "properties": {
                 "text": "Page 2",
@@ -54,6 +85,35 @@
           ]
         }
       ]
+    },
+    {
+      "name": "page 2",
+      "navigation": {
+        "path": "/page-2"
+      },
+      "children": []
+    },
+    {
+      "name": "page 3",
+      "navigation": {
+        "path": "/page-3",
+        "tab": {
+          "label": "About",
+          "icon": "about"
+        }
+      },
+      "children": []
+    },
+    {
+      "name": "page 4",
+      "navigation": {
+        "path": "/page-4",
+        "tab": {
+          "label": "Home",
+          "icon": "home"
+        }
+      },
+      "children": []
     }
   ]
 }
