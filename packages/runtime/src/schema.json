@@ -23,6 +23,13 @@
         "endpoint": "https://batiq.qorebase.io"
       },
       "authenticatedRoutes": ["/users", "/posts/*"]
+    },
+    "petstore": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "OpenAPI"
+      },
+      "config": {}
     }
   },
   "pages": [
