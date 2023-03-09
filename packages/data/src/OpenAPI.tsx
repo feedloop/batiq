@@ -2,6 +2,7 @@ import { DataSourceDefinitionSchema } from "@batiq/core";
 import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
+import { DataSource, useData } from "./DataProvider";
 
 const queryDefinition = Type.Required(
   Type.Object({
@@ -98,9 +99,6 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
           const { scopes, authorizationUrl = oauth2.authorizationUrl } =
             securityScheme.flows.authorizationCode || {};
           const redirectUri = window.location.origin;
-          const state =
-            Math.random().toString(36).substring(2, 15) +
-            Math.random().toString(36).substring(2, 15);
           const url = new URL(authorizationUrl);
           url.searchParams.set("client_id", clientId);
           url.searchParams.set("redirect_uri", redirectUri);
@@ -108,7 +106,6 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
           if (scopes) {
             url.searchParams.set("scope", Object.keys(scopes).join(" "));
           }
-          url.searchParams.set("state", state);
           return;
         }
 
@@ -122,13 +119,44 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
       }
     },
     definition: queryDefinition,
-    component: async (query: Static<typeof queryDefinition>) => {
-      const operation = operationMap[query.operationId];
+    component: async (
+      props: React.PropsWithChildren<{
+        query: Static<typeof queryDefinition>;
+        name: string;
+      }>
+    ) => {
+      const operation = operationMap[props.query.operationId];
       if (!operation) {
-        throw new Error(`Operation ${query.operationId} not found`);
+        throw new Error(`Operation ${props.query.operationId} not found`);
       }
 
-      const res = await client[query.operationId]();
+      const config = {
+        headers:
+          securityScheme?.type === "apiKey"
+            ? { "x-api-key": apiKey }
+            : securityScheme?.type === "http"
+            ? {
+                Authorization: `Bearer ${window?.localStorage?.getItem(
+                  "token"
+                )}`,
+              }
+            : {
+                Authorization: `Bearer ${window?.localStorage?.getItem(
+                  "token"
+                )}`,
+              },
+      };
+
+      const res = await client[props.query.operationId](
+        props.query.parameters,
+        undefined,
+        config
+      );
+      return (
+        <DataSource name={props.name} data={res.data}>
+          {props.children}
+        </DataSource>
+      );
     },
   };
 };
