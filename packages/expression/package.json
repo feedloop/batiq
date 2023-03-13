@@ -1,6 +1,6 @@
 {
   "name": "@batiq/expression",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "commonjs",
   "dependencies": {
     "@feedloop/expression": "^1.0.1",
