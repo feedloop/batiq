@@ -20,6 +20,7 @@
     "jsx": "react-jsx",
     "paths": {
       "@batiq/actions": ["packages/actions/src/index.ts"],
+      "@batiq/actions/definitions.js": ["packages/actions/src/definitions.js"],
       "@batiq/cli": ["packages/cli/src/index.ts"],
       "@batiq/components": ["packages/components/src/index.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],

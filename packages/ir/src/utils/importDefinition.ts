@@ -10,7 +10,7 @@ export const importModule = (source: string) => {
       return import("@batiq/actions");
 
     case "@batiq/actions/definitions.js":
-      return import("@batiq/actions/src/definitions.js");
+      return import("@batiq/actions/definitions.js");
 
     // case "@batiq/expression":
     //   return import("@batiq/expression");
