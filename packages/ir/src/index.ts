@@ -2,6 +2,7 @@ import { PageSchema } from "@batiq/core";
 import { toVariableName } from "./utils/naming";
 import { transformComponent } from "./component";
 import { ComponentImport, Component, PageIR } from "./types";
+import { createScope } from "./scope";
 
 export * from "./types";
 export { generateNavigationPageIR } from "./expo-navigation";
@@ -27,9 +28,11 @@ export const transformIR = async (
   page: PageSchema,
   validate = false
 ): Promise<PageIR> => {
+  const scope = createScope();
+  scope.addVariable(toVariableName(page.name), null);
   const results = await Promise.all(
     page.children.map((component) =>
-      transformComponent(component, true, validate)
+      transformComponent(scope.clone(), component, true, validate)
     )
   );
   const imports = mergeImports(results.flatMap((r) => r.imports));

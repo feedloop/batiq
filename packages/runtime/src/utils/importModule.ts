@@ -41,8 +41,8 @@ export const importModule = (source: string, version = "latest") => {
     case "@batiq/components":
       return import("@batiq/components");
 
-    // case "@batiq/actions":
-    //   return import("@batiq/actions");
+    case "@batiq/actions":
+      return import("@batiq/actions");
 
     // case "@batiq/expression":
     //   return import("@batiq/expression");

@@ -4,7 +4,7 @@ export const navigate = {
   root: false,
 };
 
-export const back = {
+export const goBack = {
   isHook: true,
   pure: true,
   root: false,

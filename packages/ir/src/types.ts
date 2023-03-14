@@ -3,13 +3,22 @@ import { Container } from "@batiq/core";
 export type ComponentImport = {
   source: string;
   names: string[];
-  default: boolean;
+  default: string | null;
 };
 
 export type FunctionCall = {
   type: "function_call";
+  object?: Value;
   name: string;
   arguments: Container<Primitive>[];
+};
+
+export type FunctionDefinition = {
+  type: "function_definition";
+  async?: boolean;
+  name?: string;
+  parameters: string[];
+  return: Value;
 };
 
 export type Variable = {
@@ -52,9 +61,14 @@ export type BinaryOperator = {
   right: Value;
 };
 
-type Primitive = string | number | boolean;
+export type Primitive = string | number | boolean;
 export type Value = Container<
-  FunctionCall | Variable | BinaryOperator | Element | Primitive
+  | FunctionDefinition
+  | FunctionCall
+  | Variable
+  | BinaryOperator
+  | Element
+  | Primitive
 >;
 
 export type Element = {

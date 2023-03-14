@@ -1,4 +1,10 @@
-import { Element, FunctionCall, Value, Variable } from "@batiq/ir";
+import {
+  Element,
+  FunctionCall,
+  FunctionDefinition,
+  Value,
+  Variable,
+} from "@batiq/ir";
 import React from "react";
 
 export const valueToRuntime = (
@@ -23,12 +29,45 @@ export const valueToRuntime = (
       );
     }
     if (value.type === "function_call") {
-      const { name, arguments: args } = value as FunctionCall;
-      const func = scope[name];
+      const { object, name, arguments: args } = value as FunctionCall;
+      const func = object ? valueToRuntime(scope, object)[name] : scope[name];
       if (typeof func !== "function") {
         throw new Error(`Function ${name} not found`);
       }
       return func(...args.map((arg) => valueToRuntime(scope, arg)));
+    }
+    if (value.type === "function_definition") {
+      const {
+        async,
+        name,
+        parameters,
+        return: returnValue,
+      } = value as FunctionDefinition;
+      const func = async
+        ? async (...args: any[]) => {
+            scope = parameters.reduce(
+              (scope, param, i) => ({
+                ...scope,
+                [param]: args[i],
+              }),
+              scope
+            );
+            return valueToRuntime(scope, returnValue);
+          }
+        : (...args: any[]) => {
+            scope = parameters.reduce(
+              (scope, param, i) => ({
+                ...scope,
+                [param]: args[i],
+              }),
+              scope
+            );
+            return valueToRuntime(scope, returnValue);
+          };
+      if (name) {
+        scope[name] = func;
+      }
+      return func;
     }
     if (value.type === "variable") {
       const { name } = value as Variable;

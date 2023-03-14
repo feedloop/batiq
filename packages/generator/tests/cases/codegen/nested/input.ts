@@ -1,4 +1,4 @@
-import { PageIR } from "../../../../src/intermediate-representation";
+import { PageIR } from "@batiq/ir";
 
 export const input: PageIR = {
   imports: [

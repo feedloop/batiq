@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "type": "commonjs",
   "dependencies": {
-    "@feedloop/expression-parser": "^0.1.51",
-    "@feedloop/formula-editor": "^0.1.51"
+    "@feedloop/expression": "^1.0.0",
+    "@feedloop/formula-prelude": "^1.0.0"
   }
 }
