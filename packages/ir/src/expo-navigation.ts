@@ -47,6 +47,11 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
 
   const imports: ComponentImport[] = [
     {
+      source: "@batiq/data",
+      names: ["AppProvider"],
+      default: null,
+    },
+    {
       source: "@react-navigation/native",
       names: ["NavigationContainer"],
       default: null,
@@ -210,7 +215,7 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
         name: ["AppProvider"],
         props: [
           {
-            name: "app",
+            name: "schema",
             value: {
               type: "variable",
               name: "schema",

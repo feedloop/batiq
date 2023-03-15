@@ -164,7 +164,7 @@ export type AppSchema = {
   config: Record<string, any> & {
     link_prefixes?: string[];
   };
-  data: Record<string, DataSourceDefinitionSchema>;
+  datasource: Record<string, DataSourceDefinitionSchema>;
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{

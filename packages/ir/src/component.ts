@@ -72,14 +72,10 @@ export const transformComponent = async (
   );
 
   const childrenResults = await Promise.all(
-    schema.children
-      .filter(
-        (component): component is ComponentSchema =>
-          typeof component === "object" && component.type === "component"
-      )
-      .map((component) =>
-        transformComponent(scope.clone(), component, false, validate)
-      )
+    schema.children.map((component) =>
+      // transformComponent(scope.clone(), component, false, validate)
+      transformJSXChild(scope.clone(), component, false, validate)
+    )
   );
 
   const variables = [
@@ -143,7 +139,7 @@ export const transformJSXChild = async (
           {
             type: "component",
             from: "@batiq/data",
-            name: "DataSource",
+            name: "Query",
             properties: {
               data: schema.data,
               name: schema.name,

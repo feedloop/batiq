@@ -4,9 +4,12 @@ import {
   DataSourceDefinitionSchema,
 } from "@batiq/core";
 import { useBatiqData } from "./AppContext";
+import useSwr from "swr/immutable";
 
 const importDataModule = (source: string, name: string) => {
-  const fromName = (module: any): DataSourceConfig => {
+  const fromName = (
+    module: any
+  ): ((data: DataSourceDefinitionSchema) => Promise<DataSourceConfig>) => {
     if (!(name in module)) {
       throw new Error(`data source '${name}' is exported in ${source}`);
     }
@@ -18,32 +21,6 @@ const importDataModule = (source: string, name: string) => {
 
     default:
       import(source).then(fromName);
-  }
-};
-
-const suspense = <T,>(promise: () => Promise<T>): T | undefined => {
-  let status = "pending";
-  let result: T | undefined;
-  const suspend = promise().then(
-    (res) => {
-      status = "success";
-      result = res;
-    },
-    (err) => {
-      status = "error";
-      result = err;
-    }
-  );
-  switch (status) {
-    case "pending":
-      throw suspend;
-
-    case "success":
-      return result;
-
-    case "error":
-    default:
-      throw result;
   }
 };
 
@@ -60,15 +37,39 @@ const Query_ = (
     query: Record<string, any>;
   }>
 ) => {
-  const data = suspense(() =>
-    typeof props.dataConfig.type === "object"
-      ? importDataModule(props.dataConfig.type.from, props.dataConfig.type.name)
-      : Promise.reject()
+  const { data: datasourceConstructor } = useSwr(
+    [props.dataConfig],
+    async () => {
+      return typeof props.dataConfig.type === "object"
+        ? importDataModule(
+            props.dataConfig.type.from,
+            props.dataConfig.type.name
+          )
+        : Promise.reject();
+    },
+    { suspense: true }
+  );
+  const { data } = useSwr(
+    [datasourceConstructor, props.dataConfig.config],
+    () => datasourceConstructor?.(props.dataConfig),
+    { suspense: true }
   );
 
-  return data ? <data.component query={props.query}></data.component> : null;
+  return data ? (
+    <data.component name={props.name} query={props.query}>
+      {props.children}
+    </data.component>
+  ) : null;
 };
 
 export const Query = (props: React.PropsWithChildren<Props>) => {
-  const data = useBatiqData(props.name);
+  const data = useBatiqData(props.data);
+
+  return data ? (
+    <React.Suspense fallback="Loading datasource">
+      <Query_ dataConfig={data} name={props.name} query={props.query}>
+        {props.children}
+      </Query_>
+    </React.Suspense>
+  ) : null;
 };

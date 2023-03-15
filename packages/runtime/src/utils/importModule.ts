@@ -35,6 +35,9 @@ export const importModule = (source: string, version = "latest") => {
   }
 
   switch (source) {
+    case "@batiq/core":
+      return import("@batiq/core");
+
     case "@batiq/data":
       return import("@batiq/data");
 
@@ -44,8 +47,8 @@ export const importModule = (source: string, version = "latest") => {
     case "@batiq/actions":
       return import("@batiq/actions");
 
-    // case "@batiq/expression":
-    //   return import("@batiq/expression");
+    case "@batiq/expression":
+      return import("@batiq/expression");
 
     case "@react-navigation/native":
       return import("@react-navigation/native");

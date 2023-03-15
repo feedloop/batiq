@@ -3,6 +3,7 @@ import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
 import { DataSource, useData } from "./DataProvider";
+import useSwr from "swr/immutable";
 
 const queryDefinition = Type.Required(
   Type.Object({
@@ -28,13 +29,15 @@ const queryDefinition = Type.Required(
   })
 );
 
-export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
+export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
   const { definition, auth } = data.config;
   if (!definition) {
     throw new Error("No definition provided");
   }
   const api = new OpenAPIClientAxios({ definition });
   const client = await api.init();
+
+  const { origin } = new URL(definition);
 
   // eslint-disable-next-line prefer-const
   let { http, apiKey, oauth2, openIdConnect } = auth;
@@ -119,7 +122,7 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
       }
     },
     definition: queryDefinition,
-    component: async (
+    component: (
       props: React.PropsWithChildren<{
         query: Static<typeof queryDefinition>;
         name: string;
@@ -131,6 +134,7 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
       }
 
       const config = {
+        baseURL: origin + (api.document.servers?.[0]?.url ?? ""),
         headers:
           securityScheme?.type === "apiKey"
             ? { "x-api-key": apiKey }
@@ -147,16 +151,18 @@ export const OpenAPIDataSource = async (data: DataSourceDefinitionSchema) => {
               },
       };
 
-      const res = await client[props.query.operationId](
-        props.query.parameters,
-        undefined,
-        config
+      const { data: res } = useSwr([client, props.query, config], () =>
+        client[props.query.operationId](
+          props.query.parameters,
+          undefined,
+          config
+        )
       );
-      return (
-        <DataSource name={props.name} data={res.data}>
+      return res?.data ? (
+        <DataSource name={props.name} data={res?.data}>
           {props.children}
         </DataSource>
-      );
+      ) : null;
     },
   };
 };

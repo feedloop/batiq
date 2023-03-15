@@ -28,5 +28,5 @@ export const useBatiqData = (
   name: string
 ): DataSourceDefinitionSchema | undefined => {
   const batiq = useBatiq();
-  return batiq.getSchema().data[name];
+  return React.useMemo(() => batiq.getSchema()?.datasource[name], [name]);
 };

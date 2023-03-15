@@ -208,12 +208,16 @@ export const transformHookExpressionProp = async (
       const hookCallVariableName = generateUniqueName(scope, "evaluate");
       return {
         imports: [
-          { source: "@batiq/core", names: ["useExpression"], default: null },
+          {
+            source: "@batiq/expression",
+            names: ["useLazyExpression"],
+            default: null,
+          },
         ],
         variables: [
           [
             hookCallVariableName,
-            { type: "function_call", arguments: [], name: "useExpression" },
+            { type: "function_call", arguments: [], name: "useLazyExpression" },
           ],
         ],
         prop: {

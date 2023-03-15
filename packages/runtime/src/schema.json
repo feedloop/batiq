@@ -29,7 +29,12 @@
         "from": "@batiq/data",
         "name": "OpenAPI"
       },
-      "config": {}
+      "config": {
+        "definition": "https://petstore3.swagger.io/api/v3/openapi.json",
+        "auth": {
+          "apiKey": null
+        }
+      }
     }
   },
   "pages": [
@@ -84,18 +89,26 @@
             },
             {
               "type": "data",
-              "datasource": "qore2",
-              "properties": {},
+              "data": "petstore",
+              "name": "pet",
+              "query": {
+                "operationId": "getPetById",
+                "parameters": {
+                  "petId": 1
+                }
+              },
               "children": [
                 {
-                  "type": "data",
-                  "datasource": "qore",
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Text",
                   "properties": {
-                    "name": "qore_users",
-                    "query": {
-                      "column": {}
+                    "text": {
+                      "type": "expression",
+                      "expression": "pet.id"
                     }
-                  }
+                  },
+                  "children": []
                 }
               ]
             },

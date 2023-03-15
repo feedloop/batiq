@@ -31,19 +31,19 @@ export const transformIR = async (
   const scope = createScope();
   scope.addVariable(toVariableName(page.name), null);
   const results = await Promise.all(
-    page.children.map((component) => {
+    page.children.map(async (component) => {
       if (typeof component === "object") {
         switch (component.type) {
           case "component":
             return transformJSXChild(scope.clone(), component, true, validate);
 
           case "data":
-            return transformJSXChild(
+            return await transformJSXChild(
               scope.clone(),
               {
                 type: "component",
                 from: "@batiq/data",
-                name: "DataSource",
+                name: "Query",
                 properties: {
                   data: component.data,
                   name: component.name,
