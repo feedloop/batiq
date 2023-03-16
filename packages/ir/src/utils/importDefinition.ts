@@ -12,8 +12,8 @@ export const importModule = (source: string) => {
     case "@batiq/actions/definitions.js":
       return import("@batiq/actions/definitions.js");
 
-    // case "@batiq/expression":
-    //   return import("@batiq/expression");
+    case "@batiq/expression":
+      return import("@batiq/expression");
 
     case "@react-navigation/native":
       return import("@react-navigation/native");
@@ -27,6 +27,10 @@ export const importModule = (source: string) => {
     default:
       return import(source);
   }
+};
+
+export const importComponent = async (source: string, name: string) => {
+  return (await importModule(source).catch(() => ({})))[name];
 };
 
 export const importDefinition = async (source: string, name: string) => {

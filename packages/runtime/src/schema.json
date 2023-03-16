@@ -7,6 +7,72 @@
   "config": {
     "link_prefixes": ["http://localhost:4400/", "app://"]
   },
+  "components": {
+    "CompoundHeader": {
+      "definitions": {
+        "color": {
+          "type": "string",
+          "default": "green"
+        }
+      },
+      "component": {
+        "from": "@batiq/components",
+        "name": "Header",
+        "id": "HeaderId",
+        "properties": {
+          "color": {
+            "type": "expression",
+            "expression": "props.color"
+          }
+        },
+        "children": [
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "question2",
+            "id": "color",
+            "properties": {
+              "color": "blue",
+              "color2": "red"
+            },
+            "children": []
+          },
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "question2",
+            "id": "question2_2",
+            "properties": {
+              "color": "blue",
+              "color2": "red"
+            },
+            "children": [
+              {
+                "type": "component",
+                "from": "@batiq/components",
+                "name": "question3",
+                "id": "question3",
+                "properties": {
+                  "color": "blue",
+                  "color2": "red"
+                },
+                "children": [
+                  {
+                    "type": "component",
+                    "$ref": ""
+                  }
+                ]
+              },
+              {
+                "type": "component",
+                "$ref": ""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
   "pages": [
     {
       "name": "page 1",
@@ -24,6 +90,34 @@
           "name": "Provider",
           "properties": {},
           "children": [
+            {
+              "type": "component",
+              "from": "local",
+              "name": "CompoundHeader",
+              "properties": {
+                "color": "red"
+              },
+              "overrideProperties": {
+                "question2": {
+                  "color": "blue"
+                },
+                "question2_2": {
+                  "color": "green"
+                }
+              },
+              "overridesComponents": {
+                "question2": {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "question2",
+                  "properties": {
+                    "color": "blue",
+                    "color2": "red"
+                  },
+                  "children": []
+                }
+              }
+            },
             {
               "type": "component",
               "from": "@batiq/components",

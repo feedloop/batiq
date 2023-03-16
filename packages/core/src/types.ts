@@ -3,7 +3,9 @@ import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
 import { TTuple, TArray, Static } from "@sinclair/typebox";
 
-export type ComponentDefinition<P extends Record<string, any>> = {
+export type ComponentDefinition<
+  P extends Record<string, any> = Record<string, any>
+> = {
   inputs: ComponentInput<P>;
 };
 
@@ -66,6 +68,11 @@ export type PageSchema = {
 
 export type Platform = "web" | "native" | "webcomponent";
 
+export type LocalCompoundComponent = {
+  definitions: ComponentDefinition;
+  component: Primitive[];
+};
+
 export type AppSchema = {
   batiq: string;
   platform: Platform;
@@ -81,6 +88,7 @@ export type AppSchema = {
   config: Record<string, any> & {
     link_prefixes?: string[];
   };
+  components: Record<string, LocalCompoundComponent>;
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{
