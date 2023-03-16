@@ -33,28 +33,7 @@ export const transformIR = async (
   const results = await Promise.all(
     page.children.map(async (component) => {
       if (typeof component === "object") {
-        switch (component.type) {
-          case "component":
-            return transformJSXChild(scope.clone(), component, true, validate);
-
-          case "data":
-            return await transformJSXChild(
-              scope.clone(),
-              {
-                type: "component",
-                from: "@batiq/data",
-                name: "Query",
-                properties: {
-                  data: component.data,
-                  name: component.name,
-                  query: component.query,
-                },
-                children: component.children,
-              },
-              true,
-              validate
-            );
-        }
+        return transformJSXChild(scope.clone(), component, true, validate);
       }
       return {
         imports: [],
