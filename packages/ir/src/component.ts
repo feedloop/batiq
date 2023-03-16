@@ -29,7 +29,7 @@ export const transformComponent = async (
       value.type === "breakpoint"
         ? {
             type: "action",
-            from: "./test",
+            from: "@batiq/actions",
             name: "breakpoint",
             arguments: [value.breakpoints],
           }
