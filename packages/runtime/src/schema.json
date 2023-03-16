@@ -37,6 +37,72 @@
       }
     }
   },
+  "components": {
+    "CompoundHeader": {
+      "definitions": {
+        "color": {
+          "type": "string",
+          "default": "green"
+        }
+      },
+      "component": {
+        "from": "@batiq/components",
+        "name": "Header",
+        "id": "HeaderId",
+        "properties": {
+          "color": {
+            "type": "expression",
+            "expression": "props.color"
+          }
+        },
+        "children": [
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "question2",
+            "id": "color",
+            "properties": {
+              "color": "blue",
+              "color2": "red"
+            },
+            "children": []
+          },
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "question2",
+            "id": "question2_2",
+            "properties": {
+              "color": "blue",
+              "color2": "red"
+            },
+            "children": [
+              {
+                "type": "component",
+                "from": "@batiq/components",
+                "name": "question3",
+                "id": "question3",
+                "properties": {
+                  "color": "blue",
+                  "color2": "red"
+                },
+                "children": [
+                  {
+                    "type": "component",
+                    "$ref": ""
+                  }
+                ]
+              },
+              {
+                "type": "component",
+                "$ref": ""
+              }
+            ]
+          }
+        ]
+      }
+    }
+  },
   "pages": [
     {
       "name": "page 1",
@@ -56,24 +122,43 @@
           "children": [
             {
               "type": "component",
+              "from": "local",
+              "name": "CompoundHeader",
+              "properties": {
+                "color": "red"
+              },
+              "overrideProperties": {
+                "question2": {
+                  "color": "blue"
+                },
+                "question2_2": {
+                  "color": "green"
+                }
+              },
+              "overridesComponents": {
+                "question2": {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "question2",
+                  "properties": {
+                    "color": "blue",
+                    "color2": "red"
+                  },
+                  "children": []
+                }
+              }
+            },
+            {
+              "type": "component",
               "from": "@batiq/components",
               "name": "Button",
               "properties": {
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-4"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
+                "onPress": {
+                  "type": "action",
+                  "from": "@batiq/actions",
+                  "name": "navigate",
+                  "arguments": ["/page-4"]
+                }
               },
               "children": [
                 {
@@ -111,6 +196,30 @@
                   "children": []
                 }
               ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Text",
+              "properties": {
+                "text": "Page 2",
+                "onPress": [
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "navigate",
+                    "arguments": ["/page-2"],
+                    "next": 1
+                  },
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "goBack",
+                    "arguments": []
+                  }
+                ]
+              },
+              "children": []
             },
             {
               "type": "component",

@@ -1,6 +1,6 @@
 import { ComponentDefinition, ComponentSchema, Primitive } from "@batiq/core";
 import Ajv from "ajv";
-import { importDefinition } from "./utils/importDefinition";
+import { importDefinition, importModule } from "./utils/importDefinition";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -21,6 +21,11 @@ export const transformComponent = async (
   isRoot = true,
   validate: boolean
 ): Promise<TransformResult> => {
+  const component = (await importModule(schema.from))[schema.name ?? "default"];
+  if (typeof component !== "function") {
+    throw new Error(`Component ${schema.name} is not a function`);
+  }
+
   const properties = Object.fromEntries(
     Object.entries(schema.properties).map(([key, value]) => [
       key,
@@ -37,9 +42,12 @@ export const transformComponent = async (
     ])
   );
   if (validate) {
-    const component: ComponentDefinition<Record<string, any>> =
+    const componentDefinition: ComponentDefinition<Record<string, any>> =
       await importDefinition(schema.from, schema.name ?? "default");
-    if (component?.inputs && !ajv.validate(component.inputs, properties)) {
+    if (
+      componentDefinition?.inputs &&
+      !ajv.validate(componentDefinition.inputs, schema.properties)
+    ) {
       throw new Error(ajv.errorsText());
     }
   }
@@ -73,7 +81,6 @@ export const transformComponent = async (
 
   const childrenResults = await Promise.all(
     schema.children.map((component) =>
-      // transformComponent(scope.clone(), component, false, validate)
       transformJSXChild(scope.clone(), component, false, validate)
     )
   );

@@ -1,3 +1,4 @@
+import { AppProvider } from "@batiq/data";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
@@ -69,7 +70,7 @@ const Tabs = (props) => {
 };
 const App = (props) => {
   return (
-    <AppProvider app={schema}>
+    <AppProvider schema={schema}>
       <NavigationContainer
         linking={{
           prefixes: process.env.LINK_PREFIXES ?? [],
