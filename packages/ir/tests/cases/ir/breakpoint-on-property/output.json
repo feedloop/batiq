@@ -8,15 +8,9 @@
       "default": null
     },
     {
-      "source": "./test",
-      "names": [
-        "breakpoint"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/actions",
       "names": [
+        "breakpoint",
         "navigate"
       ],
       "default": null

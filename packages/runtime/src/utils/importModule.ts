@@ -41,11 +41,17 @@ export const importModule = (source: string, version = "latest") => {
     case "@batiq/components":
       return import("@batiq/components");
 
+    case "@batiq/components/defintions.js":
+      return import("@batiq/components/src/definitions.js");
+
     case "@batiq/actions":
       return import("@batiq/actions");
 
-    // case "@batiq/expression":
-    //   return import("@batiq/expression");
+    case "@batiq/actions/definitions.js":
+      return import("@batiq/actions/src/definitions.js");
+
+    case "@batiq/expression":
+      return import("@batiq/expression");
 
     case "@react-navigation/native":
       return import("@react-navigation/native");
