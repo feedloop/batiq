@@ -1,4 +1,4 @@
-import { PageSchema } from "@batiq/core";
+import { AppSchema, PageSchema } from "@batiq/core";
 import { toVariableName } from "./utils/naming";
 import { transformJSXChild } from "./component";
 import { ComponentImport, Component, PageIR } from "./types";
@@ -25,6 +25,7 @@ const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
   );
 
 export const transformIR = async (
+  app: AppSchema,
   page: PageSchema,
   validate = false
 ): Promise<PageIR> => {
@@ -32,7 +33,7 @@ export const transformIR = async (
   scope.addVariable(toVariableName(page.name), null);
   const results = await Promise.all(
     page.children.map((component) =>
-      transformJSXChild(scope.clone(), component, true, validate)
+      transformJSXChild(scope.clone(), app, component, true, validate)
     )
   );
   const imports = mergeImports(results.flatMap((r) => r.imports));

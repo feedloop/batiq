@@ -1,0 +1,125 @@
+{
+  "imports": [
+    {
+      "source": "@batiq/data",
+      "names": [
+        "DataSource",
+        "RemoveKey"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
+      "names": [
+        "Button",
+        "Text"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/expression",
+      "names": [
+        "useLazyExpression"
+      ],
+      "default": null
+    }
+  ],
+  "variableDeclarations": {},
+  "components": [
+    {
+      "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "DataSource",
+          "props": [
+            {
+              "name": "name",
+              "value": "props"
+            },
+            {
+              "name": "data",
+              "value": {
+                "color": "red"
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "element",
+              "name": "Button1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Button1",
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useLazyExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Button",
+          "props": [
+            {
+              "name": "color",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "props.color"
+                ]
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "23 + 42"
+                ]
+              }
+            },
+            {
+              "type": "element",
+              "name": "RemoveKey",
+              "props": [
+                {
+                  "name": "key",
+                  "value": "props"
+                }
+              ],
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Text",
+                  "props": [
+                    {
+                      "name": "text",
+                      "value": "Hello World!"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "root": false
+    }
+  ]
+}

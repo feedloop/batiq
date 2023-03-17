@@ -1,0 +1,68 @@
+{
+  "imports": [
+    {
+      "source": "@batiq/components",
+      "names": [
+        "Button",
+        "Text"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/expression",
+      "names": [
+        "useLazyExpression"
+      ],
+      "default": null
+    }
+  ],
+  "variableDeclarations": {},
+  "components": [
+    {
+      "name": "Page",
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useLazyExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Button",
+          "props": [
+            {
+              "name": "color",
+              "value": "green"
+            }
+          ],
+          "children": [
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "23 + 42"
+                ]
+              }
+            },
+            {
+              "type": "element",
+              "name": "Text",
+              "props": [
+                {
+                  "name": "text",
+                  "value": "Hello World!"
+                }
+              ],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    }
+  ]
+}

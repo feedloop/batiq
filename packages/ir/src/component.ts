@@ -1,12 +1,91 @@
-import { ComponentDefinition, ComponentSchema, Primitive } from "@batiq/core";
+import {
+  AppSchema,
+  ComponentDefinition,
+  ComponentSchema,
+  CompoundComponentSchema,
+  Primitive,
+} from "@batiq/core";
 import Ajv from "ajv";
-import { importDefinition, importModule } from "./utils/importDefinition";
+import { importComponent, importDefinition } from "./utils/importDefinition";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
 import { Scope } from "./scope";
 
-const ajv = new Ajv();
+const ajv = new Ajv({
+  useDefaults: true,
+});
+
+const resolveCompoundComponent = (
+  compoundComponent: CompoundComponentSchema,
+  schema: ComponentSchema,
+  children: ComponentSchema["children"]
+): ComponentSchema =>
+  schema.overrideComponents &&
+  compoundComponent.id &&
+  compoundComponent.id in schema.overrideComponents
+    ? schema.overrideComponents[compoundComponent.id]
+    : {
+        type: "component",
+        from: compoundComponent.from,
+        name: compoundComponent.name,
+        properties:
+          compoundComponent.id &&
+          schema.overrideProperties &&
+          compoundComponent.id in schema.overrideProperties
+            ? {
+                ...compoundComponent.properties,
+                ...schema.overrideProperties[compoundComponent.id],
+              }
+            : compoundComponent.properties,
+        children: compoundComponent.children.flatMap((child) =>
+          typeof child === "object"
+            ? child.type === "component"
+              ? [resolveCompoundComponent(child, schema, children)]
+              : child.type === "slot"
+              ? children
+              : [child]
+            : [child]
+        ),
+      };
+
+const transformCompoundComponent = async (
+  compoundComponent: CompoundComponentSchema,
+  definition: ComponentDefinition | null,
+  schema: ComponentSchema
+): Promise<ComponentSchema> => {
+  const children: ComponentSchema["children"] =
+    Object.keys(definition?.inputs ?? {}).length === 0
+      ? schema.children
+      : [
+          {
+            type: "component",
+            from: "@batiq/data",
+            name: "RemoveKey",
+            properties: {
+              key: "props",
+            },
+            children: schema.children,
+          },
+        ];
+  const resolvedComponent: ComponentSchema = resolveCompoundComponent(
+    compoundComponent,
+    schema,
+    children
+  );
+  return Object.keys(definition?.inputs ?? {}).length === 0
+    ? resolvedComponent
+    : {
+        type: "component",
+        from: "@batiq/data",
+        name: "DataSource",
+        properties: {
+          name: "props",
+          data: schema.properties,
+        },
+        children: [resolvedComponent],
+      };
+};
 
 type TransformResult = {
   imports: ComponentImport[];
@@ -17,13 +96,37 @@ type TransformResult = {
 
 export const transformComponent = async (
   scope: Scope,
+  app: AppSchema,
   schema: ComponentSchema,
   isRoot = true,
   validate: boolean
 ): Promise<TransformResult> => {
-  const component = (await importModule(schema.from))[schema.name ?? "default"];
-  if (typeof component !== "function") {
-    throw new Error(`Component ${schema.name} is not a function`);
+  const componentDefinition =
+    schema.from === "local" && schema.name
+      ? app.components[schema.name]?.definitions
+      : await importDefinition(schema.from, schema.name ?? "default");
+  if (
+    validate &&
+    componentDefinition?.inputs &&
+    !ajv.validate(componentDefinition.inputs, schema.properties)
+  ) {
+    throw new Error(ajv.errorsText());
+  }
+
+  const component =
+    schema.from === "local" && schema.name
+      ? app.components[schema.name]?.component
+      : await importComponent(schema.from, schema.name ?? "default");
+  if (
+    !Array.isArray(component) &&
+    component !== null &&
+    typeof component === "object"
+  ) {
+    schema = await transformCompoundComponent(
+      component,
+      componentDefinition,
+      schema
+    );
   }
 
   const properties = Object.fromEntries(
@@ -41,16 +144,6 @@ export const transformComponent = async (
         : value,
     ])
   );
-  if (validate) {
-    const componentDefinition: ComponentDefinition<Record<string, any>> =
-      await importDefinition(schema.from, schema.name ?? "default");
-    if (
-      componentDefinition?.inputs &&
-      !ajv.validate(componentDefinition.inputs, schema.properties)
-    ) {
-      throw new Error(ajv.errorsText());
-    }
-  }
 
   const componentName =
     schema.name ?? generateDefaultImport(scope, schema.from);
@@ -81,7 +174,7 @@ export const transformComponent = async (
 
   const childrenResults = await Promise.all(
     schema.children.map((component) =>
-      transformJSXChild(scope.clone(), component, false, validate)
+      transformJSXChild(scope.clone(), app, component, false, validate)
     )
   );
 
@@ -131,6 +224,7 @@ export const transformComponent = async (
 
 export const transformJSXChild = async (
   scope: Scope,
+  app: AppSchema,
   schema: Primitive,
   isRoot = true,
   validate: boolean
@@ -138,11 +232,12 @@ export const transformJSXChild = async (
   if (typeof schema === "object") {
     switch (schema.type) {
       case "component":
-        return transformComponent(scope.clone(), schema, isRoot, validate);
+        return transformComponent(scope.clone(), app, schema, isRoot, validate);
 
       case "data":
         return transformComponent(
           scope.clone(),
+          app,
           {
             type: "component",
             from: "@batiq/data",
@@ -158,16 +253,37 @@ export const transformJSXChild = async (
           validate
         );
 
-      case "expression":
+      case "expression": {
+        const hookCallVariableName = generateUniqueName(scope, "evaluate");
         return {
-          imports: [],
-          variables: [],
+          imports: [
+            {
+              source: "@batiq/expression",
+              names: ["useLazyExpression"],
+              default: null,
+            },
+          ],
+          variables: [
+            [
+              hookCallVariableName,
+              {
+                type: "function_call",
+                arguments: [],
+                name: "useLazyExpression",
+              },
+            ],
+          ],
           element: {
             type: "jsx_expression",
-            value: false,
+            value: {
+              type: "function_call",
+              name: hookCallVariableName,
+              arguments: [schema.expression],
+            },
           },
           additionalComponents: [],
         };
+      }
     }
   }
   return {

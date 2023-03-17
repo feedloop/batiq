@@ -29,6 +29,10 @@ export const importModule = (source: string) => {
   }
 };
 
+export const importComponent = async (source: string, name: string) => {
+  return (await importModule(source).catch(() => ({})))[name];
+};
+
 export const importDefinition = async (source: string, name: string) => {
   const definitionPath =
     source + (source.endsWith("/") ? "" : "/") + "definitions.js";

@@ -1,15 +1,14 @@
 import React from "react";
+import { Static } from "@sinclair/typebox";
+import * as definitions from "./definitions";
 
 const DataContext = React.createContext<Record<string, any>>({});
 
 export const useDataContext = () => React.useContext(DataContext);
 
-type Props = {
-  name: string;
-  data: Record<string, any>;
-};
-
-export const DataSource = (props: React.PropsWithChildren<Props>) => {
+export const DataSource = (
+  props: React.PropsWithChildren<Static<typeof definitions.DataSource.inputs>>
+) => {
   const parentData = React.useContext(DataContext);
   const data = React.useMemo(
     () => ({ ...parentData, [props.name]: props.data }),
@@ -17,6 +16,32 @@ export const DataSource = (props: React.PropsWithChildren<Props>) => {
   );
   return (
     <DataContext.Provider value={data}>{props.children}</DataContext.Provider>
+  );
+};
+
+export const RemoveKey = (
+  props: React.PropsWithChildren<Static<typeof definitions.RemoveKey.inputs>>
+) => {
+  const parentData = React.useContext(DataContext);
+  const data = React.useMemo(() => {
+    const { [props.key]: _, ...rest } = parentData;
+    return parentData;
+  }, [parentData, props.key]);
+  return (
+    <DataContext.Provider value={data}>{props.children}</DataContext.Provider>
+  );
+};
+
+export const ScopedDataSource = (
+  props: React.PropsWithChildren<
+    Static<typeof definitions.ScopedDataSource.inputs>
+  >
+) => {
+  const children = <RemoveKey key={props.name}>{props.children}</RemoveKey>;
+  return (
+    <DataSource name={props.name} data={props.data}>
+      {props.component}
+    </DataSource>
   );
 };
 

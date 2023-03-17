@@ -48,7 +48,20 @@ export type ComponentSchema = {
   from: string;
   name?: string;
   properties: Record<string, Property>;
+  overrideProperties?: Record<string, Record<string, Property>>;
+  overrideComponents?: Record<string, ComponentSchema>;
   children: Primitive[];
+};
+
+export type SlotSchema = { type: "slot" };
+
+export type CompoundComponentSchema = Omit<ComponentSchema, "children"> & {
+  id?: string;
+  children: (
+    | Exclude<Primitive, { type: "component" }>
+    | CompoundComponentSchema
+    | SlotSchema
+  )[];
 };
 
 export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
@@ -106,7 +119,7 @@ export type Container<T> =
   | { [key in string extends "type" ? never : string]: Container<T> };
 export type Value = Container<Primitive>;
 export type Property =
-  | Container<Primitive | ExpressionSchema | ActionSchema>
+  | Container<Primitive | ActionSchema>
   | BreakpointSchema<Container<Primitive | ExpressionSchema | ActionSchema>>;
 
 export type PageSchema = {
@@ -153,7 +166,7 @@ export type FontStyle = {
 
 export type LocalCompoundComponent = {
   definitions: ComponentDefinition;
-  component: Primitive[];
+  component: CompoundComponentSchema;
 };
 
 export type AppSchema = {
