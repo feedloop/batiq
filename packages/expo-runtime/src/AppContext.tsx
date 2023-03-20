@@ -1,10 +1,5 @@
 import React from "react";
-import {
-  createBatiq,
-  BaseBatiqCore,
-  AppSchema,
-  DataSourceDefinitionSchema,
-} from "@batiq/core";
+import { createBatiq, BaseBatiqCore, AppSchema } from "@batiq/core";
 
 const AppContext = React.createContext<BaseBatiqCore>(
   createBatiq(
@@ -23,10 +18,3 @@ export const AppProvider = (
 };
 
 export const useBatiq = () => React.useContext(AppContext);
-
-export const useBatiqData = (
-  name: string
-): DataSourceDefinitionSchema | undefined => {
-  const batiq = useBatiq();
-  return React.useMemo(() => batiq.getSchema()?.datasource[name], [name]);
-};

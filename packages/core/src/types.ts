@@ -30,8 +30,12 @@ export type DataSource<
   P extends Record<string, any> = Record<string, any>,
   Data = any
 > = {
-  isAuthenticated: () => Promise<boolean>;
-  authenticate: (...args: any[]) => Promise<any>;
+  isAuthenticated: <T extends BaseBatiqCore>(batiq: T) => Promise<boolean>;
+  authenticate: <T extends BaseBatiqCore>(
+    batiq: T,
+    params: any
+  ) => Promise<any>;
+  logout: <T extends BaseBatiqCore>(batiq: T) => Promise<void>;
   definition: DataSourceDefinition<P>;
   query: (query: P) => Promise<QueryResult<Data>>;
   component: (
@@ -131,6 +135,7 @@ export type DataSourceDefinitionSchema = {
         name: string;
       };
   config: Record<string, any>;
+  authenticatedRoutes?: string[];
 };
 
 export type FontStyle = {

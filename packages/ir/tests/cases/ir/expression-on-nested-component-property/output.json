@@ -1,16 +1,23 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
       "names": [
         "Paragraph"
       ],
       "default": null
     },
     {
-      "source": "@batiq/core",
+      "source": "@batiq/expression",
       "names": [
-        "useExpression"
+        "useLazyExpression"
       ],
       "default": null
     }
@@ -19,11 +26,31 @@
   "components": [
     {
       "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Paragraph1",
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",
           "arguments": [],
-          "name": "useExpression"
+          "name": "useLazyExpression"
         }
       },
       "JSX": [
@@ -56,7 +83,7 @@
           ]
         }
       ],
-      "root": true
+      "root": false
     },
     {
       "name": "Paragraph1",
@@ -64,7 +91,7 @@
         "evaluate": {
           "type": "function_call",
           "arguments": [],
-          "name": "useExpression"
+          "name": "useLazyExpression"
         }
       },
       "JSX": [

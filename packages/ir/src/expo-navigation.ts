@@ -47,7 +47,7 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
 
   const imports: ComponentImport[] = [
     {
-      source: "@batiq/data",
+      source: "@batiq/expo-runtime",
       names: ["AppProvider"],
       default: null,
     },

@@ -34,7 +34,8 @@
         "auth": {
           "apiKey": null
         }
-      }
+      },
+      "authenticatedRoutes": ["/page-1"]
     }
   },
   "pages": [
@@ -59,21 +60,12 @@
               "from": "@batiq/components",
               "name": "Button",
               "properties": {
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-4"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
+                "onPress": {
+                  "type": "action",
+                  "from": "@batiq/actions",
+                  "name": "navigate",
+                  "arguments": ["/page-4"]
+                }
               },
               "children": [
                 {
@@ -111,6 +103,30 @@
                   "children": []
                 }
               ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Text",
+              "properties": {
+                "text": "Page 2",
+                "onPress": [
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "navigate",
+                    "arguments": ["/page-2"],
+                    "next": 1
+                  },
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "goBack",
+                    "arguments": []
+                  }
+                ]
+              },
+              "children": []
             },
             {
               "type": "component",

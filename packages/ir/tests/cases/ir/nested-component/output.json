@@ -1,11 +1,18 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
       "names": [
         "Paragraph"
       ],
-      "default": "Test"
+      "default": "Batiq_Components"
     }
   ],
   "variableDeclarations": {},
@@ -16,24 +23,31 @@
       "JSX": [
         {
           "type": "element",
-          "name": "Paragraph",
-          "props": [
-            {
-              "name": "color",
-              "value": "red"
-            }
-          ],
+          "name": "PageWrapper",
+          "props": [],
           "children": [
             {
               "type": "element",
-              "name": "Test",
+              "name": "Paragraph",
               "props": [
                 {
                   "name": "color",
-                  "value": "blue"
+                  "value": "red"
                 }
               ],
-              "children": []
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Batiq_Components",
+                  "props": [
+                    {
+                      "name": "color",
+                      "value": "blue"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
             }
           ]
         }

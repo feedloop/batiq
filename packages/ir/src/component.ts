@@ -1,6 +1,7 @@
 import { ComponentDefinition, ComponentSchema, Primitive } from "@batiq/core";
 import Ajv from "ajv";
-import { importDefinition } from "./utils/importDefinition";
+// @ts-ignore TODO: fix this
+import { importDefinition } from "@batiq/shared";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -29,7 +30,7 @@ export const transformComponent = async (
       value.type === "breakpoint"
         ? {
             type: "action",
-            from: "./test",
+            from: "@batiq/actions",
             name: "breakpoint",
             arguments: [value.breakpoints],
           }

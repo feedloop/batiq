@@ -1,6 +1,13 @@
 {
   "imports": [
     {
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
       "source": "./test",
       "names": [],
       "default": "Test"
@@ -14,14 +21,21 @@
       "JSX": [
         {
           "type": "element",
-          "name": "Test",
-          "props": [
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
             {
-              "name": "color",
-              "value": "blue"
+              "type": "element",
+              "name": "Test",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "blue"
+                }
+              ],
+              "children": []
             }
-          ],
-          "children": []
+          ]
         }
       ],
       "root": true

@@ -1,28 +1,8 @@
 import React from "react";
-import {
-  DataSource as DataSourceConfig,
-  DataSourceDefinitionSchema,
-} from "@batiq/core";
-import { useBatiqData } from "./AppContext";
 import useSwr from "swr/immutable";
-
-const importDataModule = (source: string, name: string) => {
-  const fromName = (
-    module: any
-  ): ((data: DataSourceDefinitionSchema) => Promise<DataSourceConfig>) => {
-    if (!(name in module)) {
-      throw new Error(`data source '${name}' is exported in ${source}`);
-    }
-    return module[name];
-  };
-  switch (source) {
-    case "@batiq/data":
-      return import("./").then(fromName);
-
-    default:
-      import(source).then(fromName);
-  }
-};
+import { useBatiq } from "@batiq/expo-runtime";
+// @ts-ignore TODO: fix this
+import { importDataSourceModule } from "@batiq/shared";
 
 type Props = {
   data: string;
@@ -32,27 +12,18 @@ type Props = {
 
 const Query_ = (
   props: React.PropsWithChildren<{
-    dataConfig: DataSourceDefinitionSchema;
+    datasourceName: string;
     name: string;
     query: Record<string, any>;
   }>
 ) => {
-  const { data: datasourceConstructor } = useSwr(
-    [props.dataConfig],
-    async () => {
-      return typeof props.dataConfig.type === "object"
-        ? importDataModule(
-            props.dataConfig.type.from,
-            props.dataConfig.type.name
-          )
-        : Promise.reject();
-    },
-    { suspense: true }
-  );
+  const batiq = useBatiq();
   const { data } = useSwr(
-    [datasourceConstructor, props.dataConfig.config],
-    () => datasourceConstructor?.(props.dataConfig),
-    { suspense: true }
+    [batiq.getSchema(), props.datasourceName],
+    ([schema, name]) => importDataSourceModule(schema, name),
+    {
+      suspense: true,
+    }
   );
 
   return data ? (
@@ -63,13 +34,11 @@ const Query_ = (
 };
 
 export const Query = (props: React.PropsWithChildren<Props>) => {
-  const data = useBatiqData(props.data);
-
-  return data ? (
-    <React.Suspense fallback="Loading datasource">
-      <Query_ dataConfig={data} name={props.name} query={props.query}>
+  return (
+    <React.Suspense fallback="Loading Data">
+      <Query_ datasourceName={props.data} name={props.name} query={props.query}>
         {props.children}
       </Query_>
     </React.Suspense>
-  ) : null;
+  );
 };
