@@ -1,6 +1,13 @@
 {
   "imports": [
     {
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
       "source": "@batiq/data",
       "names": [
         "DataSource",
@@ -32,25 +39,32 @@
       "JSX": [
         {
           "type": "element",
-          "name": "DataSource",
-          "props": [
-            {
-              "name": "name",
-              "value": "props"
-            },
-            {
-              "name": "data",
-              "value": {
-                "color": "red"
-              }
-            }
-          ],
+          "name": "PageWrapper",
+          "props": [],
           "children": [
             {
               "type": "element",
-              "name": "Button1",
-              "props": [],
-              "children": []
+              "name": "DataSource",
+              "props": [
+                {
+                  "name": "name",
+                  "value": "props"
+                },
+                {
+                  "name": "data",
+                  "value": {
+                    "color": "red"
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Button1",
+                  "props": [],
+                  "children": []
+                }
+              ]
             }
           ]
         }

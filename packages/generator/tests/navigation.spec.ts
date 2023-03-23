@@ -1,4 +1,4 @@
-import path from "node:path";
+import path from "path";
 import glob from "fast-glob";
 import { toMatchFile } from "jest-file-snapshot";
 import { generateNavigation } from "../src/expo/navigation";

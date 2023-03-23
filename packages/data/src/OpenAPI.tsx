@@ -1,4 +1,4 @@
-import { DataSourceDefinitionSchema } from "@batiq/core";
+import { BaseBatiqCore, DataSourceDefinitionSchema } from "@batiq/core";
 import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
@@ -69,7 +69,7 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
     );
 
   return {
-    isAuthenticated: async () => {
+    isAuthenticated: async <T extends BaseBatiqCore>(batiq: T) => {
       switch (securityScheme?.type) {
         case "apiKey":
           return apiKey !== undefined
@@ -86,7 +86,7 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
           return true;
       }
     },
-    authenticate: async (data) => {
+    authenticate: async <T extends BaseBatiqCore>(batiq: T, data: any) => {
       switch (securityScheme?.type) {
         case "apiKey": {
           if (apiKey) {
@@ -119,6 +119,20 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
 
         default:
           return;
+      }
+    },
+    logout: () => {
+      switch (securityScheme?.type) {
+        case "apiKey":
+          return apiKey !== undefined
+            ? true
+            : window?.localStorage.removeItem("apiKey");
+
+        case "oauth2":
+          return window?.localStorage?.removeItem("token");
+
+        case "openIdConnect":
+          return window?.localStorage?.removeItem("token");
       }
     },
     definition: queryDefinition,

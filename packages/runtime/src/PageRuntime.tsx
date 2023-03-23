@@ -1,11 +1,12 @@
 import React from "react";
-import { PageSchema } from "@batiq/core";
+import { AppSchema, PageSchema } from "@batiq/core";
 import {
   transformIR,
   Component as ComponentIR,
   ComponentImport,
 } from "@batiq/ir";
-import { importModule } from "./utils/importModule";
+// @ts-ignore TODO: fix this
+import { importModule } from "@batiq/shared";
 import { valueToRuntime } from "./utils/valueToRuntime";
 
 export const toVariableName = (source: string): string =>
@@ -86,10 +87,12 @@ const PageComponent = async (
 };
 
 export const PageRuntime = async (
+  app: AppSchema,
   page: PageSchema,
   scope: Record<string, any> = {}
 ): Promise<React.ComponentType> => {
-  const ir = await transformIR(page, false);
+  const ir = await transformIR(app, page, "native", false);
+  console.log("page ir", ir);
   scope = await ir.imports.reduce(
     async (carryP, importSource): Promise<Record<string, any>> =>
       Promise.all([carryP, resolveImport(importSource)]).then(
@@ -123,17 +126,18 @@ export const PageRuntime = async (
 };
 
 export const PageRuntimeLazy = (props: {
+  app: AppSchema;
   schema: PageSchema;
   scope?: Record<string, any>;
 }) => {
   const PageComponent = React.useMemo(() => {
     const LazyComponent = async () =>
-      PageRuntime(props.schema, props.scope).then((c) => ({
+      PageRuntime(props.app, props.schema, props.scope).then((c) => ({
         default: c,
       }));
     LazyComponent.displayName = props.schema.name;
     return React.lazy(LazyComponent);
-  }, [props.schema, props.scope]);
+  }, [props.app, props.schema, props.scope]);
   return (
     <React.Suspense fallback="Loading...">
       <PageComponent />

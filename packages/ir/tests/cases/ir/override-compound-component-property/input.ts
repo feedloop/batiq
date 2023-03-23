@@ -2,8 +2,9 @@ import { PageSchema, LocalCompoundComponent } from "@batiq/core";
 
 export const components: Record<string, LocalCompoundComponent> = {
   CompoundButton: {
-    definitions: {},
+    inputs: {},
     component: {
+      type: "component",
       from: "@batiq/components",
       name: "Button",
       id: "MainButton",

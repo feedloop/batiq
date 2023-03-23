@@ -34,70 +34,24 @@
         "auth": {
           "apiKey": null
         }
-      }
+      },
+      "authenticatedRoutes": ["/page-1"]
     }
   },
   "components": {
-    "CompoundHeader": {
-      "definitions": {
-        "color": {
-          "type": "string",
-          "default": "green"
-        }
-      },
+    "CompoundButton": {
+      "inputs": {},
       "component": {
+        "type": "component",
         "from": "@batiq/components",
-        "name": "Header",
-        "id": "HeaderId",
+        "name": "Button",
+        "id": "MainButton",
         "properties": {
-          "color": {
-            "type": "expression",
-            "expression": "props.color"
-          }
+          "color": "green"
         },
         "children": [
           {
-            "type": "component",
-            "from": "@batiq/components",
-            "name": "question2",
-            "id": "color",
-            "properties": {
-              "color": "blue",
-              "color2": "red"
-            },
-            "children": []
-          },
-          {
-            "type": "component",
-            "from": "@batiq/components",
-            "name": "question2",
-            "id": "question2_2",
-            "properties": {
-              "color": "blue",
-              "color2": "red"
-            },
-            "children": [
-              {
-                "type": "component",
-                "from": "@batiq/components",
-                "name": "question3",
-                "id": "question3",
-                "properties": {
-                  "color": "blue",
-                  "color2": "red"
-                },
-                "children": [
-                  {
-                    "type": "component",
-                    "$ref": ""
-                  }
-                ]
-              },
-              {
-                "type": "component",
-                "$ref": ""
-              }
-            ]
+            "type": "slot"
           }
         ]
       }
@@ -123,30 +77,22 @@
             {
               "type": "component",
               "from": "local",
-              "name": "CompoundHeader",
-              "properties": {
+              "name": "CompoundButton",
+              "properties": {},
+              "overrideProperties": {
                 "color": "red"
               },
-              "overrideProperties": {
-                "question2": {
-                  "color": "blue"
-                },
-                "question2_2": {
-                  "color": "green"
-                }
-              },
-              "overridesComponents": {
-                "question2": {
+              "children": [
+                {
                   "type": "component",
                   "from": "@batiq/components",
-                  "name": "question2",
+                  "name": "Text",
                   "properties": {
-                    "color": "blue",
-                    "color2": "red"
+                    "text": "Hello World!"
                   },
                   "children": []
                 }
-              }
+              ]
             },
             {
               "type": "component",

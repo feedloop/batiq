@@ -1,7 +1,14 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
       "names": [
         "Paragraph"
       ],
@@ -19,6 +26,26 @@
   "components": [
     {
       "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Paragraph1",
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",
@@ -56,7 +83,7 @@
           ]
         }
       ],
-      "root": true
+      "root": false
     },
     {
       "name": "Paragraph1",

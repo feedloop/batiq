@@ -8,7 +8,8 @@ export const input: PageSchema = {
   children: [
     {
       type: "component",
-      from: "./test",
+      from: "@batiq/components",
+      name: "Paragraph",
       properties: {
         color: "blue",
       },

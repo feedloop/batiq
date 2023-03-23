@@ -1,4 +1,4 @@
-import { AppProvider } from "@batiq/data";
+import { AppProvider } from "@batiq/expo-runtime";
 import { NavigationContainer } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";

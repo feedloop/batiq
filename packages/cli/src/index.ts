@@ -1,5 +1,5 @@
 import fs from "node:fs";
-import path from "node:path";
+import path from "path";
 import { spawn } from "node:child_process";
 import yargs from "yargs";
 import { hideBin } from "yargs/helpers";

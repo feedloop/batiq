@@ -8,30 +8,30 @@ export const input: PageSchema = {
   children: [
     {
       type: "component",
-      from: "./test",
+      from: "@batiq/components",
       name: "Paragraph",
       properties: {
         color: "red",
         onPress: {
           type: "action",
-          from: "./test",
-          name: "navigate",
-          arguments: ["/page-2"],
+          from: "@batiq/actions",
+          name: "breakpoint",
+          arguments: [{ base: "/page-2" }],
           root: true,
         },
       },
       children: [
         {
           type: "component",
-          from: "./test",
+          from: "@batiq/components",
           name: "Paragraph",
           properties: {
             color: "red",
             onPress: {
               type: "action",
-              from: "./test",
-              name: "navigate",
-              arguments: ["/page-3"],
+              from: "@batiq/actions",
+              name: "breakpoint",
+              arguments: [{ base: "/page-3" }],
               root: true,
             },
           },

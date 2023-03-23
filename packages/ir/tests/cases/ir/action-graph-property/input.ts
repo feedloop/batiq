@@ -8,14 +8,14 @@ export const input: PageSchema = {
   children: [
     {
       type: "component",
-      from: "./test",
+      from: "@batiq/actions",
       name: "Paragraph",
       properties: {
         color: "red",
         onPress: [
           {
             type: "action",
-            from: "./test",
+            from: "@batiq/actions",
             name: "navigate",
             arguments: ["/page-2"],
             next: "log",

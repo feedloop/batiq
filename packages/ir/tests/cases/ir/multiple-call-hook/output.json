@@ -1,9 +1,22 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
       "names": [
-        "Paragraph",
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
+      "names": [
+        "Paragraph"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/actions",
+      "names": [
         "navigate",
         "useNavigate"
       ],
@@ -19,7 +32,53 @@
           "type": "function_call",
           "arguments": [],
           "name": "navigate"
-        },
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "text",
+                  "value": "To Page 2"
+                },
+                {
+                  "name": "color",
+                  "value": "red"
+                },
+                {
+                  "name": "onPress",
+                  "value": {
+                    "type": "function_call",
+                    "name": "navigate_",
+                    "arguments": [
+                      "/page-2"
+                    ]
+                  }
+                }
+              ],
+              "children": []
+            },
+            {
+              "type": "element",
+              "name": "Paragraph1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Paragraph1",
+      "variableDeclarations": {
         "navigate1": {
           "type": "function_call",
           "arguments": [],
@@ -27,31 +86,6 @@
         }
       },
       "JSX": [
-        {
-          "type": "element",
-          "name": "Paragraph",
-          "props": [
-            {
-              "name": "text",
-              "value": "To Page 2"
-            },
-            {
-              "name": "color",
-              "value": "red"
-            },
-            {
-              "name": "onPress",
-              "value": {
-                "type": "function_call",
-                "name": "navigate_",
-                "arguments": [
-                  "/page-2"
-                ]
-              }
-            }
-          ],
-          "children": []
-        },
         {
           "type": "element",
           "name": "Paragraph",
@@ -78,7 +112,7 @@
           "children": []
         }
       ],
-      "root": true
+      "root": false
     }
   ]
 }

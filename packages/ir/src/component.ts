@@ -6,7 +6,8 @@ import {
   Primitive,
 } from "@batiq/core";
 import Ajv from "ajv";
-import { importComponent, importDefinition } from "./utils/importDefinition";
+// @ts-ignore TODO: fix this
+import { importDefinition } from "@batiq/shared";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -50,12 +51,11 @@ const resolveCompoundComponent = (
       };
 
 const transformCompoundComponent = async (
-  compoundComponent: CompoundComponentSchema,
-  definition: ComponentDefinition | null,
+  definition: ComponentDefinition<"compound">,
   schema: ComponentSchema
 ): Promise<ComponentSchema> => {
   const children: ComponentSchema["children"] =
-    Object.keys(definition?.inputs ?? {}).length === 0
+    Object.keys(definition.inputs ?? {}).length === 0
       ? schema.children
       : [
           {
@@ -69,7 +69,7 @@ const transformCompoundComponent = async (
           },
         ];
   const resolvedComponent: ComponentSchema = resolveCompoundComponent(
-    compoundComponent,
+    definition.component,
     schema,
     children
   );
@@ -101,9 +101,9 @@ export const transformComponent = async (
   isRoot = true,
   validate: boolean
 ): Promise<TransformResult> => {
-  const componentDefinition =
+  const componentDefinition: ComponentDefinition =
     schema.from === "local" && schema.name
-      ? app.components[schema.name]?.definitions
+      ? app.components[schema.name]
       : await importDefinition(schema.from, schema.name ?? "default");
   if (
     validate &&
@@ -113,20 +113,8 @@ export const transformComponent = async (
     throw new Error(ajv.errorsText());
   }
 
-  const component =
-    schema.from === "local" && schema.name
-      ? app.components[schema.name]?.component
-      : await importComponent(schema.from, schema.name ?? "default");
-  if (
-    !Array.isArray(component) &&
-    component !== null &&
-    typeof component === "object"
-  ) {
-    schema = await transformCompoundComponent(
-      component,
-      componentDefinition,
-      schema
-    );
+  if (componentDefinition?.component?.type === "component") {
+    schema = await transformCompoundComponent(componentDefinition, schema);
   }
 
   const properties = Object.fromEntries(
@@ -137,7 +125,7 @@ export const transformComponent = async (
       value.type === "breakpoint"
         ? {
             type: "action",
-            from: "./test",
+            from: "@batiq/actions",
             name: "breakpoint",
             arguments: [value.breakpoints],
           }

@@ -3,20 +3,36 @@ import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
 import { TTuple, TArray } from "@sinclair/typebox";
 
+export type ComponentDefinitionType = "compound" | "module";
+
 export type ComponentDefinition<
+  T extends ComponentDefinitionType = ComponentDefinitionType,
   P extends Record<string, any> = Record<string, any>
 > = {
-  inputs: ComponentInput<P>;
+  inputs?: Record<string, any>;
+  schema: ComponentInput<P>;
   definitions: {
     kind: "block" | "text" | "void";
   };
+  component: T extends "compound"
+    ? CompoundComponentSchema
+    : ModuleComponentSchema;
+};
+
+export type ModuleComponentSchema = {
+  type: "module";
+  from: string;
+  name?: string;
 };
 
 export type DataSourceDefinition<P extends Record<string, any>> =
-  ComponentDefinition<{
-    name: string;
-    query: P;
-  }>;
+  ComponentDefinition<
+    ComponentDefinitionType,
+    {
+      name: string;
+      query: P;
+    }
+  >;
 
 type QueryResult<T> =
   | {
@@ -32,8 +48,12 @@ export type DataSource<
   P extends Record<string, any> = Record<string, any>,
   Data = any
 > = {
-  isAuthenticated: () => Promise<boolean>;
-  authenticate: (...args: any[]) => Promise<any>;
+  isAuthenticated: <T extends BaseBatiqCore>(batiq: T) => Promise<boolean>;
+  authenticate: <T extends BaseBatiqCore>(
+    batiq: T,
+    params: any
+  ) => Promise<any>;
+  logout: <T extends BaseBatiqCore>(batiq: T) => Promise<void>;
   definition: DataSourceDefinition<P>;
   query: (query: P) => Promise<QueryResult<Data>>;
   component: (
@@ -146,6 +166,7 @@ export type DataSourceDefinitionSchema = {
         name: string;
       };
   config: Record<string, any>;
+  authenticatedRoutes?: string[];
 };
 
 export type FontStyle = {
@@ -164,10 +185,10 @@ export type FontStyle = {
     | "900";
 };
 
-export type LocalCompoundComponent = {
-  definitions: ComponentDefinition;
-  component: CompoundComponentSchema;
-};
+// export type LocalCompoundComponent = {
+//   definitions: ComponentDefinition;
+//   component: CompoundComponentSchema;
+// };
 
 export type AppSchema = {
   batiq: string;
@@ -185,7 +206,7 @@ export type AppSchema = {
     link_prefixes?: string[];
   };
   datasource: Record<string, DataSourceDefinitionSchema>;
-  components: Record<string, LocalCompoundComponent>;
+  components: Record<string, ComponentDefinition>;
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{

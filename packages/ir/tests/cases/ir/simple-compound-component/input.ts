@@ -3,12 +3,11 @@ import { Type } from "@sinclair/typebox";
 
 export const components: Record<string, LocalCompoundComponent> = {
   CompoundButton: {
-    definitions: {
-      inputs: {
-        color: Type.String({ default: "green" }),
-      },
+    inputs: {
+      color: Type.String({ default: "green" }),
     },
     component: {
+      type: "component",
       from: "@batiq/components",
       name: "Button",
       id: "MainButton",
