@@ -92,7 +92,6 @@ export const PageRuntime = async (
   scope: Record<string, any> = {}
 ): Promise<React.ComponentType> => {
   const ir = await transformIR(app, page, "native", false);
-  console.log("page ir", ir);
   scope = await ir.imports.reduce(
     async (carryP, importSource): Promise<Record<string, any>> =>
       Promise.all([carryP, resolveImport(importSource)]).then(
