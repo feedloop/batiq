@@ -1,5 +1,5 @@
 import React from "react";
-import { useDataContext } from "@batiq/data";
+import { useDataContext } from "@batiq/expo-runtime";
 import { evaluate, mergeConfig } from "@feedloop/expression";
 import javascriptConfig from "@feedloop/formula-prelude/evaluators/javascript";
 import Dot from "dot-object";

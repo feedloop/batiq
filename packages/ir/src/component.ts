@@ -60,7 +60,7 @@ const transformCompoundComponent = async (
       : [
           {
             type: "component",
-            from: "@batiq/data",
+            from: "@batiq/expo-runtime",
             name: "RemoveKey",
             properties: {
               key: "props",
@@ -77,7 +77,7 @@ const transformCompoundComponent = async (
     ? resolvedComponent
     : {
         type: "component",
-        from: "@batiq/data",
+        from: "@batiq/expo-runtime",
         name: "DataSource",
         properties: {
           name: "props",
@@ -228,7 +228,7 @@ export const transformJSXChild = async (
           app,
           {
             type: "component",
-            from: "@batiq/data",
+            from: "@batiq/expo-runtime",
             name: "Query",
             properties: {
               data: schema.data,

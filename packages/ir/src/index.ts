@@ -33,15 +33,18 @@ export const transformIR = async (
   const scope = createScope();
   scope.addVariable(toVariableName(page.name), null);
   if (target === "native") {
-    page.children = [
-      {
-        type: "component",
-        from: "@batiq/expo-runtime",
-        name: "PageWrapper",
-        properties: {},
-        children: page.children,
-      },
-    ];
+    page = {
+      ...page,
+      children: [
+        {
+          type: "component",
+          from: "@batiq/expo-runtime",
+          name: "PageWrapper",
+          properties: {},
+          children: page.children,
+        },
+      ],
+    };
   }
   const results = await Promise.all(
     page.children.map((component) =>

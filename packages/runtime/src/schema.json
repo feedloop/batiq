@@ -149,55 +149,12 @@
               "name": "Text",
               "properties": {
                 "text": "Page 2",
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-2"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
-              },
-              "children": []
-            },
-            {
-              "type": "component",
-              "from": "@batiq/components",
-              "name": "Text",
-              "properties": {
-                "text": "Page 2",
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-2"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
-              },
-              "children": []
-            },
-            {
-              "type": "component",
-              "from": "@batiq/components",
-              "name": "Link",
-              "properties": {
-                "text": "Page 2",
-                "to": "/page-2"
+                "onPress": {
+                  "type": "action",
+                  "from": "@batiq/actions",
+                  "name": "navigate",
+                  "arguments": ["/page-2"]
+                }
               },
               "children": []
             }

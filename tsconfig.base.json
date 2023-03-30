@@ -30,6 +30,9 @@
       "@batiq/data": ["packages/data/src/index.ts"],
       "@batiq/data/definitions.js": ["packages/data/src/definitions.js"],
       "@batiq/expo-runtime": ["packages/expo-runtime/src/index.ts"],
+      "@batiq/expo-runtime/definitions.js": [
+        "packages/expo-runtime/src/definitions.js"
+      ],
       "@batiq/expression": ["packages/expression/src/index.ts"],
       "@batiq/generator": ["packages/generator/src/index.ts"],
       "@batiq/ir": ["packages/ir/src/index.ts"],

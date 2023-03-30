@@ -37,9 +37,6 @@ const AuthGuard = (props: React.PropsWithChildren<{}>) => {
 
     return results.every((result) => result);
   });
-  React.useEffect(() => {
-    console.log("isAuthenticated", isAuthenticated, "on", currentPath);
-  }, [isAuthenticated]);
 
   // return isAuthenticated ? props.children : null;
   return <>{props.children}</>;

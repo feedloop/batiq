@@ -1,9 +1,9 @@
+import React from "react";
 import { BaseBatiqCore, DataSourceDefinitionSchema } from "@batiq/core";
 import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
-import { DataSource, useData } from "./DataProvider";
-import useSwr from "swr/immutable";
+import { useData } from "@batiq/expo-runtime";
 
 const queryDefinition = Type.Required(
   Type.Object({
@@ -165,18 +165,17 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
               },
       };
 
-      const { data: res } = useSwr([client, props.query, config], () =>
-        client[props.query.operationId](
-          props.query.parameters,
-          undefined,
-          config
-        )
+      const data = useData(
+        props.name,
+        () =>
+          client[props.query.operationId](
+            props.query.parameters,
+            undefined,
+            config
+          ).then((response) => response.data),
+        [client, props.query, config]
       );
-      return res?.data ? (
-        <DataSource name={props.name} data={res?.data}>
-          {props.children}
-        </DataSource>
-      ) : null;
+      return props.children;
     },
   };
 };
