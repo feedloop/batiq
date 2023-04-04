@@ -10,15 +10,13 @@ describe("Navigation", () => {
     absolute: true,
   });
 
-  files
-    .filter((file) => file.includes("action-graph-property"))
-    .forEach(async (file) => {
-      test(path.basename(path.dirname(file)), async () => {
-        const { input } = await import(file);
-        const output = await transformIR(input);
-        expect(JSON.stringify(output, null, 2)).toMatchFile(
-          file.replace("input.ts", "output.json")
-        );
-      });
+  files.forEach(async (file) => {
+    test(path.basename(path.dirname(file)), async () => {
+      const { input } = await import(file);
+      const output = await transformIR(input);
+      expect(JSON.stringify(output, null, 2)).toMatchFile(
+        file.replace("input.ts", "output.json")
+      );
     });
+  });
 });

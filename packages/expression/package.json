@@ -1,9 +1,10 @@
 {
   "name": "@batiq/expression",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "commonjs",
   "dependencies": {
-    "@feedloop/expression": "^1.0.0",
-    "@feedloop/formula-prelude": "^1.0.0"
+    "@feedloop/expression": "^1.0.1",
+    "@feedloop/expression-parser": "^1.0.1",
+    "@feedloop/formula-prelude": "^1.0.1"
   }
 }

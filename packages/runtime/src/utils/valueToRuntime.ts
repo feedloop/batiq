@@ -134,6 +134,9 @@ export const valueToRuntime = (
           throw new Error(`Unknown operator ${operator}`);
       }
     }
+    if (value.type === "json") {
+      return value.value;
+    }
     return Object.fromEntries(
       Object.entries(value).map(([key, value]) => [
         key,

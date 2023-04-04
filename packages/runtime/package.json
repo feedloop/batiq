@@ -1,6 +1,6 @@
 {
   "name": "@batiq/runtime",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "type": "commonjs",
   "devDependencies": {
     "@react-navigation/bottom-tabs": "^6.5.4",

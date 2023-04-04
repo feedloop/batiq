@@ -74,6 +74,17 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
   );
 
   const variableDeclarations: [string, Value][] = [
+    ...(schema.theme
+      ? ([
+          [
+            "theme",
+            {
+              type: "json",
+              value: schema.theme,
+            },
+          ],
+        ] as [string, Value][])
+      : []),
     [
       "Stack",
       {
@@ -250,6 +261,17 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
               },
             },
           },
+          ...(schema.theme
+            ? [
+                {
+                  name: "theme",
+                  value: {
+                    type: "variable",
+                    name: "theme",
+                  },
+                },
+              ]
+            : []),
         ],
         children: [
           {

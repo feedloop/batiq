@@ -61,6 +61,11 @@ export type BinaryOperator = {
   right: Value;
 };
 
+export type JSON = {
+  type: "json";
+  value: Record<string, any>;
+};
+
 export type Primitive = string | number | boolean;
 export type Value = Container<
   | FunctionDefinition
@@ -68,6 +73,7 @@ export type Value = Container<
   | Variable
   | BinaryOperator
   | Element
+  | JSON
   | Primitive
 >;
 
