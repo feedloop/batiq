@@ -38,38 +38,29 @@ export const importModule = (source: string, version = "latest") => {
   }
 
   switch (source) {
-    // case "@batiq/core":
-    //   return import("@batiq/core");
+    case "@batiq/core":
+      return import("@batiq/core");
 
-    // case "@batiq/data":
-    //   return import("@batiq/data");
-    // case "@batiq/data/definitions.js":
-    //   return import("@batiq/data/definitions.js");
+    case "@batiq/data":
+      return import("@batiq/data");
+    case "@batiq/data/definitions.js":
+      return import("@batiq/data/definitions.js");
 
-    // case "@batiq/components":
-    //   return import("@batiq/components");
-    // case "@batiq/components/definitions.js":
-    //   return import("@batiq/components/definitions.js");
+    case "@batiq/components":
+      return import("@batiq/components");
+    case "@batiq/components/definitions.js":
+      return import("@batiq/components/definitions.js");
 
-    // case "@batiq/actions":
-    //   return import("@batiq/actions");
-    // case "@batiq/actions/definitions.js":
-    //   return import("@batiq/actions/definitions.js");
+    case "@batiq/actions":
+      return import("@batiq/actions");
+    case "@batiq/actions/definitions.js":
+      return import("@batiq/actions/definitions.js");
 
-    // case "@batiq/expression":
-    //   return import("@batiq/expression");
+    case "@batiq/expression":
+      return import("@batiq/expression");
 
-    // case "@batiq/expo-runtime":
-    //   return import("@batiq/expo-runtime");
-
-    // case "@react-navigation/native":
-    //   return import("@react-navigation/native");
-
-    // case "@react-navigation/native-stack":
-    //   return import("@react-navigation/native-stack");
-
-    // case "@react-navigation/bottom-tabs":
-    //   return import("@react-navigation/bottom-tabs");
+    case "@batiq/expo-runtime":
+      return import("@batiq/expo-runtime");
 
     default:
       return import(
