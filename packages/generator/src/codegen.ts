@@ -13,7 +13,7 @@ import {
   FunctionDefinition,
 } from "@batiq/ir";
 import { valueToAST } from "./utils/valueToAST";
-import { PageSchema } from "@batiq/core";
+import { AppSchema, PageSchema } from "@batiq/core";
 import _babelGenerate from "@babel/generator";
 import { toVariableName } from "./utils/naming";
 
@@ -235,5 +235,8 @@ export const generate = async (ir: PageIR, format = false): Promise<string> => {
   return prettier.format(code, { parser: "babel" });
 };
 
-export const generatePage = async (page: PageSchema, format?: boolean) =>
-  generate(await transformIR(page), format);
+export const generatePage = async (
+  app: AppSchema,
+  page: PageSchema,
+  format?: boolean
+) => generate(await transformIR(app, page), format);

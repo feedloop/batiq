@@ -1,4 +1,4 @@
-import path from "node:path";
+import path from "path";
 import fs from "node:fs";
 import { createRequire } from "node:module";
 const require = createRequire(import.meta.url);

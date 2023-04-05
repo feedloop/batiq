@@ -38,6 +38,25 @@
       "authenticatedRoutes": ["/page-1"]
     }
   },
+  "components": {
+    "CompoundButton": {
+      "inputs": {},
+      "component": {
+        "type": "component",
+        "from": "@batiq/components",
+        "name": "Button",
+        "id": "MainButton",
+        "properties": {
+          "color": "green"
+        },
+        "children": [
+          {
+            "type": "slot"
+          }
+        ]
+      }
+    }
+  },
   "theme": {
     "dark": false,
     "colors": {
@@ -74,6 +93,26 @@
           "name": "Provider",
           "properties": {},
           "children": [
+            {
+              "type": "component",
+              "from": "local",
+              "name": "CompoundButton",
+              "properties": {},
+              "overrideProperties": {
+                "color": "red"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Text",
+                  "properties": {
+                    "text": "Hello World!"
+                  },
+                  "children": []
+                }
+              ]
+            },
             {
               "type": "component",
               "from": "@batiq/components",

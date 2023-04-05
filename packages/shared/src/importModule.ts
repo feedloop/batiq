@@ -1,5 +1,5 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
-import * as path from "node:path";
+import * as path from "path";
 
 // esm.sh instance
 const CDN_URL =

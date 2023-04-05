@@ -25,6 +25,7 @@ const mergeImports = (imports: ComponentImport[]): ComponentImport[] =>
   );
 
 export const transformIR = async (
+  app: AppSchema,
   page: PageSchema,
   target: AppSchema["platform"] = "native",
   validate = false
@@ -44,7 +45,7 @@ export const transformIR = async (
   }
   const results = await Promise.all(
     page.children.map((component) =>
-      transformJSXChild(scope.clone(), component, true, validate)
+      transformJSXChild(scope.clone(), app, component, true, validate)
     )
   );
   const imports = mergeImports(results.flatMap((r) => r.imports));

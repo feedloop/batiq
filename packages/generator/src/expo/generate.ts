@@ -1,4 +1,4 @@
-import path from "node:path";
+import path from "path";
 import fs from "node:fs";
 import { AppSchema } from "@batiq/core";
 import * as ExpoPackageManager from "@expo/package-manager";
@@ -25,7 +25,7 @@ export const installExpo = async (schema: AppSchema) => {
       (
         await Promise.all(
           schema.pages.map((page) =>
-            transformIR(page, "native", false).then((ir) =>
+            transformIR(schema, page, "native", false).then((ir) =>
               ir.imports.map((imp) => imp.source)
             )
           )
@@ -131,7 +131,7 @@ export const generateExpo = async (schema: AppSchema) => {
     schema.pages.map(async (page) => {
       fs.writeFileSync(
         path.join("app/pages", `${toVariableName(page.name)}.tsx`),
-        await generatePage(page, true)
+        await generatePage(schema, page, true)
       );
     })
   );
