@@ -1,3 +1,6 @@
+/* eslint-disable @nrwl/nx/enforce-module-boundaries */
+import * as path from "node:path";
+
 // esm.sh instance
 const CDN_URL =
   "http://localhost:8080/{package}@{version}?alias=react-native:react-native-web";
@@ -35,32 +38,29 @@ export const importModule = (source: string, version = "latest") => {
   }
 
   switch (source) {
+    case "@batiq/core":
+      return import("@batiq/core");
+
     case "@batiq/data":
       return import("@batiq/data");
+    case "@batiq/data/definitions.js":
+      return import("@batiq/data/definitions.js");
 
     case "@batiq/components":
       return import("@batiq/components");
-
-    case "@batiq/components/defintions.js":
-      return import("@batiq/components/src/definitions.js");
+    case "@batiq/components/definitions.js":
+      return import("@batiq/components/definitions.js");
 
     case "@batiq/actions":
       return import("@batiq/actions");
-
     case "@batiq/actions/definitions.js":
-      return import("@batiq/actions/src/definitions.js");
+      return import("@batiq/actions/definitions.js");
 
     case "@batiq/expression":
       return import("@batiq/expression");
 
-    case "@react-navigation/native":
-      return import("@react-navigation/native");
-
-    case "@react-navigation/native-stack":
-      return import("@react-navigation/native-stack");
-
-    case "@react-navigation/bottom-tabs":
-      return import("@react-navigation/bottom-tabs");
+    case "@batiq/expo-runtime":
+      return import("@batiq/expo-runtime");
 
     default:
       return import(
@@ -70,4 +70,13 @@ export const importModule = (source: string, version = "latest") => {
         )
       );
   }
+};
+
+export const importDefinition = async (source: string, name: string) => {
+  const definitionPath = path.join(source, "definitions.js");
+  return (
+    await import(
+      source.startsWith("./") ? `./${definitionPath}` : definitionPath
+    ).catch(() => ({}))
+  )[name];
 };

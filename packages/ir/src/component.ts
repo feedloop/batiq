@@ -1,6 +1,7 @@
-import { ComponentDefinition, ComponentSchema } from "@batiq/core";
+import { ComponentDefinition, ComponentSchema, Primitive } from "@batiq/core";
 import Ajv from "ajv";
-import { importDefinition } from "./utils/importDefinition";
+// @ts-ignore TODO: fix this
+import { importDefinition } from "@batiq/shared";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -72,14 +73,10 @@ export const transformComponent = async (
   );
 
   const childrenResults = await Promise.all(
-    schema.children
-      .filter(
-        (component): component is ComponentSchema =>
-          typeof component === "object" && component.type === "component"
-      )
-      .map((component) =>
-        transformComponent(scope.clone(), component, false, validate)
-      )
+    schema.children.map((component) =>
+      // transformComponent(scope.clone(), component, false, validate)
+      transformJSXChild(scope.clone(), component, false, validate)
+    )
   );
 
   const variables = [
@@ -123,5 +120,54 @@ export const transformComponent = async (
       ...propsResult.additionalComponents,
       ...childrenResults.flatMap((result) => result.additionalComponents),
     ],
+  };
+};
+
+export const transformJSXChild = async (
+  scope: Scope,
+  schema: Primitive,
+  isRoot = true,
+  validate: boolean
+): Promise<TransformResult> => {
+  if (typeof schema === "object") {
+    switch (schema.type) {
+      case "component":
+        return transformComponent(scope.clone(), schema, isRoot, validate);
+
+      case "data":
+        return transformComponent(
+          scope.clone(),
+          {
+            type: "component",
+            from: "@batiq/data",
+            name: "Query",
+            properties: {
+              data: schema.data,
+              name: schema.name,
+              query: schema.query,
+            },
+            children: schema.children,
+          },
+          isRoot,
+          validate
+        );
+
+      case "expression":
+        return {
+          imports: [],
+          variables: [],
+          element: {
+            type: "jsx_expression",
+            value: false,
+          },
+          additionalComponents: [],
+        };
+    }
+  }
+  return {
+    imports: [],
+    variables: [],
+    element: schema,
+    additionalComponents: [],
   };
 };

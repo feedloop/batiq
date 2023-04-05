@@ -14,7 +14,7 @@ export const valueToRuntime = (
   if (Array.isArray(value)) {
     return value.map((v) => valueToRuntime(scope, v));
   }
-  if (typeof value === "object") {
+  if (value !== null && typeof value === "object") {
     if (value.type === "element") {
       const { name, props, children } = value as Element;
       const component = Array.isArray(name)

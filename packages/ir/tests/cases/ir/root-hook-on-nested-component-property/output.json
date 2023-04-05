@@ -1,10 +1,23 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
       "names": [
-        "Paragraph",
-        "navigate"
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
+      "names": [
+        "Paragraph"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/actions",
+      "names": [
+        "breakpoint"
       ],
       "default": null
     }
@@ -13,33 +26,12 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {
-        "navigate_": {
-          "type": "function_call",
-          "arguments": [],
-          "name": "navigate"
-        }
-      },
+      "variableDeclarations": {},
       "JSX": [
         {
           "type": "element",
-          "name": "Paragraph",
-          "props": [
-            {
-              "name": "color",
-              "value": "red"
-            },
-            {
-              "name": "onPress",
-              "value": {
-                "type": "function_call",
-                "name": "navigate_",
-                "arguments": [
-                  "/page-2"
-                ]
-              }
-            }
-          ],
+          "name": "PageWrapper",
+          "props": [],
           "children": [
             {
               "type": "element",
@@ -55,10 +47,10 @@
     {
       "name": "Paragraph1",
       "variableDeclarations": {
-        "navigate_": {
+        "breakpoint_": {
           "type": "function_call",
           "arguments": [],
-          "name": "navigate"
+          "name": "breakpoint"
         }
       },
       "JSX": [
@@ -74,9 +66,54 @@
               "name": "onPress",
               "value": {
                 "type": "function_call",
-                "name": "navigate_",
+                "name": "breakpoint_",
                 "arguments": [
-                  "/page-3"
+                  {
+                    "base": "/page-2"
+                  }
+                ]
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": false
+    },
+    {
+      "name": "Paragraph1",
+      "variableDeclarations": {
+        "breakpoint_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "breakpoint"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Paragraph",
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            },
+            {
+              "name": "onPress",
+              "value": {
+                "type": "function_call",
+                "name": "breakpoint_",
+                "arguments": [
+                  {
+                    "base": "/page-3"
+                  }
                 ]
               }
             }

@@ -7,6 +7,37 @@
   "config": {
     "link_prefixes": ["http://localhost:4400/", "app://"]
   },
+  "datasource": {
+    "qore": {
+      "type": "qore",
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      }
+    },
+    "qore2": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "CustomDataSource"
+      },
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      },
+      "authenticatedRoutes": ["/users", "/posts/*"]
+    },
+    "petstore": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "OpenAPI"
+      },
+      "config": {
+        "definition": "https://petstore3.swagger.io/api/v3/openapi.json",
+        "auth": {
+          "apiKey": null
+        }
+      },
+      "authenticatedRoutes": ["/page-1"]
+    }
+  },
   "theme": {
     "dark": false,
     "colors": {
@@ -66,6 +97,55 @@
                   "children": []
                 }
               ]
+            },
+            {
+              "type": "data",
+              "data": "petstore",
+              "name": "pet",
+              "query": {
+                "operationId": "getPetById",
+                "parameters": {
+                  "petId": 1
+                }
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Text",
+                  "properties": {
+                    "text": {
+                      "type": "expression",
+                      "expression": "pet.id"
+                    }
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Text",
+              "properties": {
+                "text": "Page 2",
+                "onPress": [
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "navigate",
+                    "arguments": ["/page-2"],
+                    "next": 1
+                  },
+                  {
+                    "type": "action",
+                    "from": "@batiq/actions",
+                    "name": "goBack",
+                    "arguments": []
+                  }
+                ]
+              },
+              "children": []
             },
             {
               "type": "component",

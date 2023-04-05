@@ -1,7 +1,14 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
+      "names": [
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
       "names": [
         "Paragraph"
       ],
@@ -16,14 +23,21 @@
       "JSX": [
         {
           "type": "element",
-          "name": "Paragraph",
-          "props": [
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
             {
-              "name": "color",
-              "value": "red"
+              "type": "element",
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "red"
+                }
+              ],
+              "children": []
             }
-          ],
-          "children": []
+          ]
         }
       ],
       "root": true

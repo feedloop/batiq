@@ -61,7 +61,7 @@ export const NavigationRuntime = async (
     (scope, page) => ({
       ...scope,
       [toVariableName(`./pages/${toVariableName(page.name)}`)]: () =>
-        React.createElement(PageRuntimeLazy, { schema: page }),
+        React.createElement(PageRuntimeLazy, { schema: page, scope }),
     }),
     scope
   );

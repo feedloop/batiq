@@ -47,6 +47,11 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
 
   const imports: ComponentImport[] = [
     {
+      source: "@batiq/expo-runtime",
+      names: ["AppProvider"],
+      default: null,
+    },
+    {
       source: "@react-navigation/native",
       names: ["NavigationContainer"],
       default: null,
@@ -85,6 +90,13 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
           ],
         ] as [string, Value][])
       : []),
+    [
+      "schema",
+      {
+        type: "json",
+        value: schema,
+      },
+    ],
     [
       "Stack",
       {
@@ -211,54 +223,13 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
     JSX: [
       {
         type: "element",
-        name: ["NavigationContainer"],
+        name: ["AppProvider"],
         props: [
           {
-            name: "linking",
+            name: "schema",
             value: {
-              prefixes: {
-                type: "binary_operator",
-                operator: "??",
-                left: {
-                  type: "variable",
-                  name: "process.env.LINK_PREFIXES",
-                },
-                right: [],
-              },
-              config: {
-                screens: {
-                  ...(Object.keys(navigation.tabs).length > 0
-                    ? {
-                        Tabs: {
-                          screens: Object.fromEntries(
-                            Object.values(navigation.tabs).map(
-                              (tab): [string, any] =>
-                                Array.isArray(tab.page)
-                                  ? [
-                                      tab.tab.label,
-                                      {
-                                        screens: Object.fromEntries(
-                                          tab.page.map((page) => [
-                                            page.name,
-                                            page.navigation.path,
-                                          ])
-                                        ),
-                                      },
-                                    ]
-                                  : [tab.tab.label, tab.page.navigation.path]
-                            )
-                          ),
-                        },
-                      }
-                    : {}),
-                  ...Object.fromEntries(
-                    navigation.stack.map((page) => [
-                      page.name,
-                      page.navigation.path,
-                    ])
-                  ),
-                },
-              },
+              type: "variable",
+              name: "schema",
             },
           },
           ...(schema.theme
@@ -276,59 +247,118 @@ export const generateNavigationPageIR = (schema: AppSchema): PageIR => {
         children: [
           {
             type: "element",
-            name: ["Stack", "Navigator"],
-            props: [],
+            name: ["NavigationContainer"],
+            props: [
+              {
+                name: "linking",
+                value: {
+                  prefixes: {
+                    type: "binary_operator",
+                    operator: "??",
+                    left: {
+                      type: "variable",
+                      name: "process.env.LINK_PREFIXES",
+                    },
+                    right: [],
+                  },
+                  config: {
+                    screens: {
+                      ...(Object.keys(navigation.tabs).length > 0
+                        ? {
+                            Tabs: {
+                              screens: Object.fromEntries(
+                                Object.values(navigation.tabs).map(
+                                  (tab): [string, any] =>
+                                    Array.isArray(tab.page)
+                                      ? [
+                                          tab.tab.label,
+                                          {
+                                            screens: Object.fromEntries(
+                                              tab.page.map((page) => [
+                                                page.name,
+                                                page.navigation.path,
+                                              ])
+                                            ),
+                                          },
+                                        ]
+                                      : [
+                                          tab.tab.label,
+                                          tab.page.navigation.path,
+                                        ]
+                                )
+                              ),
+                            },
+                          }
+                        : {}),
+                      ...Object.fromEntries(
+                        navigation.stack.map((page) => [
+                          page.name,
+                          page.navigation.path,
+                        ])
+                      ),
+                    },
+                  },
+                },
+              },
+            ],
             children: [
-              ...(Object.keys(navigation.tabs).length > 0
-                ? [
-                    {
+              {
+                type: "element",
+                name: ["Stack", "Navigator"],
+                props: [],
+                children: [
+                  ...(Object.keys(navigation.tabs).length > 0
+                    ? [
+                        {
+                          type: "element",
+                          name: ["Stack", "Screen"],
+                          props: [
+                            {
+                              name: "name",
+                              value: "Tabs",
+                            },
+                            {
+                              name: "component",
+                              value: {
+                                type: "variable",
+                                name: "Tabs",
+                              },
+                            },
+                            {
+                              name: "options",
+                              value: {
+                                headerShown: false,
+                              },
+                            },
+                          ],
+                          children: [],
+                        } as JSX,
+                      ]
+                    : []),
+                  ...navigation.stack.map(
+                    (page): JSX => ({
                       type: "element",
                       name: ["Stack", "Screen"],
                       props: [
                         {
                           name: "name",
-                          value: "Tabs",
+                          value: page.name,
                         },
                         {
                           name: "component",
                           value: {
                             type: "variable",
-                            name: "Tabs",
-                          },
-                        },
-                        {
-                          name: "options",
-                          value: {
-                            headerShown: false,
+                            name: toVariableName(
+                              `./pages/${toVariableName(page.name)}`
+                            ),
                           },
                         },
                       ],
                       children: [],
-                    } as JSX,
-                  ]
-                : []),
-              ...navigation.stack.map(
-                (page): JSX => ({
-                  type: "element",
-                  name: ["Stack", "Screen"],
-                  props: [
-                    {
-                      name: "name",
-                      value: page.name,
-                    },
-                    {
-                      name: "component",
-                      value: {
-                        type: "variable",
-                        name: toVariableName(
-                          `./pages/${toVariableName(page.name)}`
-                        ),
-                      },
-                    },
-                  ],
-                  children: [],
-                })
-              ),
+                    })
+                  ),
+                ],
+              },
             ],
           },
         ],

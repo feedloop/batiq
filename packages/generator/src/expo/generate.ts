@@ -25,7 +25,7 @@ export const installExpo = async (schema: AppSchema) => {
       (
         await Promise.all(
           schema.pages.map((page) =>
-            transformIR(page, false).then((ir) =>
+            transformIR(page, "native", false).then((ir) =>
               ir.imports.map((imp) => imp.source)
             )
           )

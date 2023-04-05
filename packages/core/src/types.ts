@@ -1,10 +1,46 @@
 import * as React from "react";
 import { JSONSchemaType } from "ajv";
 import { Path } from "./lens";
-import { TTuple, TArray, Static } from "@sinclair/typebox";
+import { TTuple, TArray } from "@sinclair/typebox";
 
 export type ComponentDefinition<P extends Record<string, any>> = {
   inputs: ComponentInput<P>;
+  definitions: {
+    kind: "block" | "text" | "void";
+  };
+};
+
+export type DataSourceDefinition<P extends Record<string, any>> =
+  ComponentDefinition<{
+    name: string;
+    query: P;
+  }>;
+
+type QueryResult<T> =
+  | {
+      type: "single";
+      data: T;
+    }
+  | {
+      type: "list";
+      data: T[];
+    };
+
+export type DataSource<
+  P extends Record<string, any> = Record<string, any>,
+  Data = any
+> = {
+  isAuthenticated: <T extends BaseBatiqCore>(batiq: T) => Promise<boolean>;
+  authenticate: <T extends BaseBatiqCore>(
+    batiq: T,
+    params: any
+  ) => Promise<any>;
+  logout: <T extends BaseBatiqCore>(batiq: T) => Promise<void>;
+  definition: DataSourceDefinition<P>;
+  query: (query: P) => Promise<QueryResult<Data>>;
+  component: (
+    props: React.PropsWithChildren<{ name: string; query: P }>
+  ) => React.ReactElement;
 };
 
 export type ComponentInput<P> = JSONSchemaType<P>;
@@ -46,18 +82,31 @@ export type ExpressionSchema = {
   expression: string;
 };
 
+export type DataSchema = {
+  type: "data";
+  data: string;
+  name: string;
+  query: Record<string, any>;
+  children: ComponentSchema["children"];
+};
+
 export type BreakpointSchema<T> = {
   type: "breakpoint";
   breakpoints: Record<string, T>;
 };
 
-export type Primitive = ComponentSchema | string | number | boolean;
+export type Primitive =
+  | ComponentSchema
+  | ExpressionSchema
+  | DataSchema
+  | string
+  | number
+  | boolean;
 export type Container<T> =
   | T
   | Container<T>[]
   | { [key in string extends "type" ? never : string]: Container<T> };
 export type Value = Container<Primitive>;
-export type Children = Container<Primitive | ExpressionSchema>;
 export type Property =
   | Container<Primitive | ExpressionSchema | ActionSchema>
   | BreakpointSchema<Container<Primitive | ExpressionSchema | ActionSchema>>;
@@ -71,10 +120,23 @@ export type PageSchema = {
       icon: string;
     };
   };
-  children: ComponentSchema[];
+  children: Primitive[];
 };
 
 export type Platform = "web" | "native" | "webcomponent";
+
+export type DataSourceDefinitionSchema = {
+  type:
+    | "qore"
+    | "local"
+    | "openapi"
+    | {
+        from: string;
+        name: string;
+      };
+  config: Record<string, any>;
+  authenticatedRoutes?: string[];
+};
 
 export type FontStyle = {
   fontFamily: string;
@@ -107,6 +169,7 @@ export type AppSchema = {
   config: Record<string, any> & {
     link_prefixes?: string[];
   };
+  datasource: Record<string, DataSourceDefinitionSchema>;
   theme?: Partial<{
     dark: boolean;
     colors: Partial<{

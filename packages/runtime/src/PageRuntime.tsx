@@ -5,7 +5,8 @@ import {
   Component as ComponentIR,
   ComponentImport,
 } from "@batiq/ir";
-import { importModule } from "./utils/importModule";
+// @ts-ignore TODO: fix this
+import { importModule } from "@batiq/shared";
 import { valueToRuntime } from "./utils/valueToRuntime";
 
 export const toVariableName = (source: string): string =>
@@ -89,7 +90,7 @@ export const PageRuntime = async (
   page: PageSchema,
   scope: Record<string, any> = {}
 ): Promise<React.ComponentType> => {
-  const ir = await transformIR(page, false);
+  const ir = await transformIR(page, "native", false);
   scope = await ir.imports.reduce(
     async (carryP, importSource): Promise<Record<string, any>> =>
       Promise.all([carryP, resolveImport(importSource)]).then(

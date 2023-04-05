@@ -1,9 +1,22 @@
 {
   "imports": [
     {
-      "source": "./test",
+      "source": "@batiq/expo-runtime",
       "names": [
-        "Paragraph",
+        "PageWrapper"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
+      "names": [
+        "Paragraph"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/actions",
+      "names": [
         "navigate"
       ],
       "default": null
@@ -23,24 +36,31 @@
       "JSX": [
         {
           "type": "element",
-          "name": "Paragraph",
-          "props": [
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
             {
-              "name": "color",
-              "value": "red"
-            },
-            {
-              "name": "onPress",
-              "value": {
-                "type": "function_call",
-                "name": "navigate_",
-                "arguments": [
-                  "/page-2"
-                ]
-              }
+              "type": "element",
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "red"
+                },
+                {
+                  "name": "onPress",
+                  "value": {
+                    "type": "function_call",
+                    "name": "navigate_",
+                    "arguments": [
+                      "/page-2"
+                    ]
+                  }
+                }
+              ],
+              "children": []
             }
-          ],
-          "children": []
+          ]
         }
       ],
       "root": true

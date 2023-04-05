@@ -35,11 +35,16 @@ export const useLazyExpression = () => {
     (
       expression: string,
       additionalConfig: Partial<typeof javascriptConfig> = {}
-    ): any =>
-      evaluateExpression(
-        expression,
-        mergeConfig({ variables }, additionalConfig)
-      ),
+    ): any => {
+      try {
+        return evaluateExpression(
+          expression,
+          mergeConfig({ variables }, additionalConfig)
+        );
+      } catch (e) {
+        return undefined;
+      }
+    },
     [variables]
   );
 };

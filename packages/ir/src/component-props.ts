@@ -11,7 +11,8 @@ import {
   hookResultName,
 } from "./utils/naming";
 import { Component, ComponentImport, Value } from "./types";
-import { importDefinition } from "./utils/importDefinition";
+// @ts-ignore TODO: fix this
+import { importDefinition } from "@batiq/shared";
 import { buildActionGraph } from "./action-graph";
 import { Scope } from "./scope";
 
@@ -196,7 +197,7 @@ export const transformHookExpressionProp = async (
           (!isRoot &&
             value.type === "action" &&
             isHook &&
-            !!("root" in actionDef ? actionDef?.root : true)) ||
+            !!(actionDef && "root" in actionDef ? actionDef?.root : true)) ||
           arguments_.some((arg) => arg.splitComponent),
         additionalComponents: arguments_.flatMap(
           (arg) => arg.additionalComponents
@@ -208,12 +209,16 @@ export const transformHookExpressionProp = async (
       const hookCallVariableName = generateUniqueName(scope, "evaluate");
       return {
         imports: [
-          { source: "@batiq/core", names: ["useExpression"], default: null },
+          {
+            source: "@batiq/expression",
+            names: ["useLazyExpression"],
+            default: null,
+          },
         ],
         variables: [
           [
             hookCallVariableName,
-            { type: "function_call", arguments: [], name: "useExpression" },
+            { type: "function_call", arguments: [], name: "useLazyExpression" },
           ],
         ],
         prop: {
