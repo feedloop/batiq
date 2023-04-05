@@ -103,7 +103,7 @@ export type ActionSchema = {
   from: string;
   name: string;
   id?: string;
-  arguments: Container<Primitive | ExpressionSchema>[];
+  arguments: Container<Primitive | ActionSchema | ExpressionSchema>[];
   next?: string | number;
   onError?: string | number;
 };
@@ -233,7 +233,10 @@ export type AppSchema = {
   pages: PageSchema[];
 };
 
-export type Middleware<S extends BaseBatiqCore, O extends S> = (batiq: S) => O;
+export type Middleware<
+  S extends BaseBatiqCore = BaseBatiqCore,
+  O extends S = S
+> = (batiq: S) => O;
 
 export type Operation<S> =
   | { type: "insert"; path: Path<S>; value: unknown }

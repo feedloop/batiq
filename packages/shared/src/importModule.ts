@@ -61,6 +61,8 @@ export const importModule = (source: string, version = "latest") => {
 
     case "@batiq/expo-runtime":
       return import("@batiq/expo-runtime");
+    case "@batiq/expo-runtime/definitions.js":
+      return import("@batiq/expo-runtime/definitions.js");
 
     default:
       return import(
@@ -72,11 +74,11 @@ export const importModule = (source: string, version = "latest") => {
   }
 };
 
-export const importDefinition = async (source: string, name: string) => {
+export const importDefinition = (source: string, name: string) => {
   const definitionPath = path.join(source, "definitions.js");
-  return (
-    await import(
-      source.startsWith("./") ? `./${definitionPath}` : definitionPath
-    ).catch(() => ({}))
-  )[name];
+  return importModule(
+    source.startsWith("./") ? `./${definitionPath}` : definitionPath
+  )
+    .catch(() => ({}))
+    .then((module) => module[name]);
 };

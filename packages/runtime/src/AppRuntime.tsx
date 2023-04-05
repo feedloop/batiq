@@ -8,6 +8,7 @@ import {
   toVariableName,
 } from "./PageRuntime";
 import { valueToRuntime } from "./utils/valueToRuntime";
+import { useBatiqSchema } from "@batiq/expo-runtime";
 
 const PageComponent = async (
   scope: Record<string, any>,
@@ -87,17 +88,17 @@ export const NavigationRuntime = async (
 };
 
 export const NavigationRuntimeLazy = (props: {
-  schema: AppSchema;
   scope?: Record<string, any>;
 }) => {
+  const schema = useBatiqSchema();
   const Navigation = React.useMemo(
     () =>
       React.lazy(async () =>
-        NavigationRuntime(props.schema, props.scope).then((c) => ({
+        NavigationRuntime(schema, props.scope).then((c) => ({
           default: c,
         }))
       ),
-    [props.schema, props.scope]
+    [schema, props.scope]
   );
   return (
     <React.Suspense fallback="Loading...">

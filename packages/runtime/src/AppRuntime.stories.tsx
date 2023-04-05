@@ -1,5 +1,11 @@
+import {
+  AppProvider,
+  runtimeMiddleware,
+  timeTravelMiddleware,
+  actionRecorderMiddleware,
+} from "@batiq/expo-runtime";
 import React from "react";
-import { NavigationRuntimeLazy } from "./NavigationRuntime";
+import { NavigationRuntimeLazy } from "./AppRuntime";
 import schema from "./schema.json";
 
 export default {
@@ -26,7 +32,22 @@ export default {
   ],
 };
 
-export const NavigationRuntime = (args) => <NavigationRuntimeLazy {...args} />;
+export const NavigationRuntime = (props) => {
+  return (
+    <AppProvider
+      schema={props.schema}
+      middlewares={[
+        runtimeMiddleware,
+        // @ts-ignore
+        timeTravelMiddleware,
+        // @ts-ignore
+        actionRecorderMiddleware,
+      ]}
+    >
+      <NavigationRuntimeLazy scope={props.scope} />
+    </AppProvider>
+  );
+};
 NavigationRuntime.args = {
   schema: schema,
 };

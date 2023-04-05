@@ -168,64 +168,12 @@
               "name": "Text",
               "properties": {
                 "text": "Page 2",
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-2"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
-              },
-              "children": []
-            },
-            {
-              "type": "component",
-              "from": "@batiq/components",
-              "name": "Text",
-              "properties": {
-                "text": "Page 2",
-                "onPress": [
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "navigate",
-                    "arguments": ["/page-2"],
-                    "next": 1
-                  },
-                  {
-                    "type": "action",
-                    "from": "@batiq/actions",
-                    "name": "goBack",
-                    "arguments": []
-                  }
-                ]
-              },
-              "children": []
-            },
-            {
-              "type": "component",
-              "from": "@batiq/components",
-              "name": "Link",
-              "properties": {
-                "text": {
-                  "type": "breakpoint",
-                  "breakpoints": {
-                    "base": "base",
-                    "sm": "sm",
-                    "md": "md",
-                    "xl": "xl",
-                    "2xl": "2xl"
-                  }
-                },
-                "to": "/page-2"
+                "onPress": {
+                  "type": "action",
+                  "from": "@batiq/actions",
+                  "name": "navigate",
+                  "arguments": ["/page-2"]
+                }
               },
               "children": []
             }

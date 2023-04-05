@@ -35,93 +35,55 @@
           "children": [
             {
               "type": "element",
-              "name": "Paragraph1",
-              "props": [],
-              "children": []
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "red"
+                },
+                {
+                  "name": "onPress",
+                  "value": {
+                    "type": "function_call",
+                    "name": "breakpoint",
+                    "arguments": [
+                      {
+                        "base": "/page-2"
+                      }
+                    ]
+                  }
+                }
+              ],
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Paragraph",
+                  "props": [
+                    {
+                      "name": "color",
+                      "value": "red"
+                    },
+                    {
+                      "name": "onPress",
+                      "value": {
+                        "type": "function_call",
+                        "name": "breakpoint",
+                        "arguments": [
+                          {
+                            "base": "/page-3"
+                          }
+                        ]
+                      }
+                    }
+                  ],
+                  "children": []
+                }
+              ]
             }
           ]
         }
       ],
       "root": true
-    },
-    {
-      "name": "Paragraph1",
-      "variableDeclarations": {
-        "breakpoint_": {
-          "type": "function_call",
-          "arguments": [],
-          "name": "breakpoint"
-        }
-      },
-      "JSX": [
-        {
-          "type": "element",
-          "name": "Paragraph",
-          "props": [
-            {
-              "name": "color",
-              "value": "red"
-            },
-            {
-              "name": "onPress",
-              "value": {
-                "type": "function_call",
-                "name": "breakpoint_",
-                "arguments": [
-                  {
-                    "base": "/page-2"
-                  }
-                ]
-              }
-            }
-          ],
-          "children": [
-            {
-              "type": "element",
-              "name": "Paragraph1",
-              "props": [],
-              "children": []
-            }
-          ]
-        }
-      ],
-      "root": false
-    },
-    {
-      "name": "Paragraph1",
-      "variableDeclarations": {
-        "breakpoint_": {
-          "type": "function_call",
-          "arguments": [],
-          "name": "breakpoint"
-        }
-      },
-      "JSX": [
-        {
-          "type": "element",
-          "name": "Paragraph",
-          "props": [
-            {
-              "name": "color",
-              "value": "red"
-            },
-            {
-              "name": "onPress",
-              "value": {
-                "type": "function_call",
-                "name": "breakpoint_",
-                "arguments": [
-                  {
-                    "base": "/page-3"
-                  }
-                ]
-              }
-            }
-          ],
-          "children": []
-        }
-      ],
-      "root": false
     }
   ]
 }

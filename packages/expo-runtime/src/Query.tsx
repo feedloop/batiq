@@ -1,8 +1,9 @@
 import React from "react";
 import useSwr from "swr/immutable";
-import { useBatiq } from "@batiq/expo-runtime";
+import { useBatiq } from "./AppContext";
 // @ts-ignore TODO: fix this
 import { importDataSourceModule } from "@batiq/shared";
+import { withData } from "./DataProvider";
 
 type Props = {
   data: string;
@@ -25,11 +26,12 @@ const Query_ = (
       suspense: true,
     }
   );
+  const DataComponent = data && withData(data.component);
 
-  return data ? (
-    <data.component name={props.name} query={props.query}>
+  return DataComponent ? (
+    <DataComponent name={props.name} query={props.query}>
       {props.children}
-    </data.component>
+    </DataComponent>
   ) : null;
 };
 

@@ -3,13 +3,7 @@
     {
       "source": "@batiq/expo-runtime",
       "names": [
-        "PageWrapper"
-      ],
-      "default": null
-    },
-    {
-      "source": "@batiq/data",
-      "names": [
+        "PageWrapper",
         "DataSource",
         "RemoveKey"
       ],

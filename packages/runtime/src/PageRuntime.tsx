@@ -8,6 +8,7 @@ import {
 // @ts-ignore TODO: fix this
 import { importModule } from "@batiq/shared";
 import { valueToRuntime } from "./utils/valueToRuntime";
+import { withComponentProvider } from "@batiq/expo-runtime";
 
 export const toVariableName = (source: string): string =>
   source
@@ -30,8 +31,10 @@ export const resolveImport = (
 
 export const createElement = (
   scope: Record<string, any>,
-  jsx: ComponentIR["JSX"][number]
+  jsx: ComponentIR["JSX"][number],
+  index?: number
 ) => {
+  const withPath = typeof index === "number";
   if (typeof jsx === "object") {
     if (jsx.type === "element") {
       const scopeVariable = Array.isArray(jsx.name) ? jsx.name[0] : jsx.name;
@@ -42,27 +45,26 @@ export const createElement = (
             : scope[jsx.name]
           : jsx.name;
       return React.createElement(
-        component,
+        withPath ? withComponentProvider(index, component) : component,
         Object.fromEntries(
           jsx.props.map((prop) => [
             prop.name,
             valueToRuntime(scope, prop.value),
           ])
         ),
-        ...jsx.children.map((child) => createElement(scope, child))
+        ...jsx.children.map((child, i) =>
+          createElement(scope, child, withPath ? i : undefined)
+        )
       );
     }
     if (jsx.type === "render_prop") {
-      return () => createElement(scope, jsx.JSX);
+      return () => createElement(scope, jsx.JSX, withPath ? index : undefined);
     }
   }
   return jsx;
 };
 
-const PageComponent = async (
-  scope: Record<string, any>,
-  component: ComponentIR
-) => {
+const PageComponent = (scope: Record<string, any>, component: ComponentIR) => {
   const componentFn = () => {
     scope = Object.entries(component.variableDeclarations).reduce(
       (scope, [name, value]) => {
@@ -78,9 +80,9 @@ const PageComponent = async (
       ? React.createElement(
           React.Fragment,
           {},
-          ...component.JSX.map((jsx) => createElement(scope, jsx))
+          ...component.JSX.map((jsx, i) => createElement(scope, jsx, i))
         )
-      : createElement(scope, component.JSX[0]);
+      : createElement(scope, component.JSX[0], 0);
   };
   componentFn.displayName = component.name;
   return componentFn;
@@ -110,11 +112,14 @@ export const PageRuntime = async (
     scope
   );
   const components = await ir.components.reduceRight(
-    async (scopeP, component) => {
+    async (scopeP, component, index) => {
       const scope = await scopeP;
       return {
         ...scope,
-        [component.name]: await PageComponent(scope, component),
+        [component.name]: withComponentProvider(
+          index,
+          PageComponent(scope, component)
+        ),
       };
     },
     Promise.resolve(scope)
