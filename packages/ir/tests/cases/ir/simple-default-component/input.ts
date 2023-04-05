@@ -9,6 +9,7 @@ export const input: PageSchema = {
     {
       type: "component",
       from: "@batiq/components",
+      name: "Paragraph",
       properties: {
         color: "red",
       },

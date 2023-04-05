@@ -9,8 +9,10 @@
     },
     {
       "source": "@batiq/components",
-      "names": [],
-      "default": "Batiq_Components"
+      "names": [
+        "Paragraph"
+      ],
+      "default": null
     }
   ],
   "variableDeclarations": {},
@@ -26,7 +28,7 @@
           "children": [
             {
               "type": "element",
-              "name": "Batiq_Components",
+              "name": "Paragraph",
               "props": [
                 {
                   "name": "color",
