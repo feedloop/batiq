@@ -64,15 +64,6 @@ export const importModule = (source: string, version = "latest") => {
     case "@batiq/expo-runtime/definitions.js":
       return import("@batiq/expo-runtime/definitions.js");
 
-    case "@react-navigation/native":
-      return import("@react-navigation/native");
-
-    case "@react-navigation/native-stack":
-      return import("@react-navigation/native-stack");
-
-    case "@react-navigation/bottom-tabs":
-      return import("@react-navigation/bottom-tabs");
-
     default:
       return import(
         /* webpackIgnore: true */ CDN_URL.replace("{package}", source).replace(

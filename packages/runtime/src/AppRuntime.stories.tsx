@@ -5,7 +5,7 @@ import {
   actionRecorderMiddleware,
 } from "@batiq/expo-runtime";
 import React from "react";
-import { NavigationRuntimeLazy } from "./NavigationRuntime";
+import { NavigationRuntimeLazy } from "./AppRuntime";
 import schema from "./schema.json";
 
 export default {

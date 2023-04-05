@@ -1,3 +1,2 @@
 export * from "./PageRuntime";
-
-export * from "./NavigationRuntime";
+export * from "./AppRuntime";

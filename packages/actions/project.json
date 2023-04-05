@@ -13,7 +13,8 @@
         "main": "packages/actions/src/index.ts",
         "tsConfig": "packages/actions/tsconfig.lib.json",
         "assets": ["packages/actions/src/definitions.js"],
-        "format": ["esm", "cjs"]
+        "format": ["esm", "cjs"],
+        "compiler": "swc"
       }
     },
     "publish": {

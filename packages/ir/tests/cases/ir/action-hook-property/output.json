@@ -26,13 +26,7 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {
-        "navigate_": {
-          "type": "function_call",
-          "arguments": [],
-          "name": "navigate"
-        }
-      },
+      "variableDeclarations": {},
       "JSX": [
         {
           "type": "element",
@@ -51,7 +45,7 @@
                   "name": "onPress",
                   "value": {
                     "type": "function_call",
-                    "name": "navigate_",
+                    "name": "navigate",
                     "arguments": [
                       "/page-2"
                     ]

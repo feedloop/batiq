@@ -1,7 +1,4 @@
-import { AppProvider } from "@batiq/expo-runtime";
-import { NavigationContainer } from "@react-navigation/native";
-import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { AppProvider, Navigation } from "@batiq/expo-runtime";
 import Pages_Page_1 from "./pages/Page_1";
 import Pages_Page_2 from "./pages/Page_2";
 const schema = {
@@ -29,26 +26,14 @@ const schema = {
     },
   ],
 };
-const Stack = createNativeStackNavigator();
+const importMaps = {
+  "/page-1": Pages_Page_1,
+  "/page-2": Pages_Page_2,
+};
 const App = (props) => {
   return (
     <AppProvider schema={schema}>
-      <NavigationContainer
-        linking={{
-          prefixes: process.env.LINK_PREFIXES ?? [],
-          config: {
-            screens: {
-              "page 1": "/page-1",
-              "page 2": "/page-2",
-            },
-          },
-        }}
-      >
-        <Stack.Navigator>
-          <Stack.Screen name="page 1" component={Pages_Page_1} />
-          <Stack.Screen name="page 2" component={Pages_Page_2} />
-        </Stack.Navigator>
-      </NavigationContainer>
+      <Navigation importMaps={importMaps} />
     </AppProvider>
   );
 };
