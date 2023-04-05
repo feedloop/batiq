@@ -2,7 +2,7 @@ import { Type } from "@sinclair/typebox";
 
 export const navigate = {
   isHook: true,
-  pure: false,
+  pure: true,
   root: false,
 };
 
