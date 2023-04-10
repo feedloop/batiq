@@ -6,8 +6,7 @@ import {
   Primitive,
 } from "@batiq/core";
 import Ajv from "ajv";
-// @ts-ignore TODO: fix this
-import { importDefinition } from "@batiq/shared";
+import { importNamedModule } from "@batiq/shared";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";
@@ -104,7 +103,7 @@ export const transformComponent = async (
   const componentDefinition: ComponentDefinition =
     schema.from === "local" && schema.name
       ? app.components[schema.name]
-      : await importDefinition(schema.from, schema.name ?? "default");
+      : await importNamedModule(schema.from, schema.name ?? "default");
   if (
     validate &&
     componentDefinition?.inputs &&
@@ -114,7 +113,13 @@ export const transformComponent = async (
   }
 
   if (componentDefinition?.component?.type === "component") {
-    schema = await transformCompoundComponent(componentDefinition, schema);
+    return transformComponent(
+      scope,
+      app,
+      await transformCompoundComponent(componentDefinition, schema),
+      isRoot,
+      validate
+    );
   }
 
   const properties = Object.fromEntries(
@@ -133,25 +138,35 @@ export const transformComponent = async (
     ])
   );
 
-  const componentName =
-    schema.name ?? generateDefaultImport(scope, schema.from);
-  const imports = [
-    schema.name
+  const importSource =
+    componentDefinition?.type === "component"
       ? {
-          source: schema.from,
-          names: [schema.name],
+          from: componentDefinition.component.from,
+          name: componentDefinition.component.name,
+        }
+      : {
+          from: schema.from,
+          name: schema.name,
+        };
+  const componentName =
+    importSource.name ?? generateDefaultImport(scope, importSource.from);
+  const imports = [
+    importSource.name
+      ? {
+          source: importSource.from,
+          names: [importSource.name],
           default: null,
         }
       : {
-          source: schema.from,
+          source: importSource.from,
           names: [],
           default: componentName,
         },
   ];
-  if (schema.name) {
-    scope.addImport(schema.from, [schema.name], null);
+  if (importSource.name) {
+    scope.addImport(importSource.from, [importSource.name], null);
   } else {
-    scope.addImport(schema.from, [], componentName);
+    scope.addImport(importSource.from, [], componentName);
   }
 
   const propsResult = await transformComponentProps(

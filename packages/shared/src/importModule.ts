@@ -43,26 +43,24 @@ export const importModule = (source: string, version = "latest") => {
 
     case "@batiq/data":
       return import("@batiq/data");
-    case "@batiq/data/definitions.js":
-      return import("@batiq/data/definitions.js");
 
     case "@batiq/components":
       return import("@batiq/components");
-    case "@batiq/components/definitions.js":
-      return import("@batiq/components/definitions.js");
+    case "@batiq/components/elements":
+      return import("packages/components/src/elements");
 
     case "@batiq/actions":
-      return import("@batiq/actions");
-    case "@batiq/actions/definitions.js":
-      return import("@batiq/actions/definitions.js");
+      return import("packages/actions/src");
+    case "@batiq/actions/module":
+      return import("@batiq/actions/module");
 
     case "@batiq/expression":
       return import("@batiq/expression");
 
     case "@batiq/expo-runtime":
       return import("@batiq/expo-runtime");
-    case "@batiq/expo-runtime/definitions.js":
-      return import("@batiq/expo-runtime/definitions.js");
+    case "@batiq/expo-runtime/actions":
+      return import("@batiq/expo-runtime/actions");
 
     default:
       return import(
@@ -74,11 +72,8 @@ export const importModule = (source: string, version = "latest") => {
   }
 };
 
-export const importDefinition = (source: string, name: string) => {
-  const definitionPath = path.join(source, "definitions.js");
-  return importModule(
-    source.startsWith("./") ? `./${definitionPath}` : definitionPath
-  )
+export const importNamedModule = (source: string, name: string) => {
+  return importModule(source)
     .catch(() => ({}))
     .then((module) => module[name]);
 };

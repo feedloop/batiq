@@ -2,7 +2,7 @@ import React from "react";
 import { Text as Text_ } from "native-base";
 import { Static } from "@sinclair/typebox";
 import { useLinkTo } from "@react-navigation/native";
-import { Link as LinkDefinition } from "./definitions";
+import { Link as LinkDefinition } from ".";
 
 type T = Static<typeof LinkDefinition.inputs>;
 

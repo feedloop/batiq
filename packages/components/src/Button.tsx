@@ -1,7 +1,7 @@
 import React from "react";
 import { Button as NativeButton } from "native-base";
 import { Static } from "@sinclair/typebox";
-import { Button as ButtonDefinition } from "./definitions";
+import { Button as ButtonDefinition } from ".";
 import { useLinkTo } from "@react-navigation/native";
 
 const ButtonLink = (props: Static<typeof ButtonDefinition.inputs>) => {

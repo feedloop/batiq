@@ -1,6 +1,5 @@
 import React from "react";
 import { useBatiq } from "@batiq/expo-runtime";
-// @ts-ignore TODO: fix this
 import { importDataSourceModule } from "@batiq/shared";
 
 export const logout = () => {

@@ -2,6 +2,17 @@
   "name": "@batiq/actions",
   "version": "0.1.0",
   "type": "commonjs",
+  "exports": {
+    ".": "./index.esm.js",
+    "./module": "./module.js"
+  },
+  "typesVersions": {
+    "*": {
+      "module": [
+        "module"
+      ]
+    }
+  },
   "devDependencies": {
     "react-native": "0.70.5"
   },

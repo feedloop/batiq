@@ -5,7 +5,6 @@ import {
   Component as ComponentIR,
   ComponentImport,
 } from "@batiq/ir";
-// @ts-ignore TODO: fix this
 import { importModule } from "@batiq/shared";
 import { valueToRuntime } from "./utils/valueToRuntime";
 import { withComponentProvider } from "@batiq/expo-runtime";

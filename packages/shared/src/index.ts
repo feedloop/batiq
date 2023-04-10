@@ -1,2 +1,2 @@
-export { importModule, importDefinition } from "./importModule";
+export { importModule, importNamedModule } from "./importModule";
 export { importDataSourceModule } from "./importDataSourceModule";

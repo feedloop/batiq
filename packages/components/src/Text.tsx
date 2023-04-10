@@ -1,7 +1,7 @@
 import React from "react";
 import { Text as Text_ } from "native-base";
 import { Static } from "@sinclair/typebox";
-import { Text as TextDefinition } from "./definitions";
+import { Text as TextDefinition } from ".";
 
 type T = Static<typeof TextDefinition.inputs>;
 
