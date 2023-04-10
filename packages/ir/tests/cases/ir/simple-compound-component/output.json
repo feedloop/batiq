@@ -10,7 +10,7 @@
       "default": null
     },
     {
-      "source": "@batiq/components",
+      "source": "@batiq/components/elements",
       "names": [
         "Button",
         "Text"

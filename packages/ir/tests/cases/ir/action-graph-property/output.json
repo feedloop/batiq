@@ -28,7 +28,32 @@
   "components": [
     {
       "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "Paragraph1",
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "Paragraph1",
       "variableDeclarations": {
+        "navigate_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "navigate"
+        },
         "actionGraph": {
           "type": "function_call",
           "arguments": [
@@ -42,7 +67,7 @@
                   ],
                   "return": {
                     "type": "function_call",
-                    "name": "navigate",
+                    "name": "navigate_",
                     "arguments": [
                       "/page-2"
                     ]
@@ -78,31 +103,24 @@
       "JSX": [
         {
           "type": "element",
-          "name": "PageWrapper",
-          "props": [],
-          "children": [
+          "name": "Paragraph",
+          "props": [
             {
-              "type": "element",
-              "name": "Paragraph",
-              "props": [
-                {
-                  "name": "color",
-                  "value": "red"
-                },
-                {
-                  "name": "onPress",
-                  "value": {
-                    "type": "variable",
-                    "name": "actionGraph"
-                  }
-                }
-              ],
-              "children": []
+              "name": "color",
+              "value": "red"
+            },
+            {
+              "name": "onPress",
+              "value": {
+                "type": "variable",
+                "name": "actionGraph"
+              }
             }
-          ]
+          ],
+          "children": []
         }
       ],
-      "root": true
+      "root": false
     }
   ]
 }

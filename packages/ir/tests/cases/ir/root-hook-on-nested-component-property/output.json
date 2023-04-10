@@ -15,7 +15,7 @@
       "default": null
     },
     {
-      "source": "@batiq/actions",
+      "source": "@batiq/actions/module",
       "names": [
         "breakpoint"
       ],
@@ -26,7 +26,13 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {},
+      "variableDeclarations": {
+        "breakpoint_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "breakpoint"
+        }
+      },
       "JSX": [
         {
           "type": "element",
@@ -45,7 +51,7 @@
                   "name": "onPress",
                   "value": {
                     "type": "function_call",
-                    "name": "breakpoint",
+                    "name": "breakpoint_",
                     "arguments": [
                       {
                         "base": "/page-2"
@@ -67,7 +73,7 @@
                       "name": "onPress",
                       "value": {
                         "type": "function_call",
-                        "name": "breakpoint",
+                        "name": "breakpoint_",
                         "arguments": [
                           {
                             "base": "/page-3"

@@ -15,7 +15,7 @@
       "default": null
     },
     {
-      "source": "@batiq/actions",
+      "source": "@batiq/actions/module",
       "names": [
         "navigate"
       ],
@@ -26,7 +26,13 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {},
+      "variableDeclarations": {
+        "navigate_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "navigate"
+        }
+      },
       "JSX": [
         {
           "type": "element",
@@ -45,7 +51,7 @@
                   "name": "onPress",
                   "value": {
                     "type": "function_call",
-                    "name": "navigate",
+                    "name": "navigate_",
                     "arguments": [
                       "/page-2"
                     ]
