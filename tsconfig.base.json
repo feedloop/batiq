@@ -26,14 +26,13 @@
       "@batiq/components/elements": ["packages/components/src/elements.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],
       "@batiq/data": ["packages/data/src/index.ts"],
-      "@batiq/data/definitions.js": ["packages/data/src/definitions.js"],
       "@batiq/expo-runtime": ["packages/expo-runtime/src/index.ts"],
       "@batiq/expo-runtime/actions": ["packages/expo-runtime/src/actions.ts"],
       "@batiq/expression": ["packages/expression/src/index.ts"],
       "@batiq/generator": ["packages/generator/src/index.ts"],
+      "@batiq/import-helper": ["packages/utils/import-helper/src/index.ts"],
       "@batiq/ir": ["packages/ir/src/index.ts"],
-      "@batiq/runtime": ["packages/runtime/src/index.ts"],
-      "@batiq/shared": ["packages/shared/src/index.ts"]
+      "@batiq/runtime": ["packages/runtime/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

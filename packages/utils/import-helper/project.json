@@ -1,0 +1,52 @@
+{
+  "name": "import-helper",
+  "$schema": "../../../node_modules/nx/schemas/project-schema.json",
+  "sourceRoot": "packages/utils/import-helper/src",
+  "projectType": "library",
+  "implicitDependencies": [
+    "!actions",
+    "!components",
+    "!core",
+    "!data",
+    "!expression",
+    "!expo-runtime"
+  ],
+  "targets": {
+    "build": {
+      "executor": "@nrwl/rollup:rollup",
+      "outputs": ["{options.outputPath}"],
+      "options": {
+        "outputPath": "dist/packages/import-helper",
+        "main": "packages/utils/import-helper/src/index.ts",
+        "tsConfig": "packages/utils/import-helper/tsconfig.lib.json",
+        "assets": [],
+        "project": "packages/utils/import-helper/package.json",
+        "compiler": "swc",
+        "format": ["esm"],
+        "external": [
+          "@batiq/actions",
+          "@batiq/components",
+          "@batiq/core",
+          "@batiq/data",
+          "@batiq/expression",
+          "@batiq/expo-runtime"
+        ]
+      }
+    },
+    "publish": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "node tools/scripts/publish.mjs utils-import-helper {args.ver} {args.tag}"
+      },
+      "dependsOn": ["build"]
+    },
+    "lint": {
+      "executor": "@nrwl/linter:eslint",
+      "outputs": ["{options.outputFile}"],
+      "options": {
+        "lintFilePatterns": ["packages/utils/import-helper/**/*.ts"]
+      }
+    }
+  },
+  "tags": []
+}

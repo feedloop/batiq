@@ -6,7 +6,7 @@ import {
   Primitive,
 } from "@batiq/core";
 import Ajv from "ajv";
-import { importNamedModule } from "@batiq/shared";
+import { importNamedModule } from "@batiq/import-helper";
 import { generateDefaultImport, generateUniqueName } from "./utils/naming";
 import { transformComponentProps } from "./component-props";
 import { ComponentImport, Value, JSX, Component } from "./types";

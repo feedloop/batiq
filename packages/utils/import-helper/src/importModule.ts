@@ -1,5 +1,4 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
-import * as path from "path";
 
 // esm.sh instance
 const CDN_URL =
@@ -20,7 +19,7 @@ const alias = {
  * @param source import source
  * @returns module
  */
-export const importModule = (source: string, version = "latest") => {
+let defaultImportModule = async (source: string, version = "latest") => {
   // @ts-ignore
   if (process.env.NODE_ENV === "production") {
     return import(
@@ -47,10 +46,10 @@ export const importModule = (source: string, version = "latest") => {
     case "@batiq/components":
       return import("@batiq/components");
     case "@batiq/components/elements":
-      return import("packages/components/src/elements");
+      return import("@batiq/components/elements");
 
     case "@batiq/actions":
-      return import("packages/actions/src");
+      return import("@batiq/actions");
     case "@batiq/actions/module":
       return import("@batiq/actions/module");
 
@@ -72,7 +71,13 @@ export const importModule = (source: string, version = "latest") => {
   }
 };
 
-export const importNamedModule = (source: string, name: string) => {
+export const importModule: typeof defaultImportModule = defaultImportModule;
+
+export const setImportModule = (importModule: typeof defaultImportModule) => {
+  defaultImportModule = importModule;
+};
+
+export const importNamedModule = async (source: string, name: string) => {
   return importModule(source)
     .catch(() => ({}))
     .then((module) => module[name]);

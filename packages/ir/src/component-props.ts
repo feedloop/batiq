@@ -11,7 +11,7 @@ import {
   hookResultName,
 } from "./utils/naming";
 import { Component, ComponentImport, Value } from "./types";
-import { importNamedModule } from "@batiq/shared";
+import { importNamedModule } from "@batiq/import-helper";
 import { buildActionGraph } from "./action-graph";
 import { Scope } from "./scope";
 
