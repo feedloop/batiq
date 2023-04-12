@@ -14,28 +14,9 @@ export const Button = {
   },
 };
 
-export const Link = {
-  type: "component",
-  inputs: Type.Strict(
-    Type.Object({
-      text: Type.String(),
-      to: Type.String(),
-    })
-  ),
-  component: {
-    type: "module",
-    from: "@batiq/components/elements",
-    name: "Link",
-  },
-};
-
 export const Text = {
   type: "component",
-  inputs: Type.Strict(
-    Type.Object({
-      text: Type.String(),
-    })
-  ),
+  inputs: Type.Strict(Type.Object({})),
   component: {
     type: "module",
     from: "@batiq/components/elements",
