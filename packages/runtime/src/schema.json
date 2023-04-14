@@ -186,7 +186,261 @@
       "navigation": {
         "path": "/page-2"
       },
-      "children": []
+      "children": [
+        {
+          "type": "component",
+          "from": "@batiq/components",
+          "name": "Provider",
+          "properties": {},
+          "children": [
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Button",
+                  "properties": {},
+                  "children": [
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "Text",
+                      "properties": {
+                        "text": "Button 1"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Button",
+                  "properties": {},
+                  "children": [
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "Text",
+                      "properties": {
+                        "text": "Button 2"
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Image",
+                  "properties": {
+                    "size": "xl",
+                    "src": "https://wallpaperaccess.com/full/317501.jpg"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "CheckBox",
+                  "properties": {
+                    "initialValue": "FE"
+                  },
+                  "children": [
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "Text",
+                      "properties": {
+                        "text": "Frontend"
+                      },
+                      "children": []
+                    }
+                  ]
+                },
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "CheckBox",
+                  "properties": {
+                    "initialValue": "BE"
+                  },
+                  "children": [
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "Text",
+                      "properties": {
+                        "text": "Backend"
+                      },
+                      "children": []
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Switch",
+                  "properties": {
+                    "initialValue": true
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Dropdown",
+                  "properties": {
+                    "wrapperProps": {
+                      "placeholder": "Select"
+                    },
+                    "values": [
+                      { "label": "UX", "value": "design" },
+                      { "label": "Frontend", "value": "developer" }
+                    ]
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "@batiq/components",
+              "name": "Container",
+              "properties": {
+                "direction": "horizontal",
+                "bg": "blue.100",
+                "p": "4",
+                "gap": "2",
+                "mb": "2",
+                "justify": "center"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "RadioGroup",
+                  "properties": {
+                    "name": "RadioButton"
+                  },
+                  "children": [
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "RadioItem",
+                      "properties": {
+                        "value": "Works"
+                      },
+                      "children": [
+                        {
+                          "type": "component",
+                          "from": "@batiq/components",
+                          "name": "Text",
+                          "properties": {
+                            "text": "Works"
+                          },
+                          "children": []
+                        }
+                      ]
+                    },
+                    {
+                      "type": "component",
+                      "from": "@batiq/components",
+                      "name": "RadioItem",
+                      "properties": {
+                        "value": "Vacation"
+                      },
+                      "children": [
+                        {
+                          "type": "component",
+                          "from": "@batiq/components",
+                          "name": "Image",
+                          "properties": {
+                            "src": "https://wallpaperaccess.com/full/317501.jpg",
+                            "size": "sm"
+                          },
+                          "children": []
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
     },
     {
       "name": "page 3",

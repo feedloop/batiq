@@ -46,7 +46,7 @@
               "props": [
                 {
                   "name": "color",
-                  "value": "green"
+                  "value": "red"
                 }
               ],
               "children": [
