@@ -5,7 +5,8 @@
   "module": "src/index.ts",
   "dependencies": {
     "@sinclair/typebox": "^0.25.21",
-    "native-base": "^3.4.25"
+    "native-base": "^3.4.25",
+    "react-native-swiper": "1.6.0"
   },
   "peerDependencies": {
     "@react-navigation/native": "*",

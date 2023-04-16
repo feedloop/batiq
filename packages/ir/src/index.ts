@@ -41,7 +41,25 @@ export const transformIR = async (
           from: "@batiq/expo-runtime",
           name: "PageWrapper",
           properties: {},
-          children: page.children,
+          children: [
+            {
+              type: "component",
+              from: "@batiq/components",
+              name: "Provider",
+              properties: {},
+              children: [
+                {
+                  type: "component",
+                  from: "@batiq/components",
+                  name: "ScrollView",
+                  properties: {
+                    contentInsetAdjustmentBehavior: "automatic",
+                  },
+                  children: page.children,
+                },
+              ],
+            },
+          ],
         },
       ],
     };
