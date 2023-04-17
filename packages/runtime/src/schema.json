@@ -47,7 +47,24 @@
         "name": "Button",
         "id": "MainButton",
         "properties": {
-          "color": "green"
+          "bg": "blue.100"
+        },
+        "children": [
+          {
+            "type": "slot"
+          }
+        ]
+      }
+    },
+    "CompoundBtn": {
+      "inputs": {},
+      "component": {
+        "type": "component",
+        "from": "@batiq/components",
+        "name": "Button",
+        "id": "MainBtn",
+        "properties": {
+          "bg": "blue.500"
         },
         "children": [
           {
@@ -90,7 +107,7 @@
         {
           "type": "component",
           "from": "@batiq/components",
-          "name": "Provider",
+          "name": "Container",
           "properties": {},
           "children": [
             {
@@ -99,7 +116,28 @@
               "name": "CompoundButton",
               "properties": {},
               "overrideProperties": {
-                "color": "red"
+                "bg": "blue.500"
+              },
+              "children": [
+                {
+                  "type": "component",
+                  "from": "@batiq/components",
+                  "name": "Text",
+                  "properties": {
+                    "text": "Hello World!",
+                    "color": "red.500"
+                  },
+                  "children": []
+                }
+              ]
+            },
+            {
+              "type": "component",
+              "from": "local",
+              "name": "CompoundBtn",
+              "properties": { "bg": "red.500" },
+              "overrideProperties": {
+                "bg": "red.500"
               },
               "children": [
                 {
@@ -190,7 +228,7 @@
         {
           "type": "component",
           "from": "@batiq/components",
-          "name": "Provider",
+          "name": "Container",
           "properties": {},
           "children": [
             {
