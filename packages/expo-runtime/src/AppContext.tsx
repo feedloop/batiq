@@ -1,8 +1,5 @@
 import React from "react";
 import { createBatiq, BaseBatiqCore, AppSchema } from "@batiq/core";
-import runtimeMiddleware from "./middlewares/runtimeMiddleware";
-import timeTravelMiddleware from "./middlewares/timeTravelMiddleware";
-import actionRecorderMiddleware from "./middlewares/actionRecorderMiddleware";
 
 const AppContext = React.createContext<BaseBatiqCore>(
   // @ts-ignore

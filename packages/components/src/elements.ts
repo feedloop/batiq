@@ -8,3 +8,5 @@ export { RadioGroup } from "./Radio";
 export { RadioItem } from "./Radio";
 export { Dropdown } from "./Dropdown";
 export { CheckBox } from "./CheckBox";
+export { Carousel } from "./Carousel";
+export { ScrollView } from "./ScrollView";
