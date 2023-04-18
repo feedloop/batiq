@@ -47,7 +47,7 @@ export const Container = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Container",
   },
 };
@@ -61,7 +61,7 @@ export const Image = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Image",
   },
 };
@@ -70,7 +70,7 @@ export const Input = {
   inputs: Type.Strict(Type.Object({})),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Input",
   },
 };
@@ -83,7 +83,7 @@ export const Switch = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Switch",
   },
 };
@@ -96,7 +96,7 @@ export const RadioGroup = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "RadioGroup",
   },
 };
@@ -109,7 +109,7 @@ export const RadioItem = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "RadioItem",
   },
 };
@@ -122,7 +122,7 @@ export const CheckBox = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "CheckBox",
   },
 };
@@ -139,7 +139,7 @@ export const Dropdown = {
   ),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Dropdown",
   },
 };
@@ -148,7 +148,7 @@ export const Carousel = {
   inputs: Type.Strict(Type.Object({})),
   component: {
     type: "module",
-    from: "@batiq/components",
+    from: "@batiq/components/elements",
     name: "Carousel",
   },
 };
