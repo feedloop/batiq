@@ -1,7 +1,6 @@
 import React from "react";
 import useSwr from "swr/immutable";
-// @ts-ignore TODO: fix this
-import { importDataSourceModule } from "@batiq/shared";
+import { importDataSourceModule } from "@batiq/import-helper";
 import { useBatiq } from "./AppContext";
 import { useLinkBuilder, useRoute } from "@react-navigation/native";
 

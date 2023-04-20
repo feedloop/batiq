@@ -35,7 +35,9 @@ export const input: PageSchema = {
       name: "CompoundButton",
       properties: {},
       overrideProperties: {
-        MainButton: { color: "red" },
+        MainButton: {
+          color: "red",
+        },
       },
       children: [
         {

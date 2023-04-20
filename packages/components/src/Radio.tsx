@@ -4,7 +4,7 @@ import { Radio } from "native-base";
 import {
   RadioGroup as RadioGroupDefinition,
   RadioItem as RadioItemDefinition,
-} from "./definitions";
+} from ".";
 
 type T = Static<typeof RadioItemDefinition.inputs>;
 
@@ -15,7 +15,11 @@ export const RadioGroup = (
   return <Radio.Group {...rest} name={name} />;
 };
 
-export const RadioItem = ({children, value, ...rest}: React.PropsWithChildren<T>) => {
+export const RadioItem = ({
+  children,
+  value,
+  ...rest
+}: React.PropsWithChildren<T>) => {
   return (
     <Radio {...rest} value={value}>
       {children}

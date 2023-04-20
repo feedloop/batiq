@@ -1,7 +1,7 @@
 import { Static } from "@sinclair/typebox";
 import React from "react";
 import Swiper from "react-native-swiper";
-import { Carousel as CarouselDefinition } from "./definitions";
+import { Carousel as CarouselDefinition } from ".";
 
 type T = Static<typeof CarouselDefinition.inputs>;
 

@@ -11,8 +11,7 @@ import {
   hookResultName,
 } from "./utils/naming";
 import { Component, ComponentImport, Value } from "./types";
-// @ts-ignore TODO: fix this
-import { importDefinition } from "@batiq/shared";
+import { importNamedModule } from "@batiq/import-helper";
 import { buildActionGraph } from "./action-graph";
 import { Scope } from "./scope";
 
@@ -46,7 +45,7 @@ export const transformActionGraphProp = async (
   ];
   const actionDefs = await Promise.all(
     graph.nodes.map(async (node) => {
-      const actionDef: ActionDefinition = await importDefinition(
+      const actionDef: ActionDefinition = await importNamedModule(
         node.from,
         node.name
       );
@@ -144,7 +143,7 @@ export const transformHookExpressionProp = async (
   }
   switch (value.type) {
     case "action": {
-      const actionDef: ActionDefinition = await importDefinition(
+      const actionDef: ActionDefinition = await importNamedModule(
         value.from,
         value.name
       );
@@ -158,14 +157,18 @@ export const transformHookExpressionProp = async (
         (value.name.startsWith("use") && actionDef?.isHook !== false) ||
         actionDef?.isHook === true;
 
+      const importSource =
+        typeof actionDef === "object"
+          ? { from: actionDef.module.from, name: actionDef.module.name }
+          : { from: value.from, name: value.name };
       const imports: ComponentImport[] = [
         {
-          source: value.from,
-          names: [value.name],
+          source: importSource.from,
+          names: [importSource.name],
           default: null,
         },
       ];
-      scope.addImport(value.from, [value.name], null);
+      scope.addImport(importSource.from, [importSource.name], null);
 
       const hookCallVariableName = isHook
         ? generateHookResultName(scope, value.name)

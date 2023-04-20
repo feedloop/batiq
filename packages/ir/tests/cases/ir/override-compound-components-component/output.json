@@ -8,10 +8,18 @@
       "default": null
     },
     {
-      "source": "@batiq/components",
+      "source": "@batiq/components/elements",
       "names": [
+        "Provider",
         "Button",
         "Text"
+      ],
+      "default": null
+    },
+    {
+      "source": "@batiq/components",
+      "names": [
+        "ScrollView"
       ],
       "default": null
     },
@@ -42,33 +50,52 @@
           "children": [
             {
               "type": "element",
-              "name": "Button",
-              "props": [
-                {
-                  "name": "color",
-                  "value": "green"
-                }
-              ],
+              "name": "Provider",
+              "props": [],
               "children": [
                 {
                   "type": "element",
-                  "name": "Text",
+                  "name": "ScrollView",
                   "props": [
                     {
-                      "name": "text",
-                      "value": "Hello World!"
+                      "name": "contentInsetAdjustmentBehavior",
+                      "value": "automatic"
                     }
                   ],
                   "children": [
                     {
-                      "type": "jsx_expression",
-                      "value": {
-                        "type": "function_call",
-                        "name": "evaluate",
-                        "arguments": [
-                          "23 + 42"
-                        ]
-                      }
+                      "type": "element",
+                      "name": "Button",
+                      "props": [
+                        {
+                          "name": "color",
+                          "value": "green"
+                        }
+                      ],
+                      "children": [
+                        {
+                          "type": "element",
+                          "name": "Text",
+                          "props": [
+                            {
+                              "name": "text",
+                              "value": "Hello World!"
+                            }
+                          ],
+                          "children": [
+                            {
+                              "type": "jsx_expression",
+                              "value": {
+                                "type": "function_call",
+                                "name": "evaluate",
+                                "arguments": [
+                                  "23 + 42"
+                                ]
+                              }
+                            }
+                          ]
+                        }
+                      ]
                     }
                   ]
                 }

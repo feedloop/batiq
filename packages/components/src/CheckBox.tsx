@@ -1,7 +1,7 @@
 import React from "react";
 import { Static } from "@sinclair/typebox";
 import { Checkbox as CheckBox_ } from "native-base";
-import { CheckBox as CheckBoxDefinition } from "./definitions";
+import { CheckBox as CheckBoxDefinition } from ".";
 
 export const CheckBox = (props: Static<typeof CheckBoxDefinition.inputs>) => {
   const { initialValue, ...rest } = props;

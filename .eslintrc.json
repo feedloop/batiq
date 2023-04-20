@@ -10,7 +10,7 @@
           "error",
           {
             "enforceBuildableLibDependency": true,
-            "allow": ["@batiq/shared"],
+            "allow": ["@batiq/import-helper"],
             "depConstraints": [
               {
                 "sourceTag": "*",

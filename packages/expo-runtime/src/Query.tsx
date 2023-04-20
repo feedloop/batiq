@@ -1,8 +1,7 @@
 import React from "react";
 import useSwr from "swr/immutable";
 import { useBatiq } from "./AppContext";
-// @ts-ignore TODO: fix this
-import { importDataSourceModule } from "@batiq/shared";
+import { importDataSourceModule } from "@batiq/import-helper";
 import { withData } from "./DataProvider";
 
 type Props = {

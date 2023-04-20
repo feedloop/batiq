@@ -3,6 +3,17 @@
   "version": "0.1.0",
   "type": "commonjs",
   "module": "src/index.ts",
+  "exports": {
+    ".": "./index.esm.js",
+    "./elements": "./elements.js"
+  },
+  "typesVersions": {
+    "*": {
+      "elements": [
+        "elements"
+      ]
+    }
+  },
   "dependencies": {
     "@sinclair/typebox": "^0.25.21",
     "native-base": "^3.4.25",

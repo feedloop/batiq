@@ -20,24 +20,19 @@
     "jsx": "react-jsx",
     "paths": {
       "@batiq/actions": ["packages/actions/src/index.ts"],
-      "@batiq/actions/definitions.js": ["packages/actions/src/definitions.js"],
+      "@batiq/actions/module": ["packages/actions/src/module.ts"],
       "@batiq/cli": ["packages/cli/src/index.ts"],
       "@batiq/components": ["packages/components/src/index.ts"],
-      "@batiq/components/definitions.js": [
-        "packages/components/src/definitions.js"
-      ],
+      "@batiq/components/elements": ["packages/components/src/elements.ts"],
       "@batiq/core": ["packages/core/src/index.ts"],
       "@batiq/data": ["packages/data/src/index.ts"],
-      "@batiq/data/definitions.js": ["packages/data/src/definitions.js"],
       "@batiq/expo-runtime": ["packages/expo-runtime/src/index.ts"],
-      "@batiq/expo-runtime/definitions.js": [
-        "packages/expo-runtime/src/definitions.js"
-      ],
+      "@batiq/expo-runtime/actions": ["packages/expo-runtime/src/actions.ts"],
       "@batiq/expression": ["packages/expression/src/index.ts"],
       "@batiq/generator": ["packages/generator/src/index.ts"],
+      "@batiq/import-helper": ["packages/utils/import-helper/src/index.ts"],
       "@batiq/ir": ["packages/ir/src/index.ts"],
-      "@batiq/runtime": ["packages/runtime/src/index.ts"],
-      "@batiq/shared": ["packages/shared/src/index.ts"]
+      "@batiq/runtime": ["packages/runtime/src/index.ts"]
     }
   },
   "exclude": ["node_modules", "tmp"]

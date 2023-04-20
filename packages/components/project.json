@@ -12,8 +12,9 @@
         "project": "packages/components/package.json",
         "main": "packages/components/src/index.ts",
         "tsConfig": "packages/components/tsconfig.lib.json",
-        "assets": ["packages/components/src/definitions.js"],
-        "format": ["esm", "cjs"]
+        "assets": [],
+        "format": ["esm", "cjs"],
+        "rollupConfig": "packages/components/rollup.config.js"
       }
     },
     "publish": {

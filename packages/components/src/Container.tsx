@@ -1,7 +1,7 @@
 import React from "react";
 import { Static } from "@sinclair/typebox";
 import { Flex } from "native-base";
-import { Container as ContainerDefinition } from "./definitions";
+import { Container as ContainerDefinition } from ".";
 
 export const Container = (props: Static<typeof ContainerDefinition.inputs>) => {
   const { ...rest } = props;

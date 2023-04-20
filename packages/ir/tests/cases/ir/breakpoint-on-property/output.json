@@ -8,14 +8,22 @@
       "default": null
     },
     {
+      "source": "@batiq/components/elements",
+      "names": [
+        "Provider"
+      ],
+      "default": null
+    },
+    {
       "source": "@batiq/components",
       "names": [
+        "ScrollView",
         "Paragraph"
       ],
       "default": null
     },
     {
-      "source": "@batiq/actions",
+      "source": "@batiq/actions/module",
       "names": [
         "breakpoint",
         "navigate"
@@ -27,7 +35,23 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {},
+      "variableDeclarations": {
+        "breakpoint_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "breakpoint"
+        },
+        "navigate_": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "navigate"
+        },
+        "navigate_1": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "navigate"
+        }
+      },
       "JSX": [
         {
           "type": "element",
@@ -36,39 +60,58 @@
           "children": [
             {
               "type": "element",
-              "name": "Paragraph",
-              "props": [
+              "name": "Provider",
+              "props": [],
+              "children": [
                 {
-                  "name": "color",
-                  "value": "red"
-                },
-                {
-                  "name": "onPress",
-                  "value": {
-                    "type": "function_call",
-                    "name": "breakpoint",
-                    "arguments": [
-                      {
-                        "sm": {
-                          "type": "function_call",
-                          "name": "navigate",
-                          "arguments": [
-                            "/page-1"
-                          ]
+                  "type": "element",
+                  "name": "ScrollView",
+                  "props": [
+                    {
+                      "name": "contentInsetAdjustmentBehavior",
+                      "value": "automatic"
+                    }
+                  ],
+                  "children": [
+                    {
+                      "type": "element",
+                      "name": "Paragraph",
+                      "props": [
+                        {
+                          "name": "color",
+                          "value": "red"
                         },
-                        "md": {
-                          "type": "function_call",
-                          "name": "navigate",
-                          "arguments": [
-                            "/page-2"
-                          ]
+                        {
+                          "name": "onPress",
+                          "value": {
+                            "type": "function_call",
+                            "name": "breakpoint_",
+                            "arguments": [
+                              {
+                                "sm": {
+                                  "type": "function_call",
+                                  "name": "navigate_",
+                                  "arguments": [
+                                    "/page-1"
+                                  ]
+                                },
+                                "md": {
+                                  "type": "function_call",
+                                  "name": "navigate_1",
+                                  "arguments": [
+                                    "/page-2"
+                                  ]
+                                }
+                              }
+                            ]
+                          }
                         }
-                      }
-                    ]
-                  }
+                      ],
+                      "children": []
+                    }
+                  ]
                 }
-              ],
-              "children": []
+              ]
             }
           ]
         }

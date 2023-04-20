@@ -43,7 +43,7 @@ export const patchComponent = (component: ComponentSchema): ComponentSchema => {
             ? // Patch action
               {
                 type: "action",
-                from: "@batiq/expo-runtime",
+                from: "@batiq/expo-runtime/actions",
                 name: "replayAction",
                 arguments: [value],
               }

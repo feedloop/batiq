@@ -12,8 +12,15 @@
         "project": "packages/expo-runtime/package.json",
         "main": "packages/expo-runtime/src/index.ts",
         "tsConfig": "packages/expo-runtime/tsconfig.lib.json",
-        "assets": ["packages/expo-runtime/src/definitions.js"],
-        "format": ["esm", "cjs"]
+        "assets": [],
+        "format": ["esm", "cjs"],
+        "external": [
+          "@react-navigation/native",
+          "expo",
+          "@react-navigation/bottom-tabs",
+          "@react-navigation/native-stack"
+        ],
+        "rollupConfig": "packages/expo-runtime/rollup.config.js"
       }
     },
     "publish": {

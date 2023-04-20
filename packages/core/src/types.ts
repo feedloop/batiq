@@ -9,6 +9,7 @@ export type ComponentDefinition<
   T extends ComponentDefinitionType = ComponentDefinitionType,
   P extends Record<string, any> = Record<string, any>
 > = {
+  type: "component";
   inputs?: Record<string, any>;
   schema: ComponentInput<P>;
   definitions: {
@@ -86,16 +87,26 @@ export type CompoundComponentSchema = Omit<ComponentSchema, "children"> & {
 
 export type ActionDefinition<S extends TTuple | TArray = TTuple<[]>> =
   | {
+      type: "action";
       inputs: S;
       returns?: string | string[];
       isHook?: true; // if set, treat action as a hook/not, otherwise infer from its name.
       pure?: boolean; // when then action is a hook and impure, multiple hook calls with the same name will be called separately.
       root?: boolean; // if set, treat action as a root action, otherwise infer from its name.
+      module: {
+        from: string;
+        name: string;
+      };
     }
   | {
+      type: "action";
       inputs: S;
       returns?: string | string[];
       isHook?: false; // if set, treat action as a hook/not, otherwise infer from its name.
+      module: {
+        from: string;
+        name: string;
+      };
     };
 
 export type ActionSchema = {
