@@ -35,6 +35,7 @@ export const Provider = {
 };
 
 export const Container = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       direction: Type.Union(
@@ -53,6 +54,7 @@ export const Container = {
 };
 
 export const Image = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       src: Type.String({}),
@@ -67,6 +69,7 @@ export const Image = {
 };
 
 export const Input = {
+  type: "component",
   inputs: Type.Strict(Type.Object({})),
   component: {
     type: "module",
@@ -76,6 +79,7 @@ export const Input = {
 };
 
 export const Switch = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       initialValue: Type.Boolean({ default: false }),
@@ -89,6 +93,7 @@ export const Switch = {
 };
 
 export const RadioGroup = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       name: Type.String(),
@@ -102,6 +107,7 @@ export const RadioGroup = {
 };
 
 export const RadioItem = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       value: Type.Any(),
@@ -115,6 +121,7 @@ export const RadioItem = {
 };
 
 export const CheckBox = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       initialValue: Type.String(),
@@ -128,6 +135,7 @@ export const CheckBox = {
 };
 
 export const Dropdown = {
+  type: "component",
   inputs: Type.Strict(
     Type.Object({
       wrapperProps: Type.Object({}),
@@ -145,6 +153,7 @@ export const Dropdown = {
 };
 
 export const Carousel = {
+  type: "component",
   inputs: Type.Strict(Type.Object({})),
   component: {
     type: "module",
@@ -152,3 +161,14 @@ export const Carousel = {
     name: "Carousel",
   },
 };
+
+export const ScrollView = {
+  type: "component",
+  inputs: Type.Strict(Type.Object({})),
+  component: {
+    type: "module",
+    from: "@batiq/components/elements",
+    name: "ScrollView",
+  },
+};
+
