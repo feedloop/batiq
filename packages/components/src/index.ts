@@ -154,7 +154,14 @@ export const Dropdown = {
 
 export const Carousel = {
   type: "component",
-  inputs: Type.Strict(Type.Object({})),
+  inputs: Type.Strict(Type.Object({
+    containerStyle: Type.Object({}),
+    contentContainerStyle: Type.Object({}),
+    dotContainerStyle: Type.Object({}),
+    dotStyle: Type.Object({}),
+    isAutoPlay: Type.Boolean({default: false}),
+    isLoop: Type.Boolean({default: true})
+  })),
   component: {
     type: "module",
     from: "@batiq/components/elements",
@@ -171,4 +178,3 @@ export const ScrollView = {
     name: "ScrollView",
   },
 };
-
