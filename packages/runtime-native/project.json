@@ -16,9 +16,19 @@
         "command": "nx start runtime-native"
       }
     },
+    "patch-ios-incremental-build": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "touch packages/runtime-native/ios/.xcode.env"
+      }
+    },
     "run-ios": {
+      "dependsOn": ["patch-ios-incremental-build"],
       "executor": "@nrwl/react-native:run-ios",
-      "options": {}
+      "options": {
+        "scheme": "RuntimeNative",
+        "sync": false
+      }
     },
     "bundle-ios": {
       "executor": "@nrwl/react-native:bundle",
@@ -50,6 +60,18 @@
       "executor": "@nrwl/react-native:pod-install",
       "options": {}
     },
+    "pod-install-new-arch": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/runtime-native/ios && RCT_NEW_ARCH_ENABLED=1 pod install"
+      }
+    },
+    "remove-pods": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "cd packages/runtime-native/ios && rm -rf yarn.lock ./Podfile.lock && rm -rf ./build && rm -rf ./Pods"
+      }
+    },
     "bundle-android": {
       "executor": "@nrwl/react-native:bundle",
       "outputs": ["{options.bundleOutput}"],
@@ -61,7 +83,9 @@
     },
     "sync-deps": {
       "executor": "@nrwl/react-native:sync-deps",
-      "options": {}
+      "options": {
+        "exclude": ["@nrwl/react", "fast-glob", "jest-file-snapshot"]
+      }
     },
     "ensure-symlink": {
       "executor": "@nrwl/react-native:ensure-symlink",
@@ -72,6 +96,15 @@
       "outputs": ["{options.outputFile}"],
       "options": {
         "lintFilePatterns": ["packages/runtime-native/**/*.{ts,tsx,js,jsx}"]
+      }
+    },
+    "storybook": {
+      "executor": "@nrwl/react-native:storybook",
+      "options": {
+        "searchDir": ["packages/runtime-native"],
+        "outputFile": "./.storybook/story-loader.js",
+        "pattern": "**/*.stories.@(js|jsx|ts|tsx|md)",
+        "silent": false
       }
     }
   },

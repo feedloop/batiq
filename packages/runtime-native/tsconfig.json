@@ -15,6 +15,9 @@
   "references": [
     {
       "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./.storybook/tsconfig.json"
     }
   ],
   "exclude": ["node_modules"]

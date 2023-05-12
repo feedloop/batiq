@@ -21,20 +21,20 @@ const alias = {
  */
 let defaultImportModule = async (source: string, version = "latest") => {
   // @ts-ignore
-  if (process.env.NODE_ENV === "production") {
-    return import(
-      /* webpackIgnore: true */ CDN_URL.replace("{package}", source)
-        .replace("{version}", version)
-        .concat(
-          `?alias=${Object.entries(alias)
-            .map((keyValue) => keyValue.join(":"))
-            .join(",")}`
-        )
-    ).catch((err) => {
-      console.log("import error", source, err);
-      throw err;
-    });
-  }
+  // if (process.env.NODE_ENV === "production") {
+  //   return import(
+  //     /* webpackIgnore: true */ CDN_URL.replace("{package}", source)
+  //       .replace("{version}", version)
+  //       .concat(
+  //         `?alias=${Object.entries(alias)
+  //           .map((keyValue) => keyValue.join(":"))
+  //           .join(",")}`
+  //       )
+  //   ).catch((err) => {
+  //     console.log("import error", source, err);
+  //     throw err;
+  //   });
+  // }
 
   switch (source) {
     case "@batiq/core":
@@ -62,12 +62,7 @@ let defaultImportModule = async (source: string, version = "latest") => {
       return import("@batiq/expo-runtime/actions");
 
     default:
-      return import(
-        /* webpackIgnore: true */ CDN_URL.replace("{package}", source).replace(
-          "{version}",
-          version
-        )
-      );
+      return "default";
   }
 };
 

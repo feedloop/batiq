@@ -1,5 +1,5 @@
 {
-  "name": "runtime-native",
+  "name": "@batiq/runtime-native",
   "version": "0.0.1",
   "private": true,
   "dependencies": {
@@ -9,7 +9,19 @@
     "react-native": "*",
     "react-native-config": "*",
     "react-native-svg": "*",
+    "react-native-screens": "*",
+    "react-native-safe-area-context": "*",
+    "react-native-gesture-handler": "*",
+    "react-native-reanimated": "*",
+    "react-native-url-polyfill": "*",
     "metro-config": "*",
-    "@react-native-async-storage/async-storage": "*"
+    "@react-native-async-storage/async-storage": "*",
+    "@storybook/core-common": "*",
+    "@storybook/react-native": "*",
+    "@storybook/addon-ondevice-actions": "*",
+    "@storybook/addon-ondevice-backgrounds": "*",
+    "@storybook/addon-ondevice-controls": "*",
+    "@storybook/addon-ondevice-notes": "*",
+    "native-base": "*"
   }
 }

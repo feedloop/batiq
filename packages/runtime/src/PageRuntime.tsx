@@ -8,6 +8,7 @@ import {
 import { importModule } from "@batiq/import-helper";
 import { valueToRuntime } from "./utils/valueToRuntime";
 import { withComponentProvider } from "@batiq/expo-runtime";
+import { Text } from "react-native";
 
 export const toVariableName = (source: string): string =>
   source
@@ -142,7 +143,7 @@ export const PageRuntimeLazy = (props: {
     return React.lazy(LazyComponent);
   }, [props.app, props.schema, props.scope]);
   return (
-    <React.Suspense fallback="Loading...">
+    <React.Suspense fallback={<Text>Loading...</Text>}>
       <PageComponent />
     </React.Suspense>
   );

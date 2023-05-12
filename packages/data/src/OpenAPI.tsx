@@ -4,6 +4,7 @@ import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
 import { useData } from "@batiq/expo-runtime";
+import { URL } from 'react-native-url-polyfill';
 
 const queryDefinition = Type.Required(
   Type.Object({

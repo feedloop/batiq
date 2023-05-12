@@ -9,7 +9,8 @@
     "!core",
     "!data",
     "!expression",
-    "!expo-runtime"
+    "!expo-runtime",
+    "!runtime-native"
   ],
   "targets": {
     "build": {
@@ -29,7 +30,8 @@
           "@batiq/core",
           "@batiq/data",
           "@batiq/expression",
-          "@batiq/expo-runtime"
+          "@batiq/expo-runtime",
+          "@batiq/runtime-native"
         ]
       }
     },

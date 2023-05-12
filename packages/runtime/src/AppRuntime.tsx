@@ -9,6 +9,7 @@ import {
 } from "./PageRuntime";
 import { valueToRuntime } from "./utils/valueToRuntime";
 import { useBatiqSchema } from "@batiq/expo-runtime";
+import { Text, NativeBaseProvider } from "native-base";
 
 const PageComponent = async (
   scope: Record<string, any>,
@@ -101,7 +102,13 @@ export const NavigationRuntimeLazy = (props: {
     [schema, props.scope]
   );
   return (
-    <React.Suspense fallback="Loading...">
+    <React.Suspense
+      fallback={
+        <NativeBaseProvider>
+          <Text>Loading...</Text>
+        </NativeBaseProvider>
+      }
+    >
       <Navigation />
     </React.Suspense>
   );

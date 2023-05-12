@@ -1,0 +1,73 @@
+{
+  "batiq": "1",
+  "info": {
+    "name": "app"
+  },
+  "platform": "web",
+  "config": {
+    "link_prefixes": ["http://localhost:4400/", "app://"]
+  },
+  "datasource": {
+    "qore": {
+      "type": "qore",
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      }
+    },
+    "qore2": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "CustomDataSource"
+      },
+      "config": {
+        "endpoint": "https://batiq.qorebase.io"
+      },
+      "authenticatedRoutes": ["/users", "/posts/*"]
+    },
+    "petstore": {
+      "type": {
+        "from": "@batiq/data",
+        "name": "OpenAPI"
+      },
+      "config": {
+        "definition": "https://petstore3.swagger.io/api/v3/openapi.json",
+        "auth": {
+          "apiKey": null
+        }
+      },
+      "authenticatedRoutes": ["/page-1"]
+    }
+  },
+  "theme": {
+    "dark": false,
+    "colors": {
+      "primary": "rgb(0, 122, 255)",
+      "background": "rgb(242, 242, 242)",
+      "card": "rgb(255, 255, 255)",
+      "text": "rgb(28, 28, 30)",
+      "border": "rgb(216, 216, 216)",
+      "notification": "rgb(255, 59, 48)"
+    },
+    "breakpoints": {
+      "base": 0,
+      "sm": 0,
+      "md": 480,
+      "lg": 768,
+      "xl": 992,
+      "2xl": 1280
+    }
+  },
+  "pages": [
+    {
+      "name": "page 1",
+      "navigation": {
+        "path": "/page-1",
+        "tab": {
+          "label": "Home",
+          "icon": "home"
+        }
+      },
+      "children": []
+    }
+  ]
+}

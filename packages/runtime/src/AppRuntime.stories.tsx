@@ -7,6 +7,7 @@ import {
 import React from "react";
 import { NavigationRuntimeLazy } from "./AppRuntime";
 import schema from "./schema.json";
+// import empty from "./empty.json";
 
 export default {
   title: "Navigation Runtime",
@@ -49,5 +50,5 @@ export const NavigationRuntime = (props) => {
   );
 };
 NavigationRuntime.args = {
-  schema: schema,
+  schema: schema
 };

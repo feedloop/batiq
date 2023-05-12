@@ -31,7 +31,8 @@
         "default",
         "^production",
         "{workspaceRoot}/.storybook/**/*",
-        "{workspaceRoot}/.storybook/**/*"
+        "{workspaceRoot}/.storybook/**/*",
+        "!{projectRoot}/.storybook/**/*"
       ]
     }
   },

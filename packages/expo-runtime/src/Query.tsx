@@ -3,6 +3,7 @@ import useSwr from "swr/immutable";
 import { useBatiq } from "./AppContext";
 import { importDataSourceModule } from "@batiq/import-helper";
 import { withData } from "./DataProvider";
+import { Text } from "react-native";
 
 type Props = {
   data: string;
@@ -36,7 +37,7 @@ const Query_ = (
 
 export const Query = (props: React.PropsWithChildren<Props>) => {
   return (
-    <React.Suspense fallback="Loading Data">
+    <React.Suspense fallback={<Text>Loading Data</Text>}>
       <Query_ datasourceName={props.data} name={props.name} query={props.query}>
         {props.children}
       </Query_>

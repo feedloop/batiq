@@ -30,7 +30,6 @@ export const AppProvider = (
       ),
     [props.schema, props.middlewares]
   );
-
   return (
     <AppContext.Provider value={app}>{props.children}</AppContext.Provider>
   );
