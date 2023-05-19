@@ -5,7 +5,10 @@ import type { StorybookConfig, Options } from "@storybook/core-common";
 
 const config: StorybookConfig = {
   ...rootMain,
-  core: { ...rootMain.core, builder: "webpack5" },
+  core: {
+    ...rootMain.core,
+    builder: "webpack5",
+  },
   stories: [
     ...rootMain.stories,
     "../src/**/*.stories.mdx",
@@ -13,7 +16,7 @@ const config: StorybookConfig = {
   ],
   addons: [
     ...(rootMain.addons || []),
-    "@nrwl/react/plugins/storybook",
+    "@nx/react/plugins/storybook",
     {
       name: "@storybook/addon-react-native-web",
       options: {
@@ -24,7 +27,9 @@ const config: StorybookConfig = {
   webpackFinal: async (config, { configType }: Options) => {
     // apply any global webpack configs that might have been specified in .storybook/main.ts
     if (rootMain.webpackFinal) {
-      config = await rootMain.webpackFinal(config, { configType } as Options);
+      config = await rootMain.webpackFinal(config, {
+        configType,
+      } as Options);
     }
 
     /**
@@ -68,6 +73,9 @@ const config: StorybookConfig = {
     );
 
     return config;
+  },
+  docs: {
+    autodocs: false,
   },
 };
 
