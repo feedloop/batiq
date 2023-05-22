@@ -1,7 +1,17 @@
-import type { StorybookConfig } from "@storybook/core-common";
+import type { StorybookConfig, Options } from "@storybook/core-common";
+import { DefinePlugin } from "webpack";
 
 const config: StorybookConfig = {
   core: { builder: "webpack5" },
+  webpackFinal: async (config, { configType }: Options) => {
+    // Expose __DEV__ from Metro.
+    config.plugins.push(
+      new DefinePlugin({
+        __DEV__: JSON.stringify(true),
+      })
+    );
+    return config;
+  },
   stories: [
     "../src/app/**/*.stories.mdx",
     "../src/app/**/*.stories.@(js|jsx|ts|tsx)",

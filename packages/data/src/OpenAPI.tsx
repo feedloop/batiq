@@ -4,7 +4,8 @@ import { Type, Static } from "@sinclair/typebox";
 import OpenAPIClientAxios from "openapi-client-axios";
 import { OpenAPIV3 } from "openapi-types";
 import { useData } from "@batiq/expo-runtime";
-import { URL } from 'react-native-url-polyfill';
+import { URL as URLNative } from "react-native-url-polyfill";
+import { Platform } from "react-native";
 
 const queryDefinition = Type.Required(
   Type.Object({
@@ -38,7 +39,8 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
   const api = new OpenAPIClientAxios({ definition });
   const client = await api.init();
 
-  const { origin } = new URL(definition);
+  const { origin } =
+    Platform.OS === "web" ? new URL(definition) : new URLNative(definition);
 
   // eslint-disable-next-line prefer-const
   let { http, apiKey, oauth2, openIdConnect } = auth;
