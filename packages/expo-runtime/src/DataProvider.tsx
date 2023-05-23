@@ -2,6 +2,7 @@ import React from "react";
 import useSwr from "swr/immutable";
 import { useId } from "./PathProvider";
 import { useGlobalState } from "./useGlobalState";
+import { Text } from "react-native";
 
 const DataContext = React.createContext<Record<string, any>>({});
 
@@ -67,7 +68,7 @@ export function withData<P = any>(renderFunc: React.FunctionComponent<P>) {
     );
     overrides = {};
     return (
-      <React.Suspense fallback="Loading data">
+      <React.Suspense fallback={<Text>Loading data</Text>}>
         {Object.keys(newData).length > 0 ? (
           <DataContext.Provider value={newData}>
             {wrappedComponent}

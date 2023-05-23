@@ -9,6 +9,7 @@ export const Image = (props: Static<typeof ImageDefinition.inputs>) => {
   return (
     <Image_
       {...rest}
+      alt="Image"
       source={{
         uri: src,
       }}

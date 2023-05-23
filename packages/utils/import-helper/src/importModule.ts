@@ -1,4 +1,5 @@
 /* eslint-disable @nrwl/nx/enforce-module-boundaries */
+import { Platform } from "react-native";
 
 // esm.sh instance
 const CDN_URL =
@@ -63,10 +64,7 @@ let defaultImportModule = async (source: string, version = "latest") => {
 
     default:
       return import(
-        /* webpackIgnore: true */ CDN_URL.replace("{package}", source).replace(
-          "{version}",
-          version
-        )
+        /* webpackIgnore: true */ CDN_URL.replace("{version}", version)
       );
   }
 };

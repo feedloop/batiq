@@ -32,7 +32,9 @@
       "@batiq/generator": ["packages/generator/src/index.ts"],
       "@batiq/import-helper": ["packages/utils/import-helper/src/index.ts"],
       "@batiq/ir": ["packages/ir/src/index.ts"],
-      "@batiq/runtime": ["packages/runtime/src/index.ts"]
+      "@batiq/runtime": ["packages/runtime/src/index.ts"],
+      "@batiq/runtime-native": ["packages/runtime-native/src/index.ts"]
+
     }
   },
   "exclude": ["node_modules", "tmp"]

@@ -87,18 +87,29 @@ const createTabs = (tabs: Navigation["tabs"]) => {
               options={{
                 headerShown: false,
               }}
+              key={tab.tab.label}
             >
               {() => (
                 <Stack.Navigator>
                   {page.map((p) => (
-                    <Stack.Screen name={p.name} component={p.component} />
+                    <Stack.Screen
+                      name={p.name}
+                      component={p.component}
+                      key={p.route}
+                    />
                   ))}
                 </Stack.Navigator>
               )}
             </Tab.Screen>
           );
         } else {
-          return <Tab.Screen name={label} component={page.component} />;
+          return (
+            <Tab.Screen
+              name={label}
+              component={page.component}
+              key={page.route}
+            />
+          );
         }
       })}
     </Tab.Navigator>
@@ -158,7 +169,11 @@ export const Navigation = (props: {
           }}
         />
         {stack.map((page) => (
-          <Stack.Screen name={page.name} component={page.component} />
+          <Stack.Screen
+            name={page.name}
+            component={page.component}
+            key={page.route}
+          />
         ))}
       </Stack.Navigator>
     </NavigationContainer>
