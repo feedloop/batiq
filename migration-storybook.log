@@ -1,0 +1,60 @@
+🔎 checking possible migrations..
+
+🔎 found a 'new-frameworks' migration:
+╭ Automigration detected ─────────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                         │
+│   We've detected your project is not fully setup with Storybook's 7 new framework format.               │
+│                                                                                                         │
+│   Storybook 7 introduced the concept of frameworks, which abstracts configuration for renderers (e.g.   │
+│   React, Vue), builders (e.g. Webpack, Vite) and defaults to make integrations easier.                  │
+│                                                                                                         │
+│   Your project should be updated to use Storybook's framework: @storybook/react-webpack5. We can        │
+│   attempt to do this for you automatically.                                                             │
+│                                                                                                         │
+│   Here are the steps this migration will do to migrate your project:                                    │
+│   - Add the following dependencies:                                                                     │
+│   - * @storybook/react-webpack5                                                                         │
+│   - Update or specify the framework field in packages/runtime/.storybook/main.ts with the value of      │
+│   "@storybook/react-webpack5".                                                                          │
+│   - Remove the core.builder field in packages/runtime/.storybook/main.ts.                               │
+│                                                                                                         │
+│                                                                                                         │
+│   To learn more about the new framework format, see:                                                    │
+│   https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#new-framework-api                     │
+│                                                                                                         │
+╰─────────────────────────────────────────────────────────────────────────────────────────────────────────╯
+✅ Installing new dependencies: @storybook/react-webpack5
+✅ Updating main.js
+✅ Updating "framework" field
+✅ Removing "core.builder" field
+❌ The migration failed to update your packages/runtime/.storybook/main.ts on your behalf because of the following error:
+        ReferenceError: rootMain is not defined
+
+⚠️ Storybook automigrations are based on AST parsing and it's possible that your packages/runtime/.storybook/main.ts file contains a non-standard format (e.g. your export is not an object) or that there was an error when parsing dynamic values (e.g. "require" calls, or usage of environment variables). When your main config is non-standard, automigrations are unfortunately not possible. Please follow the instructions given previously and follow the documentation to make the updates manually.
+✅ ran new-frameworks migration
+
+🔎 found a 'autodocsTrue' migration:
+╭ Automigration detected ────────────────────────────────────────────────────────────────────────────╮
+│                                                                                                    │
+│   We've changed the configuration of autodocs (previous docsPage), so now the value:               │
+│     - docs.autodocs: true -- means automatically create docs for every CSF file                    │
+│     - docs.autodocs: 'tag' -- means only create autodocs for CSF files with the 'autodocs' tag     │
+│     - docs.autodocs: false -- means never create autodocs                                          │
+│                                                                                                    │
+│   Based on your prior configuration,  we can set the `docs.autodocs` to keep your old behaviour:   │
+│                                                                                                    │
+│   docs: { autodocs: true }                                                                         │
+│                                                                                                    │
+│   More info: https://github.com/storybookjs/storybook/blob/next/MIGRATION.md#autodocs-changes      │
+│                                                                                                    │
+╰────────────────────────────────────────────────────────────────────────────────────────────────────╯
+✅ Setting 'docs.autodocs' to true in main.js
+✅ ran autodocsTrue migration
+
+⚠️  failed to check fix missing-babelrc
+
+TypeError: Cannot read properties of undefined (reading 'name')
+    at Object.check (/home/arrizalamin/.npm/_npx/bc7e1e37fcb46ffc/node_modules/@storybook/cli/dist/generate.js:292:763)
+    at async runFixes (/home/arrizalamin/.npm/_npx/bc7e1e37fcb46ffc/node_modules/@storybook/cli/dist/generate.js:352:1154)
+    at async automigrate (/home/arrizalamin/.npm/_npx/bc7e1e37fcb46ffc/node_modules/@storybook/cli/dist/generate.js:349:676)
+    at async Command.<anonymous> (/home/arrizalamin/.npm/_npx/bc7e1e37fcb46ffc/node_modules/@storybook/cli/dist/generate.js:422:2814)

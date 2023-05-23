@@ -14,7 +14,7 @@
     }
   },
   "devDependencies": {
-    "react-native": "0.70.5"
+    "react-native": "0.71.8"
   },
   "peerDependencies": {
     "@react-navigation/native": "^6.1.3",

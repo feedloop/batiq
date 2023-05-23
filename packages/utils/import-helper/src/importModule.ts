@@ -1,18 +1,8 @@
-/* eslint-disable @nrwl/nx/enforce-module-boundaries */
+/* eslint-disable @nx/enforce-module-boundaries */
 
 // esm.sh instance
 const CDN_URL =
   "http://localhost:8080/{package}@{version}?alias=react-native:react-native-web";
-
-const alias = {
-  "react-native": "react-native-web",
-  // "react-native-safe-area-context":
-  //   "@batiq/esm-compat/react-native-safe-area-context",
-  // "react-native-safe-area-context/lib/module/SafeAreaContext.js":
-  //   "react-native-safe-area-context/lib/module/SafeAreaContext.web.js",
-  // "react-native-safe-area-context/lib/module/SafeAreaView.js":
-  //   "react-native-safe-area-context/lib/module/SafeAreaView.web.js",
-};
 
 /**
  * Import helper for dynamic imports
@@ -23,13 +13,10 @@ let defaultImportModule = async (source: string, version = "latest") => {
   // @ts-ignore
   if (process.env.NODE_ENV === "production") {
     return import(
-      /* webpackIgnore: true */ CDN_URL.replace("{package}", source)
-        .replace("{version}", version)
-        .concat(
-          `?alias=${Object.entries(alias)
-            .map((keyValue) => keyValue.join(":"))
-            .join(",")}`
-        )
+      /* webpackIgnore: true */ CDN_URL.replace("{package}", source).replace(
+        "{version}",
+        version
+      )
     ).catch((err) => {
       console.log("import error", source, err);
       throw err;

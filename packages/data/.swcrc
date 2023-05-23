@@ -1,5 +1,4 @@
 {
-  "$schema": "https://json.schemastore.org/swcrc",
   "jsc": {
     "target": "es2017",
     "parser": {
@@ -18,7 +17,7 @@
   "module": {
     "type": "es6",
     "strict": true,
-    "noInterop": false
+    "noInterop": true
   },
   "sourceMaps": true,
   "exclude": [

@@ -3,74 +3,42 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "packages/runtime/src",
   "projectType": "library",
+  "tags": [],
   "targets": {
     "build": {
-      "executor": "@nrwl/rollup:rollup",
+      "executor": "@nx/rollup:rollup",
       "outputs": ["{options.outputPath}"],
       "options": {
         "outputPath": "dist/packages/runtime",
         "project": "packages/runtime/package.json",
-        "main": "packages/runtime/src/index.ts",
+        "entryFile": "packages/runtime/src/index.ts",
         "tsConfig": "packages/runtime/tsconfig.lib.json",
-        "assets": [],
+        "assets": [
+          {
+            "glob": "packages/runtime/README.md",
+            "input": ".",
+            "output": "."
+          }
+        ],
+        "external": ["react", "react-dom", "react/jsx-runtime"],
+        "rollupConfig": "@nx/react/plugins/bundle-rollup",
+        "compiler": "babel",
         "format": ["esm", "cjs"]
-      }
-    },
-    "publish": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "node tools/scripts/publish.mjs runtime {args.ver} {args.tag}"
-      },
-      "dependsOn": ["build"]
-    },
-    "lint": {
-      "executor": "@nrwl/linter:eslint",
-      "outputs": ["{options.outputFile}"],
-      "options": {
-        "lintFilePatterns": ["packages/runtime/**/*.ts"]
-      }
-    },
-    "test": {
-      "executor": "@nrwl/jest:jest",
-      "outputs": ["{workspaceRoot}/coverage/{projectRoot}"],
-      "options": {
-        "jestConfig": "packages/runtime/jest.config.ts",
-        "passWithNoTests": true
-      }
-    },
-    "storybook": {
-      "executor": "@nrwl/storybook:storybook",
-      "options": {
-        "uiFramework": "@storybook/react",
-        "port": 4400,
-        "configDir": "packages/runtime/.storybook"
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "build-storybook": {
-      "executor": "@nrwl/storybook:build",
-      "outputs": ["{options.outputDir}"],
-      "options": {
-        "uiFramework": "@storybook/react",
-        "outputDir": "dist/storybook/runtime",
-        "configDir": "packages/runtime/.storybook"
-      },
-      "configurations": {
-        "ci": {
-          "quiet": true
-        }
-      }
-    },
-    "test-storybook": {
-      "executor": "nx:run-commands",
-      "options": {
-        "command": "test-storybook -c packages/runtime/.storybook --url=http://localhost:4400"
       }
     }
   },
-  "tags": []
+  "publish": {
+    "executor": "nx:run-commands",
+    "options": {
+      "command": "node tools/scripts/publish.mjs runtime {args.ver} {args.tag}"
+    },
+    "dependsOn": ["build"]
+  },
+  "lint": {
+    "executor": "@nx/linter:eslint",
+    "outputs": ["{options.outputFile}"],
+    "options": {
+      "lintFilePatterns": ["packages/runtime/**/*.{ts,tsx,js,jsx}"]
+    }
+  }
 }
