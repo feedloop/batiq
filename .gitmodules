@@ -1,0 +1,3 @@
+[submodule "apps/dashboard"]
+	path = apps/dashboard
+	url = git@github.com:feedloop/batiq-dashboard.git
