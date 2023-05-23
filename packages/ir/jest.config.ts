@@ -1,18 +1,12 @@
 /* eslint-disable */
-import { readFileSync } from "fs";
-
-// Reading the SWC compilation config and remove the "exclude"
-// for the test files to be compiled by SWC
-const { exclude: _, ...swcJestConfig } = JSON.parse(
-  readFileSync(`${__dirname}/.lib.swcrc`, "utf-8")
-);
 export default {
   displayName: "ir",
   preset: "../../jest.preset.js",
   transform: {
-    "^.+\\.[tj]sx?$": ["@swc/jest", { ...swcJestConfig }],
+    "^(?!.*\\.(js|jsx|ts|tsx|css|json)$)": "@nrwl/react/plugins/jest",
+    "^.+\\.[tj]sx?$": ["babel-jest", { presets: ["@nrwl/react/babel"] }],
   },
-  moduleFileExtensions: ["ts", "js", "html", "tsx"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx"],
   coverageDirectory: "../../coverage/packages/ir",
   extensionsToTreatAsEsm: [".ts", ".tsx"],
 };

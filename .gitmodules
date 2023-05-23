@@ -1,3 +1,6 @@
 [submodule "apps/dashboard"]
 	path = apps/dashboard
 	url = git@github.com:feedloop/batiq-dashboard.git
+[submodule "apps/batiq-editor"]
+	path = apps/batiq-editor
+	url = https://github.com/feedloop/batiq-editor

@@ -40,7 +40,9 @@ export const OpenAPI = async (data: DataSourceDefinitionSchema) => {
   const client = await api.init();
 
   const { origin } =
-    Platform.OS === "web" ? new URL(definition) : new URLNative(definition);
+    // temporary fix as react-native-url-polyfill doesn't work on web https://github.com/charpeni/react-native-url-polyfill/issues/366
+    // Platform.OS === "web" ? new URL(definition) : new URLNative(definition);
+    new URL(definition);
 
   // eslint-disable-next-line prefer-const
   let { http, apiKey, oauth2, openIdConnect } = auth;

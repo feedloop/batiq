@@ -34,7 +34,6 @@
       "@batiq/ir": ["packages/ir/src/index.ts"],
       "@batiq/runtime": ["packages/runtime/src/index.ts"],
       "@batiq/runtime-native": ["packages/runtime-native/src/index.ts"]
-
     }
   },
   "exclude": ["node_modules", "tmp"]
