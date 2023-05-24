@@ -1845,20 +1845,20 @@
     find-up "^5.0.0"
     js-yaml "^4.1.0"
 
-"@feedloop/expression-parser@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@feedloop/expression-parser/-/expression-parser-1.0.1.tgz#d0518b30a51a1e6927794c7a08b422d3272df41c"
-  integrity sha512-900RZDCZ53RQMa+RcGxgPVJrLjeQwWbLBVWd8htUm9zVZI3tuYGj5TXPozXl5Fp2DgZkjbluOvTwJBnaQFKKNQ==
+"@feedloop/expression-parser@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@feedloop/expression-parser/-/expression-parser-1.0.3.tgz#97c19d9c2857b485a673d38db1082907438bdca8"
+  integrity sha512-hTmMFyFlXnrS8rkAV4O6PDSAUsK08WVDAR122fttM988aINyFwD9zsfKm/JVRO+QR2AAmeTcIiuH7Ea6c64RXQ==
 
-"@feedloop/expression@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@feedloop/expression/-/expression-1.0.1.tgz#5b53276e39f4bc0a811d6bb97adf997fdff926f4"
-  integrity sha512-mNr9/Qeo2yHemoyEVL4kWXkHAwaLhWyX4HijQLStrweI6FLSAAKQfSJYVfi+h11KSH8cZ9hvgRvtsFV/qupFSg==
+"@feedloop/expression@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@feedloop/expression/-/expression-1.0.3.tgz#c6ae51f53ce9c06dce08b85866b4d7f61164b5b6"
+  integrity sha512-NgmZ5zU352kvQeHOwPHfNy0AMqsd/IEzT0yWUcqnHWgq3RcK1DGiXyyvrfG2nvPZ1ftSjsUxC9OnxYKIBGydkg==
 
-"@feedloop/formula-prelude@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@feedloop/formula-prelude/-/formula-prelude-1.0.1.tgz#84ac618bfec5ee53b570947ab67e9eddcd77d855"
-  integrity sha512-d/4Qo/OVJMoUzR7R2zYfSLRBv6Tm+Yse9bgrnV0XAge1yXI7ZzjZhF9vHJZIzZvzjIHHnCiz9nnK98D5fT37Vw==
+"@feedloop/formula-prelude@^1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@feedloop/formula-prelude/-/formula-prelude-1.0.3.tgz#f82fd6bf4ff1731d64a090a0b1feda8913cca208"
+  integrity sha512-dHYvgHv4JqxTBMnRTaDLidTV/e+D9ChiyMTJlo/9TQoOsEfXxtZ5BfWnet2F6H5D7qEbtQPMSjp2afQbqRVxiw==
   dependencies:
     dayjs "1.11.7"
 
