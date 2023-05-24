@@ -8,16 +8,8 @@
       "default": null
     },
     {
-      "source": "@batiq/components/elements",
-      "names": [
-        "Provider"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/components",
       "names": [
-        "ScrollView",
         "Paragraph"
       ],
       "default": null
@@ -43,28 +35,9 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
+              "name": "Paragraph1",
               "props": [],
-              "children": [
-                {
-                  "type": "element",
-                  "name": "ScrollView",
-                  "props": [
-                    {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "Paragraph1",
-                      "props": [],
-                      "children": []
-                    }
-                  ]
-                }
-              ]
+              "children": []
             }
           ]
         }

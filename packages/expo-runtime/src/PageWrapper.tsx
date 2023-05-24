@@ -1,6 +1,7 @@
 import React from "react";
 import useSwr from "swr/immutable";
 import { importDataSourceModule } from "@batiq/import-helper";
+import { Provider, ScrollView } from "@batiq/components/elements";
 import { useBatiq } from "./AppContext";
 import { useLinkBuilder, useRoute } from "@react-navigation/native";
 import { Text } from "react-native";
@@ -45,7 +46,13 @@ const AuthGuard = (props: React.PropsWithChildren<{}>) => {
 export const PageWrapper = (props: React.PropsWithChildren<{}>) => {
   return (
     <React.Suspense fallback={<Text>Loading Page</Text>}>
-      <AuthGuard>{props.children}</AuthGuard>
+      <AuthGuard>
+        <Provider>
+          <ScrollView contentInsetAdjustmentBehavior="automatic">
+            {props.children}
+          </ScrollView>
+        </Provider>
+      </AuthGuard>
     </React.Suspense>
   );
 };

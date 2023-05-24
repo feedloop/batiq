@@ -10,7 +10,6 @@
     {
       "source": "@batiq/components/elements",
       "names": [
-        "Button",
         "Text"
       ],
       "default": null
@@ -42,35 +41,26 @@
           "children": [
             {
               "type": "element",
-              "name": "Button",
+              "name": "Text",
               "props": [
                 {
                   "name": "color",
-                  "value": "green"
+                  "value": "blue"
                 }
               ],
               "children": [
+                "Hello",
+                false,
+                123,
                 {
-                  "type": "element",
-                  "name": "Text",
-                  "props": [
-                    {
-                      "name": "text",
-                      "value": "Hello World!"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "jsx_expression",
-                      "value": {
-                        "type": "function_call",
-                        "name": "evaluate",
-                        "arguments": [
-                          "23 + 42"
-                        ]
-                      }
-                    }
-                  ]
+                  "type": "jsx_expression",
+                  "value": {
+                    "type": "function_call",
+                    "name": "evaluate",
+                    "arguments": [
+                      "1 + 1"
+                    ]
+                  }
                 }
               ]
             }

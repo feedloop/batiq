@@ -8,16 +8,8 @@
       "default": null
     },
     {
-      "source": "@batiq/components/elements",
-      "names": [
-        "Provider"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/components",
       "names": [
-        "ScrollView",
         "Paragraph"
       ],
       "default": null
@@ -49,43 +41,24 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
-              "props": [],
-              "children": [
+              "name": "Paragraph",
+              "props": [
                 {
-                  "type": "element",
-                  "name": "ScrollView",
-                  "props": [
-                    {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "Paragraph",
-                      "props": [
-                        {
-                          "name": "color",
-                          "value": "red"
-                        },
-                        {
-                          "name": "onPress",
-                          "value": {
-                            "type": "function_call",
-                            "name": "navigate_",
-                            "arguments": [
-                              "/page-2"
-                            ]
-                          }
-                        }
-                      ],
-                      "children": []
-                    }
-                  ]
+                  "name": "color",
+                  "value": "red"
+                },
+                {
+                  "name": "onPress",
+                  "value": {
+                    "type": "function_call",
+                    "name": "navigate_",
+                    "arguments": [
+                      "/page-2"
+                    ]
+                  }
                 }
-              ]
+              ],
+              "children": []
             }
           ]
         }

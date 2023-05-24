@@ -8,16 +8,8 @@
       "default": null
     },
     {
-      "source": "@batiq/components/elements",
-      "names": [
-        "Provider"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/components",
       "names": [
-        "ScrollView",
         "Paragraph"
       ],
       "default": null
@@ -49,67 +41,48 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
-              "props": [],
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "red"
+                },
+                {
+                  "name": "onPress",
+                  "value": {
+                    "type": "function_call",
+                    "name": "breakpoint_",
+                    "arguments": [
+                      {
+                        "base": "/page-2"
+                      }
+                    ]
+                  }
+                }
+              ],
               "children": [
                 {
                   "type": "element",
-                  "name": "ScrollView",
+                  "name": "Paragraph",
                   "props": [
                     {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
+                      "name": "color",
+                      "value": "red"
+                    },
+                    {
+                      "name": "onPress",
+                      "value": {
+                        "type": "function_call",
+                        "name": "breakpoint_",
+                        "arguments": [
+                          {
+                            "base": "/page-3"
+                          }
+                        ]
+                      }
                     }
                   ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "Paragraph",
-                      "props": [
-                        {
-                          "name": "color",
-                          "value": "red"
-                        },
-                        {
-                          "name": "onPress",
-                          "value": {
-                            "type": "function_call",
-                            "name": "breakpoint_",
-                            "arguments": [
-                              {
-                                "base": "/page-2"
-                              }
-                            ]
-                          }
-                        }
-                      ],
-                      "children": [
-                        {
-                          "type": "element",
-                          "name": "Paragraph",
-                          "props": [
-                            {
-                              "name": "color",
-                              "value": "red"
-                            },
-                            {
-                              "name": "onPress",
-                              "value": {
-                                "type": "function_call",
-                                "name": "breakpoint_",
-                                "arguments": [
-                                  {
-                                    "base": "/page-3"
-                                  }
-                                ]
-                              }
-                            }
-                          ],
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
+                  "children": []
                 }
               ]
             }
