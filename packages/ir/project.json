@@ -10,8 +10,11 @@
       "options": {
         "outputPath": "dist/packages/ir",
         "project": "packages/ir/package.json",
-        "main": "packages/ir/src/index.ts",
+        "entryFile": "packages/ir/src/index.ts",
         "tsConfig": "packages/ir/tsconfig.lib.json",
+        "external": ["react/jsx-runtime"],
+        "rollupConfig": "@nrwl/react/plugins/bundle-rollup",
+        "compiler": "babel",
         "assets": [],
         "format": ["esm", "cjs"]
       }
@@ -27,7 +30,7 @@
       "executor": "@nrwl/linter:eslint",
       "outputs": ["{options.outputFile}"],
       "options": {
-        "lintFilePatterns": ["packages/ir/**/*.ts"]
+        "lintFilePatterns": ["packages/ir/**/*.{ts,tsx}"]
       }
     },
     "test": {
