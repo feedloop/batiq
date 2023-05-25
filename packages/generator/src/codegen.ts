@@ -11,6 +11,7 @@ import {
   BinaryOperator,
   JSX,
   FunctionDefinition,
+  JSXExpression,
 } from "@batiq/ir";
 import { valueToAST } from "./utils/valueToAST";
 import { AppSchema, PageSchema } from "@batiq/core";
@@ -136,6 +137,9 @@ export const jsxIRToAST = (jsx: JSX): t.Expression => {
         jsx.parameters.map(t.identifier),
         primitiveIRToAST(jsx.JSX)
       );
+    }
+    if (jsx.type === "jsx_expression") {
+      return primitiveIRToAST(<JSXExpression>jsx.value);
     }
   }
   return primitiveIRToAST(jsx);

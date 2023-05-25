@@ -8,16 +8,8 @@
       "default": null
     },
     {
-      "source": "@batiq/components/elements",
-      "names": [
-        "Provider"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/components",
       "names": [
-        "ScrollView",
         "Paragraph"
       ],
       "default": "Batiq_Components"
@@ -36,43 +28,24 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
-              "props": [],
+              "name": "Paragraph",
+              "props": [
+                {
+                  "name": "color",
+                  "value": "red"
+                }
+              ],
               "children": [
                 {
                   "type": "element",
-                  "name": "ScrollView",
+                  "name": "Batiq_Components",
                   "props": [
                     {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
+                      "name": "color",
+                      "value": "blue"
                     }
                   ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "Paragraph",
-                      "props": [
-                        {
-                          "name": "color",
-                          "value": "red"
-                        }
-                      ],
-                      "children": [
-                        {
-                          "type": "element",
-                          "name": "Batiq_Components",
-                          "props": [
-                            {
-                              "name": "color",
-                              "value": "blue"
-                            }
-                          ],
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
+                  "children": []
                 }
               ]
             }

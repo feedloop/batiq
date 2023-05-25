@@ -12,16 +12,8 @@
     {
       "source": "@batiq/components/elements",
       "names": [
-        "Provider",
         "Button",
         "Text"
-      ],
-      "default": null
-    },
-    {
-      "source": "@batiq/components",
-      "names": [
-        "ScrollView"
       ],
       "default": null
     },
@@ -46,44 +38,25 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
-              "props": [],
+              "name": "DataSource",
+              "props": [
+                {
+                  "name": "name",
+                  "value": "props"
+                },
+                {
+                  "name": "data",
+                  "value": {
+                    "color": "red"
+                  }
+                }
+              ],
               "children": [
                 {
                   "type": "element",
-                  "name": "ScrollView",
-                  "props": [
-                    {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "DataSource",
-                      "props": [
-                        {
-                          "name": "name",
-                          "value": "props"
-                        },
-                        {
-                          "name": "data",
-                          "value": {
-                            "color": "red"
-                          }
-                        }
-                      ],
-                      "children": [
-                        {
-                          "type": "element",
-                          "name": "Button1",
-                          "props": [],
-                          "children": []
-                        }
-                      ]
-                    }
-                  ]
+                  "name": "Button1",
+                  "props": [],
+                  "children": []
                 }
               ]
             }

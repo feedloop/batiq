@@ -8,17 +8,8 @@
       "default": null
     },
     {
-      "source": "@batiq/components/elements",
-      "names": [
-        "Provider"
-      ],
-      "default": null
-    },
-    {
       "source": "@batiq/components",
-      "names": [
-        "ScrollView"
-      ],
+      "names": [],
       "default": "Batiq_Components"
     }
   ],
@@ -35,33 +26,14 @@
           "children": [
             {
               "type": "element",
-              "name": "Provider",
-              "props": [],
-              "children": [
+              "name": "Batiq_Components",
+              "props": [
                 {
-                  "type": "element",
-                  "name": "ScrollView",
-                  "props": [
-                    {
-                      "name": "contentInsetAdjustmentBehavior",
-                      "value": "automatic"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "element",
-                      "name": "Batiq_Components",
-                      "props": [
-                        {
-                          "name": "color",
-                          "value": "red"
-                        }
-                      ],
-                      "children": []
-                    }
-                  ]
+                  "name": "color",
+                  "value": "red"
                 }
-              ]
+              ],
+              "children": []
             }
           ]
         }
