@@ -60,6 +60,9 @@ export const createElement = (
     if (jsx.type === "render_prop") {
       return () => createElement(scope, jsx.JSX, withPath ? index : undefined);
     }
+    if (jsx.type === "jsx_expression") {
+      return valueToRuntime(scope, jsx.value);
+    }
   }
   return jsx;
 };
