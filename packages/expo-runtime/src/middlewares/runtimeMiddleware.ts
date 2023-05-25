@@ -1,6 +1,8 @@
+import React from "react";
 import { BaseBatiqCore } from "@batiq/core";
 import { NavigationState } from "@react-navigation/native";
 import { navigationRef } from "../Navigation";
+import { usePath } from "../PathProvider";
 import { deep_equal } from "@ctx-core/fast-deep-equal";
 
 export type Runtime = {
@@ -17,6 +19,11 @@ export type Runtime = {
   };
   resetState: (state: Runtime["state"]) => void;
   resetNavigation: (navigation: Runtime["navigation"]) => void;
+
+  decorateComponent: <T = React.PropsWithChildren<any>>(
+    component: React.ComponentType<T>
+  ) => React.ComponentType<T>;
+  renderEmpty: () => React.ReactNode;
 };
 
 const runtime = <S extends BaseBatiqCore>(batiq: S): S & Runtime => {
@@ -73,6 +80,9 @@ const runtime = <S extends BaseBatiqCore>(batiq: S): S & Runtime => {
         }
       }
     },
+
+    decorateComponent: (component) => component,
+    renderEmpty: () => null,
   };
   // @ts-ignore
   window.batiq = batiqRuntime;
