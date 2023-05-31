@@ -10,8 +10,7 @@
     {
       "source": "@batiq/components/elements",
       "names": [
-        "Button",
-        "Text"
+        "Button"
       ],
       "default": null
     },
@@ -27,6 +26,28 @@
   "components": [
     {
       "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "metadata": {},
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "CompoundButton",
+              "metadata": {},
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "CompoundButton",
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",
@@ -37,46 +58,39 @@
       "JSX": [
         {
           "type": "element",
-          "name": "PageWrapper",
-          "props": [],
+          "name": "Button",
+          "metadata": {},
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            }
+          ],
           "children": [
             {
-              "type": "element",
-              "name": "Button",
-              "props": [
-                {
-                  "name": "color",
-                  "value": "red"
-                }
-              ],
-              "children": [
-                {
-                  "type": "jsx_expression",
-                  "value": {
-                    "type": "function_call",
-                    "name": "evaluate",
-                    "arguments": [
-                      "23 + 42"
-                    ]
-                  }
-                },
-                {
-                  "type": "element",
-                  "name": "Text",
-                  "props": [
-                    {
-                      "name": "text",
-                      "value": "Hello World!"
-                    }
-                  ],
-                  "children": []
-                }
-              ]
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "23 + 42"
+                ]
+              }
+            },
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "props.children"
+                ]
+              }
             }
           ]
         }
       ],
-      "root": true
+      "root": false
     }
   ]
 }

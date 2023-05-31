@@ -27,6 +27,28 @@
   "components": [
     {
       "name": "Page",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "PageWrapper",
+          "metadata": {},
+          "props": [],
+          "children": [
+            {
+              "type": "element",
+              "name": "CompoundButton",
+              "metadata": {},
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": true
+    },
+    {
+      "name": "CompoundButton",
       "variableDeclarations": {
         "evaluate": {
           "type": "function_call",
@@ -37,47 +59,42 @@
       "JSX": [
         {
           "type": "element",
-          "name": "PageWrapper",
-          "props": [],
+          "name": "Button",
+          "metadata": {},
+          "props": [
+            {
+              "name": "color",
+              "value": "green"
+            }
+          ],
           "children": [
             {
               "type": "element",
-              "name": "Button",
+              "name": "Text",
+              "metadata": {},
               "props": [
                 {
-                  "name": "color",
-                  "value": "green"
+                  "name": "text",
+                  "value": "Hello World!"
                 }
               ],
               "children": [
                 {
-                  "type": "element",
-                  "name": "Text",
-                  "props": [
-                    {
-                      "name": "text",
-                      "value": "Hello World!"
-                    }
-                  ],
-                  "children": [
-                    {
-                      "type": "jsx_expression",
-                      "value": {
-                        "type": "function_call",
-                        "name": "evaluate",
-                        "arguments": [
-                          "23 + 42"
-                        ]
-                      }
-                    }
-                  ]
+                  "type": "jsx_expression",
+                  "value": {
+                    "type": "function_call",
+                    "name": "evaluate",
+                    "arguments": [
+                      "23 + 42"
+                    ]
+                  }
                 }
               ]
             }
           ]
         }
       ],
-      "root": true
+      "root": false
     }
   ]
 }

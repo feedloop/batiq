@@ -22,11 +22,18 @@
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
               "name": "Batiq_Components",
+              "metadata": {
+                "path": [
+                  0
+                ],
+                "isLeaf": true
+              },
               "props": [
                 {
                   "name": "color",

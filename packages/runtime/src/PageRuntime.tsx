@@ -7,7 +7,7 @@ import {
 } from "@batiq/ir";
 import { importModule } from "@batiq/import-helper";
 import { valueToRuntime } from "./utils/valueToRuntime";
-import { withComponentProvider, Runtime, useBatiq } from "@batiq/expo-runtime";
+import { Runtime, useBatiq } from "@batiq/expo-runtime";
 import { Text } from "react-native";
 
 export const toVariableName = (source: string): string =>
@@ -45,7 +45,7 @@ const createElement = (
             : scope[jsx.name]
           : jsx.name;
       return React.createElement(
-        batiq.decorateComponent(withComponentProvider(index, component)),
+        batiq.decorateComponent(component, { index, element: jsx }),
         Object.fromEntries(
           jsx.props.map((prop) => [
             prop.name,
@@ -66,7 +66,8 @@ const createElement = (
 };
 
 const PageComponent = (scope: Record<string, any>, component: ComponentIR) => {
-  const componentFn = () => {
+  const componentFn = (props: React.PropsWithChildren<any>) => {
+    scope["props"] = props;
     scope = Object.entries(component.variableDeclarations).reduce(
       (scope, [name, value]) => {
         return {
@@ -122,7 +123,10 @@ export const PageRuntime = async (
       return {
         ...scope,
         [component.name]: batiq.decorateComponent(
-          withComponentProvider(index, PageComponent(scope, component))
+          PageComponent(scope, component),
+          {
+            index,
+          }
         ),
       };
     },
