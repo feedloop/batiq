@@ -1,14 +1,9 @@
 import React from "react";
-import { BaseBatiqCore, PageSchema } from "@batiq/core";
-import {
-  createNavigationContainerRef,
-  NavigationContainer,
-  PathConfigMap,
-} from "@react-navigation/native";
+import { PageSchema } from "@batiq/core";
+import { createNavigationContainerRef } from "@react-navigation/native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import { useBatiq, useBatiqSchema } from "./AppContext";
-import { Runtime } from "./middlewares/runtimeMiddleware";
+import { useBatiqSchema } from "./AppContext";
 
 type Page = {
   component: React.ComponentType;
@@ -121,7 +116,6 @@ export const navigationRef = createNavigationContainerRef();
 export const Navigation = (props: {
   importMaps: Record<string, React.ComponentType>;
 }) => {
-  const batiq = useBatiq<BaseBatiqCore & Runtime>();
   const schema = useBatiqSchema();
   const { tabs, stack } = React.useMemo(() => {
     return toNavigation(schema.pages, props.importMaps);
@@ -131,51 +125,21 @@ export const Navigation = (props: {
   const Tab = React.useCallback(() => createTabs(tabs), [tabs]);
 
   return (
-    <NavigationContainer
-      ref={navigationRef}
-      linking={{
-        prefixes: schema.config.link_prefixes ?? [],
-        config: {
-          screens: {
-            Tabs: {
-              screens: Object.fromEntries(
-                Object.entries(tabs).map(([label, tab]) => [
-                  label,
-                  Array.isArray(tab.page)
-                    ? ({
-                        screens: Object.fromEntries(
-                          tab.page.map((page) => [page.name, page.route])
-                        ),
-                      } as const)
-                    : tab.page.route,
-                ])
-              ),
-            },
-            ...(Object.fromEntries(
-              stack.map((page) => [page.name, page.route])
-            ) as PathConfigMap<{}>),
-          } as any,
-        },
-      }}
-      onStateChange={(state) => state && batiq.onNavigate(state)}
-      onReady={() => batiq.onNavigate(navigationRef.getRootState())}
-    >
-      <Stack.Navigator>
+    <Stack.Navigator>
+      <Stack.Screen
+        name="Tabs"
+        component={Tab}
+        options={{
+          headerShown: false,
+        }}
+      />
+      {stack.map((page) => (
         <Stack.Screen
-          name="Tabs"
-          component={Tab}
-          options={{
-            headerShown: false,
-          }}
+          name={page.name}
+          component={page.component}
+          key={page.route}
         />
-        {stack.map((page) => (
-          <Stack.Screen
-            name={page.name}
-            component={page.component}
-            key={page.route}
-          />
-        ))}
-      </Stack.Navigator>
-    </NavigationContainer>
+      ))}
+    </Stack.Navigator>
   );
 };
