@@ -40,7 +40,20 @@
               "name": "CompoundButton",
               "metadata": {},
               "props": [],
-              "children": []
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Text",
+                  "metadata": {},
+                  "props": [
+                    {
+                      "name": "text",
+                      "value": "Child Text"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
             }
           ]
         }

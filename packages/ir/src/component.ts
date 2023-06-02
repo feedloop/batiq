@@ -17,22 +17,11 @@ const ajv = new Ajv({
   useDefaults: true,
 });
 
-type ResolvedCompoundComponent = Omit<CompoundComponentSchema, "children"> & {
-  children: (
-    | Exclude<
-        CompoundComponentSchema["children"][number],
-        { type: "component" }
-      >
-    | ResolvedCompoundComponent
-    | SlotSchema
-  )[];
-};
-
 const resolveCompoundComponent = (
   compoundComponent: CompoundComponentSchema,
   schema: ComponentSchema
   // children: ComponentSchema["children"]
-): ResolvedCompoundComponent =>
+): ComponentSchema =>
   schema.overrideComponents &&
   compoundComponent.id &&
   compoundComponent.id in schema.overrideComponents
@@ -50,16 +39,13 @@ const resolveCompoundComponent = (
                 ...schema.overrideProperties[compoundComponent.id],
               }
             : compoundComponent.properties,
-        children: compoundComponent.children.flatMap((child) =>
-          typeof child === "object"
-            ? child.type === "component"
-              ? [resolveCompoundComponent(child, schema)]
-              : child.type === "slot"
-              ? ([
-                  { type: "expression", expression: "props.children" },
-                ] as ResolvedCompoundComponent["children"])
+        children: compoundComponent.children.flatMap(
+          (child): ComponentSchema["children"] =>
+            typeof child === "object"
+              ? child.type === "component"
+                ? [resolveCompoundComponent(child, schema)]
+                : [child]
               : [child]
-            : [child]
         ),
       };
 
@@ -95,7 +81,7 @@ const transformCompoundComponent = async (
   //   schema,
   //   children
   // );
-  const compoundSchema: ResolvedCompoundComponent =
+  const compoundSchema: ComponentSchema =
     Object.keys(definition?.inputs ?? {}).length === 0
       ? resolveCompoundComponent(definition.component, schema)
       : ({
@@ -120,17 +106,28 @@ const transformCompoundComponent = async (
     }
   );
 
+  const childrenResults = await transformComponentChildren(
+    scope,
+    app,
+    schema.children,
+    {
+      path,
+      isRoot,
+      validate,
+    }
+  );
+
   const componentName =
     schema.name ?? generateDefaultImport(scope, definition.component.from);
   return {
-    imports: transformResult.imports,
-    variables: [],
+    imports: [...transformResult.imports, ...childrenResults.imports],
+    variables: childrenResults.variables,
     element: {
       type: "element",
       name: generateUniqueName(scope, componentName),
       metadata: {},
       props: [],
-      children: [],
+      children: childrenResults.elements,
     },
     additionalComponents: [
       {
@@ -139,6 +136,8 @@ const transformCompoundComponent = async (
         JSX: [transformResult.element],
         root: false,
       },
+      ...transformResult.additionalComponents,
+      ...childrenResults.additionalComponents,
     ],
   };
 };
@@ -171,7 +170,7 @@ export const transformComponentChildren = async (
             type: "jsx_expression",
             value: {
               type: "variable",
-              name: "props.childrne",
+              name: "props.children",
             },
           },
           additionalComponents: [],
@@ -230,27 +229,10 @@ export const transformComponent = async (
   }
 
   if (componentDefinition?.component?.type === "component") {
-    const transformResult = transformCompoundComponent(
-      scope,
-      app,
-      componentDefinition,
-      schema,
-      {
-        isRoot,
-        validate,
-      }
-    );
-    return transformResult;
-
-    // return transformComponent(
-    //   scope,
-    //   app,
-    //   await transformCompoundComponent(componentDefinition, schema),
-    //   {
-    //     isRoot,
-    //     validate,
-    //   }
-    // );
+    return transformCompoundComponent(scope, app, componentDefinition, schema, {
+      isRoot,
+      validate,
+    });
   }
 
   const importSource =

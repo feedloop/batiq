@@ -11,7 +11,8 @@
     {
       "source": "@batiq/components/elements",
       "names": [
-        "Button"
+        "Button",
+        "Text"
       ],
       "default": null
     },
@@ -40,7 +41,20 @@
               "name": "CompoundButton",
               "metadata": {},
               "props": [],
-              "children": []
+              "children": [
+                {
+                  "type": "element",
+                  "name": "Text",
+                  "metadata": {},
+                  "props": [
+                    {
+                      "name": "text",
+                      "value": "Hello World!"
+                    }
+                  ],
+                  "children": []
+                }
+              ]
             }
           ]
         }
@@ -74,6 +88,55 @@
               "metadata": {},
               "props": [],
               "children": []
+            }
+          ]
+        }
+      ],
+      "root": false
+    },
+    {
+      "name": "Button1",
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useLazyExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Button",
+          "metadata": {},
+          "props": [
+            {
+              "name": "color",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "props.color"
+                ]
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "23 + 42"
+                ]
+              }
+            },
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "variable",
+                "name": "props.children"
+              }
             }
           ]
         }
