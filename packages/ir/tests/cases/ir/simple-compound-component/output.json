@@ -4,7 +4,8 @@
       "source": "@batiq/expo-runtime",
       "names": [
         "PageWrapper",
-        "DataSource"
+        "DataSource",
+        "RemoveKey"
       ],
       "default": null
     },
@@ -132,11 +133,24 @@
               }
             },
             {
-              "type": "jsx_expression",
-              "value": {
-                "type": "variable",
-                "name": "props.children"
-              }
+              "type": "element",
+              "name": "RemoveKey",
+              "metadata": {},
+              "props": [
+                {
+                  "name": "key",
+                  "value": "props"
+                }
+              ],
+              "children": [
+                {
+                  "type": "jsx_expression",
+                  "value": {
+                    "type": "variable",
+                    "name": "props.children"
+                  }
+                }
+              ]
             }
           ]
         }

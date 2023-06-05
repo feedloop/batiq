@@ -20,7 +20,6 @@ const ajv = new Ajv({
 const resolveCompoundComponent = (
   compoundComponent: CompoundComponentSchema,
   schema: ComponentSchema
-  // children: ComponentSchema["children"]
 ): ComponentSchema =>
   schema.overrideComponents &&
   compoundComponent.id &&
@@ -44,12 +43,23 @@ const resolveCompoundComponent = (
             typeof child === "object"
               ? child.type === "component"
                 ? [resolveCompoundComponent(child, schema)]
+                : child.type === "slot"
+                ? [
+                    {
+                      type: "component",
+                      from: "@batiq/expo-runtime",
+                      name: "RemoveKey",
+                      properties: {
+                        key: "props",
+                      },
+                      children: [child],
+                    },
+                  ]
                 : [child]
               : [child]
         ),
       };
 
-// TODO: create intermediate schema, type slot converted to removekey
 const transformCompoundComponent = async (
   scope: Scope,
   app: AppSchema,
@@ -62,25 +72,6 @@ const transformCompoundComponent = async (
   }>
 ): Promise<TransformResult> => {
   const { path, isRoot, validate } = options;
-  const children: ComponentSchema["children"] =
-    Object.keys(definition.inputs ?? {}).length === 0
-      ? schema.children
-      : [
-          {
-            type: "component",
-            from: "@batiq/expo-runtime",
-            name: "RemoveKey",
-            properties: {
-              key: "props",
-            },
-            children: schema.children,
-          },
-        ];
-  // const resolvedChildren: ComponentSchema = resolveCompoundComponent(
-  //   definition.component,
-  //   schema,
-  //   children
-  // );
   const compoundSchema: ComponentSchema =
     Object.keys(definition?.inputs ?? {}).length === 0
       ? resolveCompoundComponent(definition.component, schema)
