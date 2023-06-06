@@ -4,7 +4,8 @@ import { Image as Image_ } from "native-base";
 import { Image as ImageDefinition } from ".";
 
 export const Image = (props: Static<typeof ImageDefinition.inputs>) => {
-  const { src, fallbackSrc, ...rest } = props;
+  // eslint-disable-next-line @typescript-eslint/no-unused-vars
+  const { src, fallbackSrc, children, ...rest } = props;
 
   return (
     <Image_

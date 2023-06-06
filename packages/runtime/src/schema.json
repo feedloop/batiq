@@ -5,40 +5,68 @@
   },
   "platform": "web",
   "config": {
-    "link_prefixes": ["http://localhost:4400/", "app://"]
+    "link_prefixes": ["http://127.0.0.1:5174/", "app://"]
   },
-  "datasource": {
-    "qore": {
-      "type": "qore",
-      "config": {
-        "endpoint": "https://batiq.qorebase.io"
+  "datasource": {},
+  "components": {
+    "ButtonGroup": {
+      "inputs": {},
+      "component": {
+        "type": "component",
+        "from": "@batiq/components",
+        "name": "Container",
+        "id": "ContainerButtonGroup",
+        "properties": {
+          "p": "4",
+          "direction": "horizontal",
+          "w": "full",
+          "gap": "2",
+          "bg": "white"
+        },
+        "children": [
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "Button",
+            "id": "PrimaryButton",
+            "properties": {
+              "bg": "blue.500",
+              "flex": 1
+            },
+            "children": [
+              {
+                "type": "component",
+                "from": "@batiq/components",
+                "name": "Text",
+                "id": "PrimaryText",
+                "properties": {},
+                "children": ["Primary"]
+              }
+            ]
+          },
+          {
+            "type": "component",
+            "from": "@batiq/components",
+            "name": "Button",
+            "id": "SecondaryButton",
+            "properties": {
+              "bg": "blue.100",
+              "flex": 1
+            },
+            "children": [
+              {
+                "type": "component",
+                "from": "@batiq/components",
+                "name": "Text",
+                "id": "PrimaryText",
+                "properties": {},
+                "children": ["Primary"]
+              }
+            ]
+          }
+        ]
       }
     },
-    "qore2": {
-      "type": {
-        "from": "@batiq/data",
-        "name": "CustomDataSource"
-      },
-      "config": {
-        "endpoint": "https://batiq.qorebase.io"
-      },
-      "authenticatedRoutes": ["/users", "/posts/*"]
-    },
-    "petstore": {
-      "type": {
-        "from": "@batiq/data",
-        "name": "OpenAPI"
-      },
-      "config": {
-        "definition": "https://petstore3.swagger.io/api/v3/openapi.json",
-        "auth": {
-          "apiKey": null
-        }
-      },
-      "authenticatedRoutes": ["/page-1"]
-    }
-  },
-  "components": {
     "CompoundButton": {
       "inputs": {},
       "component": {
@@ -171,43 +199,12 @@
               ]
             },
             {
-              "type": "data",
-              "data": "petstore",
-              "name": "pet",
-              "query": {
-                "operationId": "getPetById",
-                "parameters": {
-                  "petId": 1
-                }
-              },
-              "children": [
-                {
-                  "type": "component",
-                  "from": "@batiq/components",
-                  "name": "Text",
-                  "properties": {
-                    "text": {
-                      "type": "expression",
-                      "expression": "pet.id"
-                    }
-                  },
-                  "children": []
-                }
-              ]
-            },
-            {
               "type": "component",
-              "from": "@batiq/components",
-              "name": "Text",
-              "properties": {
-                "onPress": {
-                  "type": "action",
-                  "from": "@batiq/actions",
-                  "name": "navigate",
-                  "arguments": ["/page-2"]
-                }
-              },
-              "children": ["Page 2"]
+              "from": "local",
+              "name": "ButtonGroup",
+              "properties": {},
+              "overrideProperties": {},
+              "children": []
             }
           ]
         }
@@ -216,7 +213,10 @@
     {
       "name": "page 2",
       "navigation": {
-        "path": "/page-2"
+        "path": "/page-2",
+        "tab": {
+          "label": "Element"
+        }
       },
       "children": [
         {
