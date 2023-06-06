@@ -1,15 +1,44 @@
 import React from "react";
 import { AppSchema } from "@batiq/core";
 import { generateNavigationPageIR, Component as ComponentIR } from "@batiq/ir";
-import {
-  createElement,
-  PageRuntimeLazy,
-  resolveImport,
-  toVariableName,
-} from "./PageRuntime";
+import { PageRuntimeLazy, resolveImport, toVariableName } from "./PageRuntime";
 import { valueToRuntime } from "./utils/valueToRuntime";
 import { useBatiqSchema } from "@batiq/expo-runtime";
 import { Text, NativeBaseProvider } from "native-base";
+
+const createElement = (
+  scope: Record<string, any>,
+  jsx: ComponentIR["JSX"][number]
+) => {
+  if (typeof jsx === "object") {
+    if (jsx.type === "element") {
+      const scopeVariable = Array.isArray(jsx.name) ? jsx.name[0] : jsx.name;
+      const component =
+        scopeVariable in scope
+          ? Array.isArray(jsx.name)
+            ? jsx.name.reduce((component, name) => component[name], scope)
+            : scope[jsx.name]
+          : jsx.name;
+      return React.createElement(
+        component,
+        Object.fromEntries(
+          jsx.props.map((prop) => [
+            prop.name,
+            valueToRuntime(scope, prop.value),
+          ])
+        ),
+        ...jsx.children.map((child, i) => createElement(scope, child))
+      );
+    }
+    if (jsx.type === "render_prop") {
+      return () => createElement(scope, jsx.JSX);
+    }
+    if (jsx.type === "jsx_expression") {
+      return valueToRuntime(scope, jsx.value);
+    }
+  }
+  return jsx;
+};
 
 const PageComponent = async (
   scope: Record<string, any>,

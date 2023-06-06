@@ -141,6 +141,7 @@ export type Primitive =
   | ComponentSchema
   | ExpressionSchema
   | DataSchema
+  | SlotSchema // TODO: remove this
   | string
   | number
   | boolean;

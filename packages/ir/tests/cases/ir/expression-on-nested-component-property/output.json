@@ -31,11 +31,13 @@
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
               "name": "Paragraph1",
+              "metadata": {},
               "props": [],
               "children": []
             }
@@ -57,6 +59,12 @@
         {
           "type": "element",
           "name": "Paragraph",
+          "metadata": {
+            "path": [
+              0
+            ],
+            "isLeaf": false
+          },
           "props": [
             {
               "name": "color",
@@ -77,6 +85,7 @@
             {
               "type": "element",
               "name": "Paragraph1",
+              "metadata": {},
               "props": [],
               "children": []
             }
@@ -98,6 +107,13 @@
         {
           "type": "element",
           "name": "Paragraph",
+          "metadata": {
+            "path": [
+              0,
+              0
+            ],
+            "isLeaf": true
+          },
           "props": [
             {
               "name": "color",

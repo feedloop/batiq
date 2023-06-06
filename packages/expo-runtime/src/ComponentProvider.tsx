@@ -1,13 +1,32 @@
+import { Element } from "@batiq/ir";
 import React from "react";
+import { ElementSchemaProvider } from "./ElementProvider";
 import { PathProvider } from "./PathProvider";
 
-export const withComponentProvider = <P extends object>(
+type DefaultProps = React.PropsWithChildren<any>;
+
+export const withComponentProvider = <P = DefaultProps,>(
   index: number,
-  Component: React.ComponentType<P>
+  Component: React.ComponentType<P>,
+  elementSchema?: Element
 ) => {
+  const ElementProvider: React.FC<{
+    children: React.PropsWithChildren<any>;
+  }> = (props) =>
+    elementSchema ? (
+      <ElementSchemaProvider schema={elementSchema}>
+        {props.children}
+      </ElementSchemaProvider>
+    ) : (
+      props.children
+    );
+
   return (props: P) => (
-    <PathProvider index={index}>
-      <Component {...props} />
-    </PathProvider>
+    <ElementProvider>
+      <PathProvider index={index}>
+        {/* @ts-ignore */}
+        <Component {...props} />
+      </PathProvider>
+    </ElementProvider>
   );
 };

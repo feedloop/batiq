@@ -44,11 +44,18 @@
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
               "name": "Paragraph",
+              "metadata": {
+                "path": [
+                  0
+                ],
+                "isLeaf": true
+              },
               "props": [
                 {
                   "name": "text",
@@ -74,6 +81,7 @@
             {
               "type": "element",
               "name": "Paragraph1",
+              "metadata": {},
               "props": [],
               "children": []
             }
@@ -95,6 +103,12 @@
         {
           "type": "element",
           "name": "Paragraph",
+          "metadata": {
+            "path": [
+              1
+            ],
+            "isLeaf": true
+          },
           "props": [
             {
               "name": "text",

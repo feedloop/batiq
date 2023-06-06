@@ -54,6 +54,8 @@ export const createBatiq: CreateBatiqFn = (
                     operation.value,
                     ...value.slice(index),
                   ]
+                : Array.isArray(value[index])
+                ? { ...value, [index]: value[index].concat(operation.value) }
                 : value
             );
             break;
