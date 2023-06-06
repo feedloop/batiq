@@ -80,6 +80,10 @@ export type Value = Container<
 export type Element = {
   type: "element";
   name: string | string[];
+  metadata: {
+    path?: (string | number)[];
+    isLeaf?: boolean;
+  };
   props: { name: string; value: Value }[];
   children: JSX[];
 };

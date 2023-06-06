@@ -19,7 +19,7 @@ const AuthGuard = (props: React.PropsWithChildren<{}>) => {
   const auths = React.useMemo(
     () =>
       currentPath
-        ? Object.entries(schema.datasource)
+        ? Object.entries(schema.datasource ?? {})
             .filter(([, data]) =>
               data.authenticatedRoutes?.includes(currentPath)
             )

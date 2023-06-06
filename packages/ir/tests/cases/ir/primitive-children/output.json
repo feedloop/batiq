@@ -37,11 +37,18 @@
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
               "name": "Text",
+              "metadata": {
+                "path": [
+                  0
+                ],
+                "isLeaf": false
+              },
               "props": [
                 {
                   "name": "color",

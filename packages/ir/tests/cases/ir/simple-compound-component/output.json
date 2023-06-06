@@ -34,28 +34,25 @@
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
-              "name": "DataSource",
-              "props": [
-                {
-                  "name": "name",
-                  "value": "props"
-                },
-                {
-                  "name": "data",
-                  "value": {
-                    "color": "red"
-                  }
-                }
-              ],
+              "name": "CompoundButton",
+              "metadata": {},
+              "props": [],
               "children": [
                 {
                   "type": "element",
-                  "name": "Button1",
-                  "props": [],
+                  "name": "Text",
+                  "metadata": {},
+                  "props": [
+                    {
+                      "name": "text",
+                      "value": "Hello World!"
+                    }
+                  ],
                   "children": []
                 }
               ]
@@ -64,6 +61,39 @@
         }
       ],
       "root": true
+    },
+    {
+      "name": "CompoundButton",
+      "variableDeclarations": {},
+      "JSX": [
+        {
+          "type": "element",
+          "name": "DataSource",
+          "metadata": {},
+          "props": [
+            {
+              "name": "name",
+              "value": "props"
+            },
+            {
+              "name": "data",
+              "value": {
+                "color": "red"
+              }
+            }
+          ],
+          "children": [
+            {
+              "type": "element",
+              "name": "Button1",
+              "metadata": {},
+              "props": [],
+              "children": []
+            }
+          ]
+        }
+      ],
+      "root": false
     },
     {
       "name": "Button1",
@@ -78,6 +108,7 @@
         {
           "type": "element",
           "name": "Button",
+          "metadata": {},
           "props": [
             {
               "name": "color",
@@ -104,6 +135,7 @@
             {
               "type": "element",
               "name": "RemoveKey",
+              "metadata": {},
               "props": [
                 {
                   "name": "key",
@@ -112,15 +144,11 @@
               ],
               "children": [
                 {
-                  "type": "element",
-                  "name": "Text",
-                  "props": [
-                    {
-                      "name": "text",
-                      "value": "Hello World!"
-                    }
-                  ],
-                  "children": []
+                  "type": "jsx_expression",
+                  "value": {
+                    "type": "variable",
+                    "name": "props.children"
+                  }
                 }
               ]
             }

@@ -1,6 +1,7 @@
 import {
   ActionDefinition,
   ActionSchema,
+  ComponentSchema,
   ExpressionSchema,
   Property,
 } from "@batiq/core";
@@ -306,10 +307,26 @@ type TransformPropsResult = {
 
 export const transformComponentProps = async (
   scope: Scope,
-  props: [string, Property][],
+  schemaProperties: ComponentSchema["properties"],
   isRoot: boolean
 ): Promise<TransformPropsResult> => {
-  const { results } = await props.reduce(
+  const properties = Object.entries(schemaProperties).map(
+    ([key, value]): [string, Property] => [
+      key,
+      !Array.isArray(value) &&
+      typeof value === "object" &&
+      value.type === "breakpoint"
+        ? {
+            type: "action",
+            from: "@batiq/actions",
+            name: "breakpoint",
+            arguments: [value.breakpoints],
+          }
+        : value,
+    ]
+  );
+
+  const { results } = await properties.reduce(
     async (promise, [name, value]) => {
       const { scope, results } = await promise;
       const transformResult: TransformPropResult = await transformComponentProp(

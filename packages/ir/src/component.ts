@@ -4,6 +4,7 @@ import {
   ComponentSchema,
   CompoundComponentSchema,
   Primitive,
+  SlotSchema,
 } from "@batiq/core";
 import Ajv from "ajv";
 import { importNamedModule } from "@batiq/import-helper";
@@ -18,8 +19,7 @@ const ajv = new Ajv({
 
 const resolveCompoundComponent = (
   compoundComponent: CompoundComponentSchema,
-  schema: ComponentSchema,
-  children: ComponentSchema["children"]
+  schema: ComponentSchema
 ): ComponentSchema =>
   schema.overrideComponents &&
   compoundComponent.id &&
@@ -38,52 +38,155 @@ const resolveCompoundComponent = (
                 ...schema.overrideProperties[compoundComponent.id],
               }
             : compoundComponent.properties,
-        children: compoundComponent.children.flatMap((child) =>
-          typeof child === "object"
-            ? child.type === "component"
-              ? [resolveCompoundComponent(child, schema, children)]
-              : child.type === "slot"
-              ? children
+        children: compoundComponent.children.flatMap(
+          (child): ComponentSchema["children"] =>
+            typeof child === "object"
+              ? child.type === "component"
+                ? [resolveCompoundComponent(child, schema)]
+                : child.type === "slot"
+                ? [
+                    {
+                      type: "component",
+                      from: "@batiq/expo-runtime",
+                      name: "RemoveKey",
+                      properties: {
+                        key: "props",
+                      },
+                      children: [child],
+                    },
+                  ]
+                : [child]
               : [child]
-            : [child]
         ),
       };
 
 const transformCompoundComponent = async (
+  scope: Scope,
+  app: AppSchema,
   definition: ComponentDefinition<"compound">,
-  schema: ComponentSchema
-): Promise<ComponentSchema> => {
-  const children: ComponentSchema["children"] =
-    Object.keys(definition.inputs ?? {}).length === 0
-      ? schema.children
-      : [
-          {
-            type: "component",
-            from: "@batiq/expo-runtime",
-            name: "RemoveKey",
-            properties: {
-              key: "props",
-            },
-            children: schema.children,
+  schema: ComponentSchema,
+  options: Partial<{
+    path: number[];
+    isRoot: boolean;
+    validate: boolean;
+  }>
+): Promise<TransformResult> => {
+  const { path, isRoot, validate } = options;
+  const compoundSchema: ComponentSchema =
+    Object.keys(definition?.inputs ?? {}).length === 0
+      ? resolveCompoundComponent(definition.component, schema)
+      : ({
+          type: "component",
+          from: "@batiq/expo-runtime",
+          name: "DataSource",
+          properties: {
+            name: "props",
+            data: schema.properties,
           },
-        ];
-  const resolvedComponent: ComponentSchema = resolveCompoundComponent(
-    definition.component,
-    schema,
-    children
+          children: [resolveCompoundComponent(definition.component, schema)],
+        } as ComponentSchema);
+
+  const transformResult = await transformComponent(
+    scope,
+    app,
+    compoundSchema as any,
+    {
+      path,
+      isRoot: true,
+      validate,
+    }
   );
-  return Object.keys(definition?.inputs ?? {}).length === 0
-    ? resolvedComponent
-    : {
-        type: "component",
-        from: "@batiq/expo-runtime",
-        name: "DataSource",
-        properties: {
-          name: "props",
-          data: schema.properties,
-        },
-        children: [resolvedComponent],
-      };
+
+  const childrenResults = await transformComponentChildren(
+    scope,
+    app,
+    schema.children,
+    {
+      path,
+      isRoot,
+      validate,
+    }
+  );
+
+  const componentName =
+    schema.name ?? generateDefaultImport(scope, definition.component.from);
+  return {
+    imports: [...transformResult.imports, ...childrenResults.imports],
+    variables: childrenResults.variables,
+    element: {
+      type: "element",
+      name: generateUniqueName(scope, componentName),
+      metadata: {},
+      props: [],
+      children: childrenResults.elements,
+    },
+    additionalComponents: [
+      {
+        name: generateUniqueName(scope, componentName),
+        variableDeclarations: Object.fromEntries(transformResult.variables),
+        JSX: [transformResult.element],
+        root: false,
+      },
+      ...transformResult.additionalComponents,
+      ...childrenResults.additionalComponents,
+    ],
+  };
+};
+
+type TransformComponentChildrenResult = {
+  imports: ComponentImport[];
+  variables: [string, Value][];
+  elements: JSX[];
+  additionalComponents: Component[];
+};
+
+export const transformComponentChildren = async (
+  scope: Scope,
+  app: AppSchema,
+  schemas: (Primitive | SlotSchema)[],
+  options: Partial<{
+    path: number[];
+    isRoot: boolean;
+    validate: boolean;
+  }>
+): Promise<TransformComponentChildrenResult> => {
+  const { path, isRoot = true, validate = false } = options;
+  const components = await Promise.all(
+    schemas.map(async (schema, i): Promise<TransformResult> => {
+      if (typeof schema === "object" && schema.type === "slot") {
+        return {
+          imports: [],
+          variables: [],
+          element: {
+            type: "jsx_expression",
+            value: {
+              type: "variable",
+              name: "props.children",
+            },
+          },
+          additionalComponents: [],
+        };
+      }
+
+      return transformPrimitiveSchema(
+        scope.clone(),
+        app,
+        schema,
+        path ? path.concat(i) : undefined,
+        false,
+        validate
+      );
+    })
+  );
+
+  return {
+    imports: components.flatMap((component) => component.imports),
+    variables: components.flatMap((component) => component.variables),
+    elements: components.map((component) => component.element),
+    additionalComponents: components.flatMap(
+      (component) => component.additionalComponents
+    ),
+  };
 };
 
 type TransformResult = {
@@ -97,9 +200,13 @@ export const transformComponent = async (
   scope: Scope,
   app: AppSchema,
   schema: ComponentSchema,
-  isRoot = true,
-  validate: boolean
+  options: Partial<{
+    path: number[];
+    isRoot: boolean;
+    validate: boolean;
+  }>
 ): Promise<TransformResult> => {
+  const { path, isRoot = true, validate = false } = options;
   const componentDefinition: ComponentDefinition =
     schema.from === "local" && schema.name
       ? app.components[schema.name]
@@ -113,30 +220,11 @@ export const transformComponent = async (
   }
 
   if (componentDefinition?.component?.type === "component") {
-    return transformComponent(
-      scope,
-      app,
-      await transformCompoundComponent(componentDefinition, schema),
+    return transformCompoundComponent(scope, app, componentDefinition, schema, {
       isRoot,
-      validate
-    );
+      validate,
+    });
   }
-
-  const properties = Object.fromEntries(
-    Object.entries(schema.properties).map(([key, value]) => [
-      key,
-      !Array.isArray(value) &&
-      typeof value === "object" &&
-      value.type === "breakpoint"
-        ? {
-            type: "action",
-            from: "@batiq/actions",
-            name: "breakpoint",
-            arguments: [value.breakpoints],
-          }
-        : value,
-    ])
-  );
 
   const importSource =
     componentDefinition?.type === "component"
@@ -171,39 +259,45 @@ export const transformComponent = async (
 
   const propsResult = await transformComponentProps(
     scope.clone(),
-    Array.from(Object.entries(properties)),
+    schema.properties,
     isRoot
   );
 
-  const childrenResults = await Promise.all(
-    schema.children.map((component) =>
-      transformJSXChild(scope.clone(), app, component, false, validate)
-    )
+  const childrenResults = await transformComponentChildren(
+    scope,
+    app,
+    schema.children,
+    {
+      path,
+      isRoot,
+      validate,
+    }
   );
 
-  const variables = [
-    ...propsResult.variables,
-    ...childrenResults.flatMap((result) => result.variables),
-  ];
+  const variables = [...propsResult.variables, ...childrenResults.variables];
 
   const jsx: JSX = {
     type: "element",
     name: componentName,
+    metadata:
+      path && path.length > 0
+        ? {
+            path,
+            isLeaf: schema.children.length === 0,
+          }
+        : {},
     props: propsResult.props,
-    children: childrenResults.map((result) => result.element),
+    children: childrenResults.elements,
   };
 
   return {
-    imports: [
-      ...imports,
-      ...propsResult.imports,
-      ...childrenResults.flatMap((result) => result.imports),
-    ],
+    imports: [...imports, ...propsResult.imports, ...childrenResults.imports],
     variables: propsResult.splitComponent ? [] : variables,
     element: propsResult.splitComponent
       ? {
           type: "element",
           name: generateUniqueName(scope, componentName),
+          metadata: {},
           props: [],
           children: [],
         }
@@ -220,22 +314,27 @@ export const transformComponent = async (
           ]
         : []),
       ...propsResult.additionalComponents,
-      ...childrenResults.flatMap((result) => result.additionalComponents),
+      ...childrenResults.additionalComponents,
     ],
   };
 };
 
-export const transformJSXChild = async (
+export const transformPrimitiveSchema = async (
   scope: Scope,
   app: AppSchema,
   schema: Primitive,
+  path?: number[],
   isRoot = true,
-  validate: boolean
+  validate = false
 ): Promise<TransformResult> => {
   if (typeof schema === "object") {
     switch (schema.type) {
       case "component":
-        return transformComponent(scope.clone(), app, schema, isRoot, validate);
+        return transformComponent(scope.clone(), app, schema, {
+          path,
+          isRoot,
+          validate,
+        });
 
       case "data":
         return transformComponent(
@@ -252,8 +351,10 @@ export const transformJSXChild = async (
             },
             children: schema.children,
           },
-          isRoot,
-          validate
+          {
+            isRoot,
+            validate,
+          }
         );
 
       case "expression": {

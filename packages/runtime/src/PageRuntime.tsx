@@ -1,5 +1,5 @@
 import React from "react";
-import { AppSchema, PageSchema } from "@batiq/core";
+import { AppSchema, BaseBatiqCore, PageSchema } from "@batiq/core";
 import {
   transformIR,
   Component as ComponentIR,
@@ -7,7 +7,7 @@ import {
 } from "@batiq/ir";
 import { importModule } from "@batiq/import-helper";
 import { valueToRuntime } from "./utils/valueToRuntime";
-import { withComponentProvider } from "@batiq/expo-runtime";
+import { Runtime, useBatiq } from "@batiq/expo-runtime";
 import { Text } from "react-native";
 
 export const toVariableName = (source: string): string =>
@@ -29,12 +29,12 @@ export const resolveImport = (
     ])
   );
 
-export const createElement = (
+const createElement = (
+  batiq: BaseBatiqCore & Runtime,
   scope: Record<string, any>,
   jsx: ComponentIR["JSX"][number],
-  index?: number
+  index: number
 ) => {
-  const withPath = typeof index === "number";
   if (typeof jsx === "object") {
     if (jsx.type === "element") {
       const scopeVariable = Array.isArray(jsx.name) ? jsx.name[0] : jsx.name;
@@ -45,20 +45,18 @@ export const createElement = (
             : scope[jsx.name]
           : jsx.name;
       return React.createElement(
-        withPath ? withComponentProvider(index, component) : component,
+        batiq.decorateComponent(component, { index, element: jsx }),
         Object.fromEntries(
           jsx.props.map((prop) => [
             prop.name,
             valueToRuntime(scope, prop.value),
           ])
         ),
-        ...jsx.children.map((child, i) =>
-          createElement(scope, child, withPath ? i : undefined)
-        )
+        ...jsx.children.map((child, i) => createElement(batiq, scope, child, i))
       );
     }
     if (jsx.type === "render_prop") {
-      return () => createElement(scope, jsx.JSX, withPath ? index : undefined);
+      return () => createElement(batiq, scope, jsx.JSX, index);
     }
     if (jsx.type === "jsx_expression") {
       return valueToRuntime(scope, jsx.value);
@@ -68,7 +66,8 @@ export const createElement = (
 };
 
 const PageComponent = (scope: Record<string, any>, component: ComponentIR) => {
-  const componentFn = () => {
+  const componentFn = (props: React.PropsWithChildren<any>) => {
+    scope["props"] = props;
     scope = Object.entries(component.variableDeclarations).reduce(
       (scope, [name, value]) => {
         return {
@@ -79,19 +78,23 @@ const PageComponent = (scope: Record<string, any>, component: ComponentIR) => {
       scope
     );
 
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    const batiq = useBatiq<BaseBatiqCore & Runtime>();
+
     return component.JSX.length > 1
       ? React.createElement(
           React.Fragment,
           {},
-          ...component.JSX.map((jsx, i) => createElement(scope, jsx, i))
+          ...component.JSX.map((jsx, i) => createElement(batiq, scope, jsx, i))
         )
-      : createElement(scope, component.JSX[0], 0);
+      : createElement(batiq, scope, component.JSX[0], 0);
   };
   componentFn.displayName = component.name;
   return componentFn;
 };
 
 export const PageRuntime = async (
+  batiq: BaseBatiqCore & Runtime,
   app: AppSchema,
   page: PageSchema,
   scope: Record<string, any> = {}
@@ -119,9 +122,11 @@ export const PageRuntime = async (
       const scope = await scopeP;
       return {
         ...scope,
-        [component.name]: withComponentProvider(
-          index,
-          PageComponent(scope, component)
+        [component.name]: batiq.decorateComponent(
+          PageComponent(scope, component),
+          {
+            index,
+          }
         ),
       };
     },
@@ -137,14 +142,15 @@ export const PageRuntimeLazy = (props: {
   schema: PageSchema;
   scope?: Record<string, any>;
 }) => {
+  const batiq = useBatiq<BaseBatiqCore & Runtime>();
   const PageComponent = React.useMemo(() => {
     const LazyComponent = async () =>
-      PageRuntime(props.app, props.schema, props.scope).then((c) => ({
+      PageRuntime(batiq, props.app, props.schema, props.scope).then((c) => ({
         default: c,
       }));
     LazyComponent.displayName = props.schema.name;
     return React.lazy(LazyComponent);
-  }, [props.app, props.schema, props.scope]);
+  }, [batiq, props.app, props.schema, props.scope]);
   return (
     <React.Suspense fallback={<Text>Loading...</Text>}>
       <PageComponent />

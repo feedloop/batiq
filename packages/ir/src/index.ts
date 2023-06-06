@@ -1,6 +1,9 @@
 import { AppSchema, PageSchema } from "@batiq/core";
 import { toVariableName } from "./utils/naming";
-import { transformJSXChild } from "./component";
+import {
+  transformComponentChildren,
+  transformPrimitiveSchema,
+} from "./component";
 import { ComponentImport, Component, PageIR } from "./types";
 import { createScope } from "./scope";
 
@@ -32,38 +35,43 @@ export const transformIR = async (
 ): Promise<PageIR> => {
   const scope = createScope();
   scope.addVariable(toVariableName(page.name), null);
-  if (target === "native") {
-    page = {
-      ...page,
-      children: [
-        {
-          type: "component",
-          from: "@batiq/expo-runtime",
-          name: "PageWrapper",
-          properties: {},
-          children: page.children,
-        },
-      ],
-    };
-  }
-  const results = await Promise.all(
-    page.children.map((component) =>
-      transformJSXChild(scope.clone(), app, component, true, validate)
-    )
+  const pageWrapper = await transformComponentChildren(
+    scope,
+    app,
+    [
+      {
+        type: "component",
+        from:
+          target === "native" ? "@batiq/expo-runtime" : "@batiq/vite-runtime",
+        name: "PageWrapper",
+        properties: {},
+        children: [],
+      },
+    ],
+    {
+      isRoot: true,
+      validate,
+    }
   );
-  const imports = mergeImports(results.flatMap((r) => r.imports));
+  const results = await transformComponentChildren(scope, app, page.children, {
+    path: [],
+    isRoot: true,
+    validate,
+  });
+  const imports = mergeImports([...pageWrapper.imports, ...results.imports]);
   const root = {
     name: toVariableName(page.name),
-    variableDeclarations: Object.fromEntries(
-      results.flatMap((r) => r.variables)
+    variableDeclarations: Object.fromEntries(results.variables),
+    JSX: pageWrapper.elements.map((element, i) =>
+      i === 0 && typeof element === "object"
+        ? { ...element, children: results.elements }
+        : element
     ),
-    JSX: results.map((r) => r.element),
     root: true,
   } as Component;
-  const additionalComponents = results.flatMap((r) => r.additionalComponents);
   return {
     imports,
     variableDeclarations: {},
-    components: [root, ...additionalComponents],
+    components: [root, ...results.additionalComponents],
   };
 };

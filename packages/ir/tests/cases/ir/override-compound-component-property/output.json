@@ -3,7 +3,8 @@
     {
       "source": "@batiq/expo-runtime",
       "names": [
-        "PageWrapper"
+        "PageWrapper",
+        "RemoveKey"
       ],
       "default": null
     },
@@ -27,42 +28,24 @@
   "components": [
     {
       "name": "Page",
-      "variableDeclarations": {
-        "evaluate": {
-          "type": "function_call",
-          "arguments": [],
-          "name": "useLazyExpression"
-        }
-      },
+      "variableDeclarations": {},
       "JSX": [
         {
           "type": "element",
           "name": "PageWrapper",
+          "metadata": {},
           "props": [],
           "children": [
             {
               "type": "element",
-              "name": "Button",
-              "props": [
-                {
-                  "name": "color",
-                  "value": "red"
-                }
-              ],
+              "name": "CompoundButton",
+              "metadata": {},
+              "props": [],
               "children": [
-                {
-                  "type": "jsx_expression",
-                  "value": {
-                    "type": "function_call",
-                    "name": "evaluate",
-                    "arguments": [
-                      "23 + 42"
-                    ]
-                  }
-                },
                 {
                   "type": "element",
                   "name": "Text",
+                  "metadata": {},
                   "props": [
                     {
                       "name": "text",
@@ -77,6 +60,62 @@
         }
       ],
       "root": true
+    },
+    {
+      "name": "CompoundButton",
+      "variableDeclarations": {
+        "evaluate": {
+          "type": "function_call",
+          "arguments": [],
+          "name": "useLazyExpression"
+        }
+      },
+      "JSX": [
+        {
+          "type": "element",
+          "name": "Button",
+          "metadata": {},
+          "props": [
+            {
+              "name": "color",
+              "value": "red"
+            }
+          ],
+          "children": [
+            {
+              "type": "jsx_expression",
+              "value": {
+                "type": "function_call",
+                "name": "evaluate",
+                "arguments": [
+                  "23 + 42"
+                ]
+              }
+            },
+            {
+              "type": "element",
+              "name": "RemoveKey",
+              "metadata": {},
+              "props": [
+                {
+                  "name": "key",
+                  "value": "props"
+                }
+              ],
+              "children": [
+                {
+                  "type": "jsx_expression",
+                  "value": {
+                    "type": "variable",
+                    "name": "props.children"
+                  }
+                }
+              ]
+            }
+          ]
+        }
+      ],
+      "root": false
     }
   ]
 }
