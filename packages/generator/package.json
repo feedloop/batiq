@@ -6,8 +6,7 @@
   "dependencies": {
     "@babel/generator": "^7.20.7",
     "@babel/types": "^7.20.7",
-    "@expo/package-manager": "^0.0.57",
-    "@expo/spawn-async": "^1.7.0",
+    "@expo/cli": "^0.7.3",
     "dot-object": "^2.1.4",
     "prettier": "^2.8.0"
   },

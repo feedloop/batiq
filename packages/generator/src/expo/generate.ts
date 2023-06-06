@@ -1,13 +1,12 @@
 import path from "path";
 import fs from "node:fs";
 import { AppSchema } from "@batiq/core";
-import * as ExpoPackageManager from "@expo/package-manager";
-import spawnAsync from "@expo/spawn-async";
 import { generatePage } from "../codegen";
 import Dot from "dot-object";
 import { toVariableName } from "../utils/naming";
 import { transformIR } from "@batiq/ir";
 import { generateNavigation } from "./navigation";
+import { getCombinedKnownVersionsAsync } from "@expo/cli/build/src/start/doctor/dependencies/getVersionedPackages";
 
 const dot = new Dot("__");
 
@@ -33,6 +32,35 @@ export const installExpo = async (schema: AppSchema) => {
       ).flat()
     )
   );
+  const dependencies = [
+    "expo",
+    "@babel/core",
+    "@batiq/cli",
+    "@types/react",
+    "@types/react-native",
+    "dotenv",
+    "typescript",
+    "react",
+    "react-dom",
+    "react-native",
+    "react-native-web",
+    "@react-navigation/native-stack",
+    "@react-navigation/bottom-tabs",
+    "@react-navigation/native",
+    "react-native-screens",
+    "react-native-safe-area-context",
+    "@expo/webpack-config",
+    ...componentDependencies,
+  ];
+  const packages = await getCombinedKnownVersionsAsync({
+    projectRoot: "./app",
+    sdkVersion: "48.0.0",
+    skipCache: false,
+  });
+  const resolvedDependencies = dependencies.reduce(
+    (acc, dep) => ({ ...acc, [dep]: packages[dep] ?? "*" }),
+    {} as Record<string, string>
+  );
   fs.writeFileSync(
     "package.json",
     JSON.stringify(
@@ -47,56 +75,12 @@ export const installExpo = async (schema: AppSchema) => {
           web: "expo start --web",
         },
         private: true,
+        dependencies: resolvedDependencies,
       },
       null,
       2
     )
   );
-  const pm = new ExpoPackageManager.NpmPackageManager({
-    cwd: process.cwd(),
-    silent: false,
-  });
-  if (process.env["NODE_ENV"] === "development") {
-    // remove yarn injected env variables
-    Object.keys(process.env)
-      .filter((key) => key.startsWith("npm"))
-      .forEach((key) => {
-        delete process.env[key];
-      });
-  }
-  await pm.addAsync("expo");
-  await pm.addDevAsync(
-    "@babel/core",
-    "@batiq/cli",
-    "@types/react",
-    "@types/react-native",
-    "dotenv",
-    "typescript"
-  );
-  await pm.installAsync();
-  const expoInstall = spawnAsync("npx", [
-    "expo",
-    "install",
-    "react",
-    "react-dom",
-    "react-native",
-    "react-native-web",
-    "@react-navigation/native-stack",
-    "@react-navigation/bottom-tabs",
-    "@react-navigation/native",
-    "react-native-screens",
-    "react-native-safe-area-context",
-    "@expo/webpack-config",
-    ...componentDependencies,
-    "--npm",
-  ]);
-  expoInstall.child.stdout?.on("data", (data) => {
-    console.log(data?.toString?.());
-  });
-  expoInstall.child.stderr?.on("data", (data) => {
-    console.error(data?.toString?.());
-  });
-  await expoInstall;
 };
 
 export const generateExpo = async (schema: AppSchema) => {
